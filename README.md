@@ -4,7 +4,7 @@ A UX and design-engineering case study: an assistant for a "camp-to-desk" store 
 
 I designed it, then built a working engine behind the design to find out which design ideas survive real data and a real AI model.
 
-**Live:** [Case study](https://dexternnierva.github.io/cartesian-rag/case-study/) · [Demo](https://dexternnierva.github.io/cartesian-rag/prototype/)
+**Live:** [Case study](https://dexternierva.github.io/cartesian-rag/case-study/) · [Demo](https://dexternierva.github.io/cartesian-rag/prototype/)
 
 | | |
 | :--- | :--- |
