@@ -14,7 +14,9 @@ import pathlib
 OUT = pathlib.Path(__file__).resolve().parents[1]        # case-study/
 REPO = OUT.parent                                        # the repository root
 DEMO = "../prototype/"
-REPO_FILE = "../"                                        # repository files, relative to case-study/
+SITE = "https://dexternnierva.github.io/cartesian-rag/"   # the live site (GitHub Pages)
+GITHUB = "https://github.com/dexternnierva/cartesian-rag"
+REPO_FILE = GITHUB + "/blob/main/"                       # Markdown opens formatted on GitHub, not as raw text
 
 # The loop, on the home page
 STEPS = [("design", "1", "Design"), ("build", "2", "Build"), ("measure", "3", "Measure"), ("redesign", "4", "Redesign")]
@@ -92,7 +94,8 @@ def load_scores():
 
 
 # ----------------------------------------------------------------- shell
-def head(title, desc, scripts=()):
+def head(title, desc, scripts=(), file="index.html"):
+    url = SITE + "case-study/" + ("" if file == "index.html" else file)
     js = "".join(f'<script src="js/{s}" defer></script>\n' for s in ("menu-dismiss.js", "lightbox.js", "theme.js") + tuple(scripts))
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -107,6 +110,12 @@ def head(title, desc, scripts=()):
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:site_name" content="CartesianRAG case study by Dex">
+<meta property="og:url" content="{url}">
+<link rel="canonical" href="{url}">
+<meta property="og:image" content="{SITE}case-study/images/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="CartesianRAG: the engine got the answers right before the screens were ready for them.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="{FAVICON}">
 {THEME_BOOT}
@@ -152,6 +161,7 @@ FOOTER = f"""<footer class="site-f">
 <div class="links">
 <a class="u" href="mailto:dexternierva@gmail.com">dexternierva@gmail.com</a>
 <a class="u" href="{DEMO}">Try the demo</a>
+<a class="u" href="{GITHUB}">Code on GitHub</a>
 <a href="#content" style="color:var(--muted)">Back to top ↑</a>
 </div>
 </div>
@@ -238,7 +248,7 @@ def pn(current):
 
 
 def page(file, title, desc, body, scripts=()):
-    html = head(title, desc, scripts) + header(file) + f'<main id="content">\n{body}\n{"" if file == "index.html" else pn(file)}\n</main>\n' + FOOTER
+    html = head(title, desc, scripts, file) + header(file) + f'<main id="content">\n{body}\n{"" if file == "index.html" else pn(file)}\n</main>\n' + FOOTER
     (OUT / file).write_text(html, encoding="utf-8")
     print("wrote", file, len(html))
 

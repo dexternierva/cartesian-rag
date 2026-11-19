@@ -197,8 +197,8 @@ def build_home(g):
         [s, "Predicted behaviour of synthetic participants. No real people took part"],
         [a, "Design‑time hypotheses about users and the market"]]) + '<div class="body" style="margin-top:24px"><p>Earlier drafts gave precise percentages for discovery research and a 500‑query benchmark. Neither study was run, so these pages leave those numbers out.</p></div>')}
 {sec("", "Source files", "Everything behind these pages is in the repository.", grid([
-        card("Write‑up", "Case study v4", f'The full written case study. <a href="{REPO}cartesian-rag-enterprise-case-study-v4.md">Open the Markdown</a>'),
-        card("Engine", "Findings log E1–E47", f'Every measured result, with what it meant for the design. <a href="{REPO}engine/FINDINGS.md">Open FINDINGS.md</a>'),
-        card("Design system", "Tokens and components", f'27 colours, 9 text styles and 16 components. <a href="{REPO}design-system/README.md">Open the brand book</a>')], 240))}
+        card("Write‑up", "Case study v4", f'The full written case study. <a href="{REPO}cartesian-rag-enterprise-case-study-v4.md">Read it on GitHub</a>'),
+        card("Engine", "Findings log E1–E47", f'Every measured result, with what it meant for the design. <a href="{REPO}engine/FINDINGS.md">Read it on GitHub</a>'),
+        card("Design system", "Tokens and components", f'27 colours, 9 text styles and 16 components. <a href="{REPO}design-system/README.md">Read it on GitHub</a>')], 240))}
 """
     page("appendix.html", "Appendix — CartesianRAG Case Study", "Appendix to the CartesianRAG case study: research, IA, engine, evaluation, design system and UI detail pages, plus evidence labels and source files.", ap)
