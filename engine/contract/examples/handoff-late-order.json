@@ -1,0 +1,18 @@
+{
+  "contract_version": "0.1",
+  "query_id": "q_example_handoff",
+  "question": "My order is 4 days late. I want a refund now or I'm cancelling my card.",
+  "route": "handoff",
+  "state": "handoff",
+  "confidence": 0.4,
+  "message": "Connecting you to a specialist. They'll see this chat and your order details, so you won't need to repeat anything.",
+  "components": [
+    {
+      "type": "handoff",
+      "reason": "critical_intent",
+      "summary": "Customer reports order 4 days late, requests refund, mentions card chargeback. Sentiment strongly negative."
+    }
+  ],
+  "citations": [],
+  "timing_ms": { "routing": 110, "total": 140 }
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design System — CartesianRAG Case Study</title>
+<meta name="description" content="The CartesianRAG design system: forest, lantern, campfire and bark, separate status colours, a receipt style, 16 components mapped to the engine's answer contract.">
+<meta name="author" content="Dex">
+<meta name="theme-color" content="#faf6ef">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Design System — CartesianRAG Case Study">
+<meta property="og:description" content="The CartesianRAG design system: forest, lantern, campfire and bark, separate status colours, a receipt style, 16 components mapped to the engine's answer contract.">
+<meta property="og:site_name" content="CartesianRAG case study by Dex">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect x=%224%22 y=%224%22 width=%2224%22 height=%2224%22 rx=%226%22 fill=%22%232f6b3b%22/%3E%3Ccircle cx=%2222%22 cy=%2210%22 r=%224%22 fill=%22%23c8452b%22/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('crcs-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Figtree:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<link rel="stylesheet" href="styles.css">
+<script src="js/menu-dismiss.js" defer></script>
+<script src="js/lightbox.js" defer></script>
+<script src="js/theme.js" defer></script>
+<script src="js/contrast.js" defer></script>
+</head>
+<body>
+<div class="page">
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-h">
+<input class="menu-toggle" type="checkbox" id="menu-toggle" aria-controls="site-menu" aria-label="Case study pages menu">
+<div class="m-bar">
+<a class="brand" href="index.html"><span class="dot" aria-hidden="true"></span>CartesianRAG</a>
+<div class="right"><button type="button" class="theme-btn" data-theme-toggle hidden>Night</button><label class="menu-button" for="menu-toggle" title="Open or close the page menu"><span class="when-closed">Menu</span><span class="when-open">Close</span><svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6h14M2 12h14"></path></svg></label></div>
+</div>
+<nav id="site-menu" class="m-menu" aria-label="Case study pages menu">
+<a href="index.html#design"><span>Design</span><span>1</span></a><a href="index.html#build"><span>Build</span><span>2</span></a><a href="index.html#measure"><span>Measure</span><span>3</span></a><a href="index.html#redesign"><span>Redesign</span><span>4</span></a><a href="appendix.html"><span>Appendix</span><span>A</span></a><a href="research.html"><span>Research &amp; Discovery</span><span>A1</span></a><a href="ia.html"><span>Information Architecture</span><span>A2</span></a><a href="engine.html"><span>Design ↔ Engine</span><span>A3</span></a><a href="evaluation.html"><span>Evaluation</span><span>A4</span></a><a href="system.html"><span>Design System</span><span>A5</span></a><a href="ui.html"><span>High‑Fidelity UI</span><span>A6</span></a><a href="../prototype/"><span>Try the demo</span><span>→</span></a>
+</nav>
+<nav class="d-nav" aria-label="Case study sections">
+<a class="brand" href="index.html"><span class="dot" aria-hidden="true"></span>CartesianRAG</a>
+<div class="links"><a href="index.html#design">Design</a><a href="index.html#build">Build</a><a href="index.html#measure">Measure</a><a href="index.html#redesign">Redesign</a><a href="appendix.html" aria-current="page">Appendix</a><button type="button" class="theme-btn" data-theme-toggle hidden>Night</button><a class="demo" href="../prototype/">Try the demo</a></div>
+</nav>
+</header>
+<main id="content">
+<section class="hero sub">
+<div class="eyebrow mono crumbs"><a href="index.html">Case study</a><span aria-hidden="true">/</span><a href="appendix.html">Appendix</a><span aria-hidden="true">/</span><span class="here">A5 — Design System</span></div>
+<h1 class="title">Design System<span class="spark">.</span></h1>
+<p class="lead">Built after the expert review, so the remaining fixes would follow one set of rules instead of each inventing its own. The palette brings the outdoors indoors; the rules keep it honest.</p>
+<div class="facts"><div><div class="mono">Themes</div><div class="v">Daylight · Campfire night</div></div><div><div class="mono">Tokens</div><div class="v">27 colours · 9 text styles</div></div><div><div class="mono">Components</div><div class="v">16, mapped to the contract</div></div><div><div class="mono">Files</div><div class="v"><a class="link" href="../design-system/README.md">design-system/</a></div></div></div>
+</section>
+<section class="sec">
+<div class="lab"><div class="mono"><span>Colour</span></div></div>
+<div class="con">
+<h2 class="big">Every colour earns its contrast ratio.</h2>
+
+<div class="body"><p>Each swatch shows a text colour on its fill. The ratio under it is calculated by your browser from the two hex values.</p></div>
+<div class="swatches">
+<div class="sw" data-fg="#ffffff" data-bg="#2f6b3b" data-min="4.5"><div class="chip" style="background:#2f6b3b;color:#ffffff">Forest</div>
+<div class="meta"><b>Forest</b><code>#2f6b3b</code><span>Primary: main buttons, links, selected states</span><span class="cr" aria-live="off">#ffffff on #2f6b3b</span></div></div>
+<div class="sw" data-fg="#2b2118" data-bg="#f2c14e" data-min="4.5"><div class="chip" style="background:#f2c14e;color:#2b2118">Lantern</div>
+<div class="meta"><b>Lantern</b><code>#f2c14e</code><span>Secondary: a fill, never text. Highlights and ways out</span><span class="cr" aria-live="off">#2b2118 on #f2c14e</span></div></div>
+<div class="sw" data-fg="#ffffff" data-bg="#c8452b" data-min="4.5"><div class="chip" style="background:#c8452b;color:#ffffff">Campfire</div>
+<div class="meta"><b>Campfire</b><code>#c8452b</code><span>Rare accent: promo tags only. Never errors or stock</span><span class="cr" aria-live="off">#ffffff on #c8452b</span></div></div>
+<div class="sw" data-fg="#faf6ef" data-bg="#2b2118" data-min="4.5"><div class="chip" style="background:#2b2118;color:#faf6ef">Bark</div>
+<div class="meta"><b>Bark</b><code>#2b2118</code><span>Text; the facilitator bar</span><span class="cr" aria-live="off">#faf6ef on #2b2118</span></div></div>
+<div class="sw" data-fg="#6a5847" data-bg="#faf6ef" data-min="4.5"><div class="chip" style="background:#faf6ef;color:#6a5847">Trail text</div>
+<div class="meta"><b>Canvas</b><code>#faf6ef</code><span>Page; muted text sits on it</span><span class="cr" aria-live="off">#6a5847 on #faf6ef</span></div></div>
+</div>
+<h3 class="sub">Status colours: a separate set</h3>
+<div class="swatches">
+<div class="sw" data-fg="#1d6782" data-bg="#ddeef4" data-min="4.5"><div class="chip" style="background:#ddeef4;color:#1d6782">In stock</div>
+<div class="meta"><b>In stock · Lake</b><code>#ddeef4</code><span>Solid dot + word</span><span class="cr" aria-live="off">#1d6782 on #ddeef4</span></div></div>
+<div class="sw" data-fg="#8a5a00" data-bg="#f7ead0" data-min="4.5"><div class="chip" style="background:#f7ead0;color:#8a5a00">Low stock</div>
+<div class="meta"><b>Low stock · Amber</b><code>#f7ead0</code><span>Outlined ring + word</span><span class="cr" aria-live="off">#8a5a00 on #f7ead0</span></div></div>
+<div class="sw" data-fg="#a3203f" data-bg="#f6dfe3" data-min="4.5"><div class="chip" style="background:#f6dfe3;color:#a3203f">Out of stock</div>
+<div class="meta"><b>Out of stock · Crimson</b><code>#f6dfe3</code><span>Dashed ring + word</span><span class="cr" aria-live="off">#a3203f on #f6dfe3</span></div></div>
+<div class="sw" data-fg="#2b2118" data-bg="#fffaf0" data-min="4.5"><div class="chip" style="background:#fffaf0;color:#2b2118">Verified · see source</div>
+<div class="meta"><b>Receipt paper</b><code>#fffaf0</code><span>Proof: dashed edge, green tick</span><span class="cr" aria-live="off">#2b2118 on #fffaf0</span></div></div>
+</div>
+<p class="mono" id="contrast-sum" style="margin-top:16px;text-transform:none;letter-spacing:0"></p>
+<div class="body" style="margin-top:20px"><p><b>Why status isn’t the brand green:</b> about 1 in 12 men can’t easily tell red from green. “In stock” is lake blue, and every status pairs its colour with a dot shape and a word.</p></div>
+
+</div>
+</section>
+<section class="sec">
+<div class="lab"><div class="mono"><span>Components</span></div></div>
+<div class="con">
+<h2 class="big">Real pieces, drawn with the same CSS rules.</h2>
+
+<div class="specimen">
+<div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center"><span class="ds-btn p">Hold 40 chairs for 15 min</span><span class="ds-btn s">Show 1 option without the delivery‑time limit</span><span class="ds-btn">View specs</span><span class="promo">New</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center"><span class="mono" style="text-transform:none;letter-spacing:0">Looking for</span><span class="req">40 units ×</span><span class="req">Navy ×</span><span class="req">Under $350 each ×</span><span class="req">Within 3 days ×</span></div>
+<div style="display:flex;flex-direction:column;gap:6px"><span class="stock ok"><i></i><b>In stock</b><span class="w">· 48 at Indianapolis Regional</span></span><span class="stock warn"><i></i><b>Low stock</b><span class="w">· 6 at Columbus Hub</span></span><span class="stock bad"><i></i><b>Out of stock</b><span class="w">· Dallas Depot</span></span></div>
+<span class="receipt"><span class="ck" aria-hidden="true">✓</span>Verified · see source <span class="mono">inventory · AT-NAV-4D</span></span>
+</div>
+<div class="tbl"><table><thead><tr><th>The engine returns</th><th>The screen draws</th></tr></thead><tbody><tr><td><code>product_card</code></td><td>ProductCard, with QuantityStepper, HoldNotice and ReceiptBadge</td></tr><tr><td><code>constraints</code></td><td>Requirement chips, each removable with <code>drop</code></td></tr><tr><td><code>state: no_results</code> + <code>relax</code></td><td>NothingMatches, one button per way out</td></tr><tr><td><code>choices</code> / <code>disambiguate</code></td><td>ChoiceList (“Did you mean…?”)</td></tr><tr><td><code>table</code> + <code>subject</code></td><td>AnswerFact: big number and a sentence</td></tr><tr><td><code>citations</code></td><td>ReceiptBadge and ReceiptDrawer</td></tr><tr><td><code>handoff</code></td><td>HandoffNotice</td></tr><tr><td>while waiting</td><td>ProgressCard</td></tr></tbody></table></div>
+
+</div>
+</section>
+<section class="sec">
+<div class="lab"><div class="mono"><span>Writing</span></div></div>
+<div class="con">
+<h2 class="big">The words are part of the system.</h2>
+<div class="grid " style="--min:260px"><div><div class="mono">Rule</div><h3 class="h">Shopper words, not engine words</h3><p>“Found 2 chairs that match everything you asked for”, not “2 rows pass every rule”.</p></div><div><div class="mono">Rule</div><h3 class="h">Say what a number is about</h3><p>“48 navy AeroTask Pro Mesh available at Indianapolis Regional”, not “Available: 48”.</p></div><div><div class="mono">Rule</div><h3 class="h">Buttons say verb, object, consequence</h3><p>“Hold 40 chairs for 15 min”, never “Submit” or wording that sounds like a charge.</p></div><div><div class="mono">Rule</div><h3 class="h">Say no with a way out</h3><p>“Nothing matches all of that right now”, then a button for the one thing to let go of.</p></div><div><div class="mono">Rule</div><h3 class="h">Be honest about time</h3><p>“Usually 6 to 40 seconds”, with the real steps.</p></div><div><div class="mono">Rule</div><h3 class="h">Be honest about the source</h3><p>“Real answers, recorded 19 Nov 2026” in a demo; “live” only when live.</p></div></div>
+</div>
+</section>
+
+<nav class="pn" aria-label="Previous and next page"><a href="evaluation.html"><span class="mono">← Previous — A4</span><span class="t">Evaluation</span></a><a class="next" href="ui.html"><span class="mono">Next — A6 →</span><span class="t">High‑Fidelity UI</span></a></nav>
+</main>
+<footer class="site-f">
+<div class="in">
+<div>
+<p class="claim">Designing for an AI that can be slow, unsure and wrong, and showing its working anyway.</p>
+<div class="links">
+<a class="u" href="mailto:dexternierva@gmail.com">dexternierva@gmail.com</a>
+<a class="u" href="../prototype/">Try the demo</a>
+<a href="#content" style="color:var(--muted)">Back to top ↑</a>
+</div>
+</div>
+<div class="mono" style="display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0"><span class="dot" aria-hidden="true" style="width:6px;height:6px;box-shadow:none"></span>CartesianRAG · Case study by Dex · Nov 2026</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

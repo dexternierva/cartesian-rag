@@ -1,0 +1,509 @@
+{
+  "about": "CartesianRAG evaluation set v0.1 - the teacher's answer key. 35 questions about store.db. Each has the route the router SHOULD pick, the state the widget SHOULD show, and the correct answer. Where possible the answer comes from a 'gold_sql' query, so check_answer_key.py can prove it against the database. A question may list 'accepted_states' when more than one widget state is an honest answer. Questions marked set='fresh' were written AFTER the rules extractor, and the rules were not changed afterwards: they measure how well a method handles phrasings it has never seen. 'expected_sku' means the receipts must include that exact product: right number AND right reason. Questions with set='router-fresh' test ONLY which station the router picks; they were written after the router and the router was not changed afterwards.",
+  "answer_types": {
+    "number": "a single number (compared with a 0.01 tolerance)",
+    "text": "a single word or name",
+    "sku_set": "the exact set of products that must be returned - no more, no fewer",
+    "top5_includes": "for meaning-based search: at least one of these SKUs must appear in the top 5 results",
+    "state_only": "only the widget state is graded (e.g. handoff)"
+  },
+  "questions": [
+    {
+      "id": "Q01",
+      "question": "How many navy AeroTask Pro Mesh chairs are available in Indianapolis?",
+      "expected_route": "sql",
+      "expected_state": "answer",
+      "answer_type": "number",
+      "expected": 48,
+      "gold_sql": "SELECT available FROM stock_available WHERE sku = 'AT-NAV-4D' AND depot_id = 'IND-04'",
+      "tests": "Basic stock lookup; available = on_hand (60) - reserved (12)."
+    },
+    {
+      "id": "Q02",
+      "question": "What does the AeroTask Pro Mesh cost?",
+      "expected_route": "sql",
+      "expected_state": "answer",
+      "answer_type": "number",
+      "expected": 320.0,
+      "gold_sql": "SELECT DISTINCT unit_price FROM products WHERE family = 'AT'",
+      "tests": "Price lookup by product name, not SKU."
+    },
+    {
+      "id": "Q03",
+      "question": "Which depot has the most navy ErgoFlex Elite Shell chairs?",
+      "expected_route": "sql",
+      "expected_state": "answer",
+      "answer_type": "text",
+      "expected": "COL-02",
+      "gold_sql": "SELECT depot_id FROM stock_available WHERE sku = 'EF-ELT-NV' ORDER BY available DESC LIMIT 1",
+      "tests": "Sorting and picking the top row."
+    },
+    {
+      "id": "Q04",
+      "question": "How many navy AeroTask Pro Mesh chairs do you have in total, across all depots?",
+      "expected_route": "sql",
+      "expected_state": "answer",
+      "answer_type": "number",
+      "expected": 51,
+      "gold_sql": "SELECT SUM(available) FROM stock_available WHERE sku = 'AT-NAV-4D'",
+      "tests": "Adding up across depots (48 in Indianapolis + 3 in Chicago)."
+    },
+    {
+      "id": "Q05",
+      "question": "Are black AeroTask chairs in stock in Columbus?",
+      "expected_route": "sql",
+      "expected_state": "answer",
+      "answer_type": "number",
+      "expected": 0,
+      "gold_sql": "SELECT available FROM stock_available WHERE sku = 'AT-BLK-4D' AND depot_id = 'COL-02'",
+      "tests": "A yes/no question whose honest answer is 'No'. Two correct shapes: a row saying available = 0, OR an empty result from a query that filtered on available > 0.",
+      "accepted_states": [
+        "answer",
+        "no_results"
+      ]
+    },
+    {
+      "id": "Q06",
+      "question": "How many grey AeroTask Pro Mesh chairs are left?",
+      "expected_route": "sql",
+      "expected_state": "answer",
+      "answer_type": "number",
+      "expected": 6,
+      "gold_sql": "SELECT SUM(available) FROM stock_available WHERE sku = 'AT-GRY-4D'",
+      "tests": "Should produce the 'low stock' label (1-9 units)."
+    },
+    {
+      "id": "Q07",
+      "question": "What's the cheapest office chair with 4D armrests?",
+      "expected_route": "sql",
+      "expected_state": "answer",
+      "answer_type": "text",
+      "expected": "Quill Office Chair",
+      "gold_sql": "SELECT name FROM products WHERE category = 'Office chairs' AND armrests = '4D' ORDER BY unit_price, sku LIMIT 1",
+      "tests": "Min-price query. Two colours tie at $202; both are the same product name."
+    },
+    {
+      "id": "Q08",
+      "question": "How many office chair products cost under $300?",
+      "expected_route": "sql",
+      "expected_state": "answer",
+      "answer_type": "number",
+      "expected": 11,
+      "gold_sql": "SELECT COUNT(*) FROM products WHERE category = 'Office chairs' AND unit_price < 300",
+      "tests": "Counting rows with a filter. Counts each colour (SKU) separately."
+    },
+    {
+      "id": "Q09",
+      "question": "How many days does delivery from the Columbus Hub to Chicago take?",
+      "expected_route": "sql",
+      "expected_state": "answer",
+      "answer_type": "number",
+      "expected": 3,
+      "gold_sql": "SELECT days FROM delivery_times WHERE depot_id = 'COL-02' AND destination_city = 'Chicago'",
+      "tests": "Lookup in a second table (delivery_times)."
+    },
+    {
+      "id": "Q10",
+      "question": "What's the status of order NX-88219?",
+      "expected_route": "sql",
+      "expected_state": "answer",
+      "answer_type": "text",
+      "expected": "DELAYED_IN_HUB",
+      "gold_sql": "SELECT status FROM orders WHERE order_id = 'NX-88219'",
+      "tests": "Order lookup (the operational domain, used by Task B later)."
+    },
+    {
+      "id": "Q11",
+      "question": "What would 40 navy AeroTask Pro Mesh chairs cost in total?",
+      "expected_route": "python",
+      "expected_state": "answer",
+      "answer_type": "number",
+      "expected": 12800.0,
+      "gold_sql": "SELECT 40 * unit_price FROM products WHERE sku = 'AT-NAV-4D'",
+      "tests": "Maths on a looked-up value. The calculation log must show 40 x 320.00. The receipt must point to the NAVY chair, not just any colour.",
+      "expected_sku": "AT-NAV-4D"
+    },
+    {
+      "id": "Q12",
+      "question": "What's the average price of mesh office chairs?",
+      "expected_route": "python",
+      "expected_state": "answer",
+      "answer_type": "number",
+      "expected": 414.38,
+      "gold_sql": "SELECT ROUND(AVG(unit_price), 2) FROM products WHERE category = 'Office chairs' AND material LIKE '%mesh%'",
+      "tests": "Aggregation over many rows: the kind of job the Python/Pandas sandbox is for."
+    },
+    {
+      "id": "Q13",
+      "question": "Need 40 ergonomic mesh chairs with 4D armrests in navy, under $350 each, delivered to Chicago within 3 days.",
+      "expected_route": "hybrid",
+      "expected_state": "answer",
+      "answer_type": "sku_set",
+      "expected": [
+        "AT-NAV-4D",
+        "EF-ELT-NV"
+      ],
+      "gold_sql": "SELECT DISTINCT p.sku FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'Chicago' WHERE p.color = 'Navy' AND p.material LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350 AND s.available >= 40 AND t.days <= 3 ORDER BY p.sku",
+      "tests": "Elena's main question. Must exclude all 5 traps: MX (price), PT (delivery), BR (3D arms), RG (leather), CM (split stock)."
+    },
+    {
+      "id": "Q14",
+      "question": "Same chairs, but they must arrive in Chicago within 2 days.",
+      "expected_route": "hybrid",
+      "expected_state": "answer",
+      "answer_type": "sku_set",
+      "expected": [
+        "AT-NAV-4D"
+      ],
+      "gold_sql": "SELECT DISTINCT p.sku FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'Chicago' WHERE p.color = 'Navy' AND p.material LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350 AND s.available >= 40 AND t.days <= 2 ORDER BY p.sku",
+      "tests": "A follow-up. Only answerable if the engine REMEMBERS Q13's rules and changes just one (3 days -> 2 days).",
+      "follow_up_of": "Q13"
+    },
+    {
+      "id": "Q15",
+      "question": "I need 60 navy mesh chairs with 4D armrests under $350, all from one warehouse.",
+      "expected_route": "hybrid",
+      "expected_state": "answer",
+      "answer_type": "sku_set",
+      "expected": [
+        "EF-ELT-NV"
+      ],
+      "gold_sql": "SELECT DISTINCT p.sku FROM products p JOIN stock_available s USING (sku) WHERE p.color = 'Navy' AND p.material LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350 AND s.available >= 60 ORDER BY p.sku",
+      "tests": "Quantity at a SINGLE depot."
+    },
+    {
+      "id": "Q16",
+      "question": "I need 50 navy mesh chairs with 4D armrests under $350 and don't mind which warehouses they come from.",
+      "expected_route": "hybrid",
+      "expected_state": "answer",
+      "answer_type": "sku_set",
+      "expected": [
+        "AT-NAV-4D",
+        "CM-NAV-4D",
+        "EF-ELT-NV",
+        "PT-NAV-4D"
+      ],
+      "gold_sql": "SELECT p.sku FROM products p JOIN stock_available s USING (sku) WHERE p.color = 'Navy' AND p.material LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350 GROUP BY p.sku HAVING SUM(s.available) >= 50 ORDER BY p.sku",
+      "tests": "Quantity added up ACROSS depots. Corsa (25 + 25) now qualifies, and so does AeroTask (48 + 3)."
+    },
+    {
+      "id": "Q17",
+      "question": "A breathable chair that's comfortable for long shifts",
+      "expected_route": "search",
+      "expected_state": "answer",
+      "answer_type": "top5_includes",
+      "expected": [
+        "AT-NAV-4D",
+        "AT-BLK-4D",
+        "AT-GRY-4D"
+      ],
+      "tests": "Meaning-based search: 'breathable' and 'long shifts' appear in the AeroTask description; there is no column to filter on."
+    },
+    {
+      "id": "Q18",
+      "question": "Water-resistant trail shell",
+      "expected_route": "search",
+      "expected_state": "answer",
+      "answer_type": "top5_includes",
+      "expected": [
+        "ST-NAV-M"
+      ],
+      "tests": "Vocabulary mismatch: the product says 'DWR-treated nylon' and 'sheds rain', never 'water-resistant'."
+    },
+    {
+      "id": "Q19",
+      "question": "Navy blue charging cable",
+      "expected_route": "search",
+      "expected_state": "answer",
+      "answer_type": "top5_includes",
+      "expected": [
+        "CB-NAV-2M"
+      ],
+      "tests": "Keyword trap in reverse: 'navy' matches 10 chairs, but the person wants a cable."
+    },
+    {
+      "id": "Q20",
+      "question": "Show me the navy shell",
+      "expected_route": "search",
+      "expected_state": "disambiguate",
+      "answer_type": "top5_includes",
+      "expected": [
+        "EF-ELT-NV",
+        "ST-NAV-M",
+        "HS-NAV-00"
+      ],
+      "tests": "Ambiguous: a shell chair, a shell jacket and a shell side chair all match. The engine should ask, not guess."
+    },
+    {
+      "id": "Q21",
+      "question": "Do you sell pink office chairs?",
+      "expected_route": "sql",
+      "expected_state": "no_results",
+      "answer_type": "number",
+      "expected": 0,
+      "gold_sql": "SELECT COUNT(*) FROM products WHERE color = 'Pink'",
+      "tests": "The honest answer is 'none'. The engine must not invent a pink chair."
+    },
+    {
+      "id": "Q22",
+      "question": "My order is 4 days late and I want a refund right now or I'm cancelling my card.",
+      "expected_route": "handoff",
+      "expected_state": "handoff",
+      "answer_type": "state_only",
+      "expected": "handoff",
+      "tests": "Critical intent plus negative sentiment: send to a human."
+    },
+    {
+      "id": "Q23",
+      "question": "Stackable chairs for a waiting room",
+      "expected_route": "search",
+      "expected_state": "answer",
+      "answer_type": "top5_includes",
+      "expected": [
+        "HS-NAV-00"
+      ],
+      "tests": "One exact keyword ('stackable') should be enough."
+    },
+    {
+      "id": "Q24",
+      "question": "Something to charge my laptop",
+      "expected_route": "search",
+      "expected_state": "answer",
+      "answer_type": "top5_includes",
+      "expected": [
+        "CB-NAV-2M"
+      ],
+      "tests": "Meaning only: the cable says 'charging cable', never 'charge' or 'laptop'."
+    },
+    {
+      "id": "Q25",
+      "question": "A desk I can stand at",
+      "expected_route": "search",
+      "expected_state": "answer",
+      "answer_type": "top5_includes",
+      "expected": [
+        "G00-BLAC",
+        "G00-GREY",
+        "G01-BLAC",
+        "G01-WHIT"
+      ],
+      "tests": "'stand' vs 'Standing': almost the same word, but not identical."
+    },
+    {
+      "id": "Q26",
+      "question": "A light for my desk",
+      "expected_route": "search",
+      "expected_state": "answer",
+      "answer_type": "top5_includes",
+      "expected": [
+        "G05-GREY",
+        "G05-WHIT"
+      ],
+      "tests": "'light' means lamp. The word 'desk' also matches every desk."
+    },
+    {
+      "id": "Q27",
+      "question": "Rain jacket for hiking",
+      "expected_route": "search",
+      "expected_state": "answer",
+      "answer_type": "top5_includes",
+      "expected": [
+        "ST-NAV-M"
+      ],
+      "tests": "Keywords 'rain' and 'jacket' both appear in the product text."
+    },
+    {
+      "id": "Q28",
+      "question": "Somewhere to put my feet up under the desk",
+      "expected_route": "search",
+      "expected_state": "answer",
+      "answer_type": "top5_includes",
+      "expected": [
+        "G04-BLAC",
+        "G04-WHIT"
+      ],
+      "tests": "Meaning only: 'feet up' means footrest. The word 'desk' is a distraction."
+    },
+    {
+      "id": "Q29",
+      "question": "Got any navy mesh chairs with fully adjustable 4D arms for less than $330? We need at least 45 shipped from a single location.",
+      "expected_route": "hybrid",
+      "expected_state": "answer",
+      "answer_type": "sku_set",
+      "expected": [
+        "AT-NAV-4D",
+        "PT-NAV-4D"
+      ],
+      "gold_sql": "SELECT DISTINCT p.sku FROM products p JOIN stock_available s USING (sku) WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND p.material LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price < 330 AND s.available >= 45 ORDER BY p.sku",
+      "tests": "Different words for the same rules: 'less than', 'at least', 'single location', 'fully adjustable 4D arms'.",
+      "set": "fresh"
+    },
+    {
+      "id": "Q30",
+      "question": "How much for 25 grey AeroTask Pro Mesh chairs?",
+      "expected_route": "python",
+      "expected_state": "answer",
+      "answer_type": "number",
+      "expected": 8000.0,
+      "gold_sql": "SELECT 25 * unit_price FROM products WHERE sku = 'AT-GRY-4D'",
+      "tests": "A total, asked without the words 'total' or 'cost'. The receipt must point to the GREY chair.",
+      "set": "fresh",
+      "expected_sku": "AT-GRY-4D"
+    },
+    {
+      "id": "Q31",
+      "question": "Mean price of chairs with 4D armrests?",
+      "expected_route": "python",
+      "expected_state": "answer",
+      "answer_type": "number",
+      "expected": 348.77,
+      "gold_sql": "SELECT ROUND(AVG(unit_price), 2) FROM products WHERE category = 'Office chairs' AND armrests = '4D'",
+      "tests": "'Mean' instead of 'average'.",
+      "set": "fresh"
+    },
+    {
+      "id": "Q32",
+      "question": "We're opening an office in Chicago next week and need 3 navy chairs with 4D armrests and a mesh back, max $350, there in 1 day.",
+      "expected_route": "hybrid",
+      "expected_state": "answer",
+      "answer_type": "sku_set",
+      "expected": [
+        "AT-NAV-4D"
+      ],
+      "gold_sql": "SELECT DISTINCT p.sku FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'Chicago' WHERE p.color = 'Navy' AND p.material LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350 AND t.days <= 1 AND s.available >= 3 ORDER BY p.sku",
+      "tests": "Small quantity, 1-day delivery: only the Chicago depot qualifies, and it has exactly 3.",
+      "set": "fresh"
+    },
+    {
+      "id": "Q33",
+      "question": "Which navy chairs with 4D arms can you get to New York in 2 days? 20 units, any price.",
+      "expected_route": "hybrid",
+      "expected_state": "answer",
+      "answer_type": "sku_set",
+      "expected": [
+        "CM-NAV-4D",
+        "EF-ELT-NV",
+        "RG-NAV-4D"
+      ],
+      "gold_sql": "SELECT DISTINCT p.sku FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'New York' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND p.armrests = '4D' AND t.days <= 2 AND s.available >= 20 ORDER BY p.sku",
+      "tests": "A different city. No material rule, so the leather chair counts too.",
+      "set": "fresh"
+    },
+    {
+      "id": "Q34",
+      "question": "Same thing but leather only.",
+      "expected_route": "hybrid",
+      "expected_state": "answer",
+      "answer_type": "sku_set",
+      "expected": [
+        "RG-NAV-4D"
+      ],
+      "gold_sql": "SELECT DISTINCT p.sku FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'New York' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND p.armrests = '4D' AND t.days <= 2 AND s.available >= 20 AND p.material LIKE '%leather%' ORDER BY p.sku",
+      "tests": "A follow-up that ADDS a rule to the previous question.",
+      "set": "fresh",
+      "follow_up_of": "Q33"
+    },
+    {
+      "id": "Q35",
+      "question": "I'd like forty navy mesh chairs, 4D arms, under $350, to Chicago within 3 days.",
+      "expected_route": "hybrid",
+      "expected_state": "answer",
+      "answer_type": "sku_set",
+      "expected": [
+        "AT-NAV-4D",
+        "EF-ELT-NV"
+      ],
+      "gold_sql": "SELECT DISTINCT p.sku FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'Chicago' WHERE p.color = 'Navy' AND p.material LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350 AND t.days <= 3 AND s.available >= 40 ORDER BY p.sku",
+      "tests": "The quantity is written as a word ('forty').",
+      "set": "fresh"
+    },
+    {
+      "id": "R01",
+      "question": "Can someone call me back about a damaged chair?",
+      "expected_route": "router_test",
+      "expected_station": "handoff",
+      "expected_state": "any",
+      "answer_type": "route_only",
+      "expected": "handoff",
+      "tests": "Wants a person; damaged item. No word from the safety list.",
+      "set": "router-fresh"
+    },
+    {
+      "id": "R02",
+      "question": "Status update on NX-88204 please",
+      "expected_route": "router_test",
+      "expected_station": "sql",
+      "expected_state": "any",
+      "answer_type": "route_only",
+      "expected": "sql",
+      "tests": "Order number.",
+      "set": "router-fresh"
+    },
+    {
+      "id": "R03",
+      "question": "Grey desks below 500 dollars, 6 of them, delivered to Austin",
+      "expected_route": "router_test",
+      "expected_station": "hybrid",
+      "expected_state": "any",
+      "answer_type": "route_only",
+      "expected": "hybrid",
+      "tests": "Budget in words, quantity, destination.",
+      "set": "router-fresh"
+    },
+    {
+      "id": "R04",
+      "question": "What's the priciest chair you sell?",
+      "expected_route": "router_test",
+      "expected_station": "sql",
+      "expected_state": "any",
+      "answer_type": "route_only",
+      "expected": "sql",
+      "tests": "'Priciest' instead of 'most expensive'.",
+      "set": "router-fresh"
+    },
+    {
+      "id": "R05",
+      "question": "Comfortable chair for a tall person",
+      "expected_route": "router_test",
+      "expected_station": "search",
+      "expected_state": "any",
+      "answer_type": "route_only",
+      "expected": "search",
+      "tests": "Pure description.",
+      "set": "router-fresh"
+    },
+    {
+      "id": "R06",
+      "question": "I'd like to buy eight standing desks",
+      "expected_route": "router_test",
+      "expected_station": "hybrid",
+      "expected_state": "any",
+      "answer_type": "route_only",
+      "expected": "hybrid",
+      "tests": "Quantity as the word 'eight'.",
+      "set": "router-fresh"
+    },
+    {
+      "id": "R07",
+      "question": "Which depot stocks the Glow Desk Lamp?",
+      "expected_route": "router_test",
+      "expected_station": "sql",
+      "expected_state": "any",
+      "answer_type": "route_only",
+      "expected": "sql",
+      "tests": "Lookup by depot.",
+      "set": "router-fresh"
+    },
+    {
+      "id": "R08",
+      "question": "This is ridiculous, nobody answers my emails",
+      "expected_route": "router_test",
+      "expected_station": "handoff",
+      "expected_state": "any",
+      "answer_type": "route_only",
+      "expected": "handoff",
+      "tests": "Frustrated customer, no listed safety word.",
+      "set": "router-fresh"
+    }
+  ]
+}

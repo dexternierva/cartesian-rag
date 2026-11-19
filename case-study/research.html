@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research — CartesianRAG Case Study</title>
+<meta name="description" content="Research and discovery for CartesianRAG: four pain-point hypotheses and what the working engine showed about each.">
+<meta name="author" content="Dex">
+<meta name="theme-color" content="#faf6ef">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Research — CartesianRAG Case Study">
+<meta property="og:description" content="Research and discovery for CartesianRAG: four pain-point hypotheses and what the working engine showed about each.">
+<meta property="og:site_name" content="CartesianRAG case study by Dex">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect x=%224%22 y=%224%22 width=%2224%22 height=%2224%22 rx=%226%22 fill=%22%232f6b3b%22/%3E%3Ccircle cx=%2222%22 cy=%2210%22 r=%224%22 fill=%22%23c8452b%22/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('crcs-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Figtree:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<link rel="stylesheet" href="styles.css">
+<script src="js/menu-dismiss.js" defer></script>
+<script src="js/lightbox.js" defer></script>
+<script src="js/theme.js" defer></script>
+</head>
+<body>
+<div class="page">
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-h">
+<input class="menu-toggle" type="checkbox" id="menu-toggle" aria-controls="site-menu" aria-label="Case study pages menu">
+<div class="m-bar">
+<a class="brand" href="index.html"><span class="dot" aria-hidden="true"></span>CartesianRAG</a>
+<div class="right"><button type="button" class="theme-btn" data-theme-toggle hidden>Night</button><label class="menu-button" for="menu-toggle" title="Open or close the page menu"><span class="when-closed">Menu</span><span class="when-open">Close</span><svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6h14M2 12h14"></path></svg></label></div>
+</div>
+<nav id="site-menu" class="m-menu" aria-label="Case study pages menu">
+<a href="index.html#design"><span>Design</span><span>1</span></a><a href="index.html#build"><span>Build</span><span>2</span></a><a href="index.html#measure"><span>Measure</span><span>3</span></a><a href="index.html#redesign"><span>Redesign</span><span>4</span></a><a href="appendix.html"><span>Appendix</span><span>A</span></a><a href="research.html"><span>Research &amp; Discovery</span><span>A1</span></a><a href="ia.html"><span>Information Architecture</span><span>A2</span></a><a href="engine.html"><span>Design ↔ Engine</span><span>A3</span></a><a href="evaluation.html"><span>Evaluation</span><span>A4</span></a><a href="system.html"><span>Design System</span><span>A5</span></a><a href="ui.html"><span>High‑Fidelity UI</span><span>A6</span></a><a href="../prototype/"><span>Try the demo</span><span>→</span></a>
+</nav>
+<nav class="d-nav" aria-label="Case study sections">
+<a class="brand" href="index.html"><span class="dot" aria-hidden="true"></span>CartesianRAG</a>
+<div class="links"><a href="index.html#design">Design</a><a href="index.html#build">Build</a><a href="index.html#measure">Measure</a><a href="index.html#redesign">Redesign</a><a href="appendix.html" aria-current="page">Appendix</a><button type="button" class="theme-btn" data-theme-toggle hidden>Night</button><a class="demo" href="../prototype/">Try the demo</a></div>
+</nav>
+</header>
+<main id="content">
+<section class="hero sub">
+<div class="eyebrow mono crumbs"><a href="index.html">Case study</a><span aria-hidden="true">/</span><a href="appendix.html">Appendix</a><span aria-hidden="true">/</span><span class="here">A1 — Research &amp; Discovery</span></div>
+<h1 class="title">Research &amp; Discovery<span class="spark">.</span></h1>
+<p class="lead">The users, pain points and constraints below are design‑time hypotheses, not findings from interviews I ran. Where the engine later tested a hypothesis, its result sits beside it.</p>
+
+</section>
+<section class="sec">
+<div class="lab"><div class="mono"><span>Pain points</span></div></div>
+<div class="con">
+<h2 class="big">Four hypotheses, and what the engine showed.</h2>
+<div class="tbl"><table><thead><tr><th>Pain point <span class="label-pill lp-assumed">Assumed</span></th><th>What the build showed <span class="label-pill lp-measured">Measured</span></th></tr></thead><tbody><tr><td><b>Confident wrong answers on price and stock.</b> Text‑only RAG doesn’t query live tables.</td><td>Real, and worse than expected. When an AI wrote whole SQL queries for multi‑rule questions, all 6 came back as a confident “No, nothing matches” while 48 chairs sat in a warehouse (E19).</td></tr><tr><td><b>Vocabulary mismatch in search.</b> Shoppers and catalogs use different words.</td><td>Reproduced. Keyword search missed “something to charge my laptop” (the product says <i>charging cable</i>). Meaning search found it (E9, E11).</td></tr><tr><td><b>Swivel‑chair work for support agents.</b> Facts live in separate tools.</td><td>Not tested. Marcus’s console is still a hand‑built prototype, not connected to the engine.</td></tr><tr><td><b>Black‑box trust barrier.</b> Answers come without sources.</td><td>Built into the contract: every card and lookup carries a receipt to its database row. Not yet tested with people.</td></tr></tbody></table></div>
+</div>
+</section>
+<section class="sec">
+<div class="lab"><div class="mono"><span>Data freshness</span></div></div>
+<div class="con">
+<h2 class="big">Fast data is read live. Slow data can be indexed.</h2>
+<div class="grid " style="--min:240px"><div><div class="mono">Fast · seconds</div><h3 class="h">Stock and orders</h3><p>Always read from the tables at question time, joined by SKU, so a search hit is never served with a stale stock number.</p></div><div><div class="mono">Medium · hours</div><h3 class="h">Prices and delivery schedules</h3><p>Also read at question time; delivery days come from a per‑warehouse, per‑city table.</p></div><div><div class="mono">Slow · months</div><h3 class="h">Specs and policies</h3><p>The only text that is pre‑indexed for keyword and meaning search.</p></div></div>
+</div>
+</section>
+<section class="sec">
+<div class="lab"><div class="mono"><span>Trust</span></div></div>
+<div class="con">
+<h2 class="big">A receipt proves where a number came from. Not that it’s right.</h2>
+
+<div class="body"><p>Three rules carried through from the first wireframes and are now enforced by the answer contract: every number has a receipt, the receipt opens in a drawer with the row and the query, and calculations show their working.</p>
+<p>The build added a fourth rule nobody had planned. A rules‑only engine answered “What would 40 chairs cost?” with <b>$320</b>, the price of one chair, and attached a perfectly real citation. Correctness has to be checked separately, against an answer key.</p></div>
+<div class="ba"><span class="before">“available: 48”</span><span class="arrow" aria-hidden="true">→</span><span class="after">48 navy AeroTask Pro Mesh available at Indianapolis Regional</span><span class="mono note">Match between system and the real world (Nielsen #2), built from the query’s own checked filters</span></div>
+
+</div>
+</section>
+
+<nav class="pn" aria-label="Previous and next page"><a href="appendix.html"><span class="mono">← Previous — A</span><span class="t">Appendix</span></a><a class="next" href="ia.html"><span class="mono">Next — A2 →</span><span class="t">Information Architecture</span></a></nav>
+</main>
+<footer class="site-f">
+<div class="in">
+<div>
+<p class="claim">Designing for an AI that can be slow, unsure and wrong, and showing its working anyway.</p>
+<div class="links">
+<a class="u" href="mailto:dexternierva@gmail.com">dexternierva@gmail.com</a>
+<a class="u" href="../prototype/">Try the demo</a>
+<a href="#content" style="color:var(--muted)">Back to top ↑</a>
+</div>
+</div>
+<div class="mono" style="display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0"><span class="dot" aria-hidden="true" style="width:6px;height:6px;box-shadow:none"></span>CartesianRAG · Case study by Dex · Nov 2026</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design ↔ Engine — CartesianRAG Case Study</title>
+<meta name="description" content="What building and measuring the CartesianRAG engine changed in the design: nine stories, a scoreboard and a replay of real wait times.">
+<meta name="author" content="Dex">
+<meta name="theme-color" content="#faf6ef">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Design ↔ Engine — CartesianRAG Case Study">
+<meta property="og:description" content="What building and measuring the CartesianRAG engine changed in the design: nine stories, a scoreboard and a replay of real wait times.">
+<meta property="og:site_name" content="CartesianRAG case study by Dex">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect x=%224%22 y=%224%22 width=%2224%22 height=%2224%22 rx=%226%22 fill=%22%232f6b3b%22/%3E%3Ccircle cx=%2222%22 cy=%2210%22 r=%224%22 fill=%22%23c8452b%22/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('crcs-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Figtree:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<link rel="stylesheet" href="styles.css">
+<script src="js/menu-dismiss.js" defer></script>
+<script src="js/lightbox.js" defer></script>
+<script src="js/theme.js" defer></script>
+<script src="js/wait-replay.js" defer></script>
+</head>
+<body>
+<div class="page">
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-h">
+<input class="menu-toggle" type="checkbox" id="menu-toggle" aria-controls="site-menu" aria-label="Case study pages menu">
+<div class="m-bar">
+<a class="brand" href="index.html"><span class="dot" aria-hidden="true"></span>CartesianRAG</a>
+<div class="right"><button type="button" class="theme-btn" data-theme-toggle hidden>Night</button><label class="menu-button" for="menu-toggle" title="Open or close the page menu"><span class="when-closed">Menu</span><span class="when-open">Close</span><svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6h14M2 12h14"></path></svg></label></div>
+</div>
+<nav id="site-menu" class="m-menu" aria-label="Case study pages menu">
+<a href="index.html#design"><span>Design</span><span>1</span></a><a href="index.html#build"><span>Build</span><span>2</span></a><a href="index.html#measure"><span>Measure</span><span>3</span></a><a href="index.html#redesign"><span>Redesign</span><span>4</span></a><a href="appendix.html"><span>Appendix</span><span>A</span></a><a href="research.html"><span>Research &amp; Discovery</span><span>A1</span></a><a href="ia.html"><span>Information Architecture</span><span>A2</span></a><a href="engine.html"><span>Design ↔ Engine</span><span>A3</span></a><a href="evaluation.html"><span>Evaluation</span><span>A4</span></a><a href="system.html"><span>Design System</span><span>A5</span></a><a href="ui.html"><span>High‑Fidelity UI</span><span>A6</span></a><a href="../prototype/"><span>Try the demo</span><span>→</span></a>
+</nav>
+<nav class="d-nav" aria-label="Case study sections">
+<a class="brand" href="index.html"><span class="dot" aria-hidden="true"></span>CartesianRAG</a>
+<div class="links"><a href="index.html#design">Design</a><a href="index.html#build">Build</a><a href="index.html#measure">Measure</a><a href="index.html#redesign">Redesign</a><a href="appendix.html" aria-current="page">Appendix</a><button type="button" class="theme-btn" data-theme-toggle hidden>Night</button><a class="demo" href="../prototype/">Try the demo</a></div>
+</nav>
+</header>
+<main id="content">
+<section class="hero sub">
+<div class="eyebrow mono crumbs"><a href="index.html">Case study</a><span aria-hidden="true">/</span><a href="appendix.html">Appendix</a><span aria-hidden="true">/</span><span class="here">A3 — Design ↔ Engine</span></div>
+<h1 class="title">Design ↔ Engine<span class="spark">.</span></h1>
+<p class="lead">I built the engine behind the design and measured it. Each story here has the same shape: what I expected, what the engine showed, and what changed in the design.</p>
+<div class="facts"><div><div class="mono">Model</div><div class="v">qwen2.5-coder:3b via Ollama</div></div><div><div class="mono">Hardware</div><div class="v">Home PC, no graphics card</div></div><div><div class="mono">Answer key</div><div class="v">43 questions, proven against the database</div></div><div><div class="mono">Findings log</div><div class="v"><a class="link" href="../engine/FINDINGS.md">E1–E47</a></div></div></div>
+</section>
+<section class="sec">
+<div class="lab"><div class="mono"><span>Built vs designed</span></div></div>
+<div class="con">
+<h2 class="big">The smallest stack that could test the same ideas.</h2>
+
+<pre class="diagram" aria-label="Diagram: the router sends each question to one of four stations; every answer passes a grounding check and becomes a ticket">
+ Shopper's question
+        │
+        ▼
+ ┌──────────────┐   rules match?  yes ─────────────┐
+ │   ROUTER     │── no ──► AI picks ONE word ──────┤
+ └──────────────┘                                  ▼
+   ┌────────────┬─────────────┬───────────────┬──────────────┐
+   │  HAND-OFF  │    SQL      │    HYBRID     │    SEARCH    │
+   │  0–1 ms    │ AI writes a │ AI fills a    │ keyword +    │
+   │            │ SELECT,     │ form, code    │ meaning,     │
+   │            │ guard checks│ builds SQL    │ fused (RRF)  │
+   └─────┬──────┴──────┬──────┴───────┬───────┴──────┬───────┘
+         └─────────────┴──────┬───────┴──────────────┘
+                              ▼
+        grounding check: does every searched value exist?
+                              ▼
+        TICKET: message · cards · rows · receipts · constraints · trace
+</pre>
+<div class="tbl"><table><thead><tr><th>Part</th><th>Designed</th><th>Built and measured</th></tr></thead><tbody><tr><td>Database</td><td>PostgreSQL, Redis, DuckDB</td><td>SQLite, opened read‑only; 6 tables built by a script</td></tr><tr><td>Router</td><td>Intent classifier</td><td>Rules first; one‑word AI tie‑breaker for leftovers</td></tr><tr><td>Multi‑rule questions</td><td>Sandboxed Python agent</td><td>AI fills a form of requirements; tested code builds parameterised SQL</td></tr><tr><td>Search</td><td>Dense + BM25 + reranker</td><td>BM25 + <code>nomic-embed-text</code>, fused with Reciprocal Rank Fusion</td></tr><tr><td>Latency budget</td><td>1,200 ms</td><td>Median 7 s; 5–40 s by question and day</td></tr></tbody></table></div>
+
+</div>
+</section>
+<section class="sec" id="where-the-time-goes">
+<div class="lab"><div class="mono"><span>Where the time goes</span></div></div>
+<div class="con">
+<h2 class="big">Watch a real wait, replayed.</h2>
+
+<div class="body"><p>Pick a recorded question. The card replays the engine’s real step timings at 4× speed, the same way the prototype’s waiting state does. The bar shows how the time splits between the <b>AI</b> and the <b>database or search</b>.</p></div>
+<div class="demo-box" id="wait-demo" hidden>
+<div class="seg" role="group" aria-label="Recorded question"></div>
+<div class="wait" role="status" aria-live="polite"></div>
+<div class="bar-track" role="img"></div>
+<div class="legend"><span><i class="bar-ai"></i>AI model writing</span><span><i class="bar-db"></i>Database and search</span><span><button type="button" data-replay class="link" style="background:none;border:0;border-bottom:1px solid currentColor;padding:0;cursor:pointer">Replay</button></span></div>
+</div>
+<div class="tbl"><table><thead><tr><th>Recorded question (19 Nov)</th><th class="num">AI</th><th class="num">Database / search</th><th class="num">Total</th></tr></thead><tbody><tr><td>Elena: 40 navy mesh chairs…</td><td class="num">8.94 s</td><td class="num">3.2 ms</td><td class="num">8.97 s</td></tr><tr><td>How many navy AeroTask chairs in Indianapolis?</td><td class="num">6.71 s</td><td class="num">1.1 ms</td><td class="num">6.74 s</td></tr><tr><td>Show me the navy shell</td><td class="num">7.88 s</td><td class="num">2.97 s</td><td class="num">10.85 s</td></tr><tr><td>Remove one requirement (any)</td><td class="num">none</td><td class="num">1–4 ms</td><td class="num">1–4 ms</td></tr></tbody></table></div>
+
+</div>
+</section>
+<section class="sec">
+<div class="lab"><div class="mono"><span>Scoreboard</span></div></div>
+<div class="con">
+<h2 class="big">Measured, with the misses left in.</h2>
+<div class="tbl"><table><thead><tr><th>Run</th><th>What was measured</th><th>Result</th></tr></thead><tbody><tr><td>1–2</td><td>SQL station, 11 lookups</td><td><b>11/11</b> right · median 7.8 s</td></tr><tr><td>5</td><td>Search, 10 descriptive questions (hit in top 5)</td><td>Keyword 8/10 · Meaning <b>10/10</b> · Hybrid <b>10/10</b></td></tr><tr><td>6</td><td>Multi‑rule questions, AI writes whole SQL</td><td><b>0/6</b>, 6 wrong</td></tr><tr><td>7</td><td>Same questions, AI fills a form</td><td><b>5/6</b>; with rules filling gaps <b>6/6</b></td></tr><tr><td>11</td><td>Whole pipeline, rules only</td><td>Router fresh 4/8 · answers 26/35, 4 wrong · 8–10 ms</td></tr><tr><td>12</td><td><b>Whole pipeline with AI</b></td><td><b>Router fresh 8/8 · answers 33/35, 2 wrong · median 7.0 s</b></td></tr><tr><td>15</td><td>Review fixes in the engine; demo re‑recorded</td><td>API tests <b>23/23</b> · 12/12 recorded answers correct</td></tr></tbody></table></div>
+</div>
+</section>
+<section class="sec">
+<div class="lab"><div class="mono"><span>Nine stories</span></div></div>
+<div class="con">
+<h2 class="big">What I expected, what happened, what changed.</h2>
+<div class="stories"><div class="story"><span class="mono">01</span><div><h3 class="h">The wait is a screen, not a flicker</h3><div class="flow">
+<div><span class="mono">Expected</span>A 1.2 s budget, covered by skeleton cards.</div><div><span class="mono">The engine showed</span>Answers take 5–40 s. Over 99.9% of that is the AI writing; the database takes milliseconds. The model reads 518 tokens/s but writes 8 (E1, E30).</div><div><span class="mono">Design change</span>A waiting card with the real steps, a timer and an honest range. Writing only the boxes the AI fills cut writing time by 47%.</div></div></div></div><div class="story"><span class="mono">02</span><div><h3 class="h">A confident “No” is the most expensive failure</h3><div class="flow">
+<div><span class="mono">Expected</span>The main risk is a wrong number.</div><div><span class="mono">The engine showed</span>The worst failure was a wrong absence: invented product names made all six of Elena’s questions come back “nothing matches” (E18, E19).</div><div><span class="mono">Design change</span>A grounding check turns invented values into a hand‑off, and “nothing matches” always offers a way out (E22).</div></div></div></div><div class="story"><span class="mono">03</span><div><h3 class="h">Make the AI’s job smaller before making it bigger</h3><div class="flow">
+<div><span class="mono">Expected</span>A bigger model would be needed.</div><div><span class="mono">The engine showed</span>Same model, same questions. Writing whole SQL scored 0/6; filling a form of allowed values scored 5/6. AI + rules scored 6/6 and 7/7 (E24, E26).</div><div><span class="mono">Design change</span>The form became the contract’s <code>constraints</code> field, and the screen shows it as chips.</div></div></div></div><div class="story"><span class="mono">04</span><div><h3 class="h">Overfitting, twice</h3><div class="flow">
+<div><span class="mono">Expected</span>Good scores on the questions I tuned for.</div><div><span class="mono">The engine showed</span>Rules scored 6/6 on known questions and 5/7 on fresh ones. The router scored 35/35, then 4/8 fresh, sending two upset customers to a product list (E21, E32).</div><div><span class="mono">Design change</span>Rules first, a one‑word AI tie‑breaker for the leftovers: 8/8 fresh (E33, E36).</div></div></div></div><div class="story"><span class="mono">05</span><div><h3 class="h">Memory without a memory</h3><div class="flow">
+<div><span class="mono">Expected</span>Follow‑ups need server‑side sessions.</div><div><span class="mono">The engine showed</span>“Same chairs, but within 2 days” works by sending the previous form back. A speed fix once silently broke it; the regression run caught it (E23, E38, E40).</div><div><span class="mono">Design change</span>Requirements shown as removable chips, so a lost requirement is visible at a glance (R4).</div></div></div></div><div class="story"><span class="mono">06</span><div><h3 class="h">Right for the wrong reason</h3><div class="flow">
+<div><span class="mono">Expected</span>A correct total means a correct answer.</div><div><span class="mono">The engine showed</span>Elena asked for navy. The AI left colour out, the engine picked black, and the total was still right. The receipt pointed at the wrong chair (E25).</div><div><span class="mono">Design change</span>No silent picks: “any colour, same price” with every colour cited, or “Which colour?”.</div></div></div></div><div class="story"><span class="mono">07</span><div><h3 class="h">Ambiguity needs a rule, not a feeling</h3><div class="flow">
+<div><span class="mono">Expected</span>Ask when unsure.</div><div><span class="mono">The engine showed</span>“Navy shell” matched a chair, a guest chair and a jacket within 3% of each other (E15).</div><div><span class="mono">Design change</span>Ask when the top matches come from different categories: “Did you mean…?” chips with category and price (E34).</div></div></div></div><div class="story"><span class="mono">08</span><div><h3 class="h">The contract grew because of testing</h3><div class="flow">
+<div><span class="mono">Expected</span>The contract is finished.</div><div><span class="mono">The engine showed</span><code>table</code> was added to mark answers, <code>trace</code> to debug empty ones (E4).</div><div><span class="mono">Design change</span>“Can we debug it?” and “can we mark it?” are design requirements too.</div></div></div></div><div class="story"><span class="mono">09</span><div><h3 class="h">A sentence is a dead end for a screen</h3><div class="flow">
+<div><span class="mono">Expected</span>Three review fixes are screen work.</div><div><span class="mono">The engine showed</span>The screen couldn’t make a hint tappable or say what “available: 48” was about, because the engine only sent sentences (E46).</div><div><span class="mono">Design change</span>The contract now sends <code>relax</code>, <code>drop</code> and <code>subject</code> as data. Removals answer in 1–4 ms with no AI.</div></div></div></div></div>
+</div>
+</section>
+
+<nav class="pn" aria-label="Previous and next page"><a href="ia.html"><span class="mono">← Previous — A2</span><span class="t">Information Architecture</span></a><a class="next" href="evaluation.html"><span class="mono">Next — A4 →</span><span class="t">Evaluation</span></a></nav>
+</main>
+<footer class="site-f">
+<div class="in">
+<div>
+<p class="claim">Designing for an AI that can be slow, unsure and wrong, and showing its working anyway.</p>
+<div class="links">
+<a class="u" href="mailto:dexternierva@gmail.com">dexternierva@gmail.com</a>
+<a class="u" href="../prototype/">Try the demo</a>
+<a href="#content" style="color:var(--muted)">Back to top ↑</a>
+</div>
+</div>
+<div class="mono" style="display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0"><span class="dot" aria-hidden="true" style="width:6px;height:6px;box-shadow:none"></span>CartesianRAG · Case study by Dex · Nov 2026</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

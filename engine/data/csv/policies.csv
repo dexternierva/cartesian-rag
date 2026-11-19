@@ -1,0 +1,5 @@
+policy_id,domain,title,text
+RET-3.1,Returns,Standard returns,Unused items may be returned within 30 days of delivery. A 15% restocking fee applies to furniture.
+RET-4.2,Returns,Transit guarantee,"A delay of more than 48 hours past the promised delivery window entitles the customer to a free replacement or a full refund, with the return fee waived."
+WAR-2.0,Warranty,Chair warranty,Office chairs carry a 5-year warranty on frame and mechanism and 2 years on upholstery and mesh.
+B2B-1.4,B2B,Inventory hold,Business buyers may hold stock for 15 minutes while a purchase order is approved. Unconfirmed holds return to general stock.

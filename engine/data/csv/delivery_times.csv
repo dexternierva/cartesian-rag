@@ -1,0 +1,16 @@
+depot_id,destination_city,days
+CHI-01,Chicago,1
+IND-04,Chicago,2
+COL-02,Chicago,3
+DAL-01,Chicago,4
+ATL-03,Chicago,4
+CHI-01,New York,3
+IND-04,New York,3
+COL-02,New York,2
+DAL-01,New York,4
+ATL-03,New York,3
+CHI-01,Austin,4
+IND-04,Austin,4
+COL-02,Austin,4
+DAL-01,Austin,1
+ATL-03,Austin,3

@@ -1,0 +1,1119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="CartesianRAG high-fidelity prototype: an assistant that answers from a store's own tables, replaying real engine answers. Part of a UX and design-engineering case study by Dex.">
+<title>CartesianRAG Prototype</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: facilitator bar on top; each task view is a full working screen (storefront + floating assistant, or tri-pane console).
+   Look: HIGH FIDELITY, from the CartesianRAG design system (Daylight theme): forest green primary, lantern yellow
+   secondary, campfire red as a rare accent (promo tags only), brown neutrals, separate status colours, receipts on paper.
+   The old token names are kept so every rule below picks up the new values. */
+:root{
+  --bg:#faf6ef; --surface:#fffdf9; --surface-2:#f1e9dd; --line:#e2d7c8; --line-strong:#8a7765;
+  --ink:#2b2118; --ink-2:#6a5847; --primary:#2f6b3b; --primary-ink:#ffffff;
+  --accent:#2f6b3b; --accent-hover:#245530; --accent-ink:#ffffff; --accent-soft:#e2eedf;
+  --lantern:#f2c14e; --lantern-soft:#fbecc6; --on-lantern:#2b2118; --campfire:#c8452b; --on-campfire:#ffffff;
+  --ok:#1d6782; --ok-soft:#ddeef4; --warn:#8a5a00; --warn-soft:#f7ead0; --bad:#a3203f; --bad-soft:#f6dfe3;
+  --receipt-paper:#fffaf0; --receipt-edge:#8a7765; --receipt-check:#2f6b3b;
+  --scrim:rgba(43,33,24,.32);
+  --shadow-card:0 1px 2px #2b21180f, 0 2px 8px #2b21180a; --shadow-pop:0 12px 32px #2b211829, 0 2px 6px #2b211814;
+  --font-display:"Bricolage Grotesque","Figtree",system-ui,sans-serif;
+  --font-sans:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+.btn,.chip,.card,.facet,.tile,.search,.kpi,.kv,.action,.trackcard,.pick{border-width:1.5px}
+.dot.warn{background:transparent!important;border:2px solid var(--ink)}
+.dot.bad{background:transparent!important;border:2px dashed var(--ink)}
+.store-scrim{position:fixed;inset:0;z-index:22;background:var(--scrim)}
+.bar{background:#D9D9D6;border-radius:4px;max-width:100%}
+.bar.l{background:var(--surface-2)}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);font-size:14px;line-height:1.45}
+*{box-sizing:border-box}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+h1,h2,h3{text-wrap:balance;margin:0}
+.mono{font-family:var(--font-mono);font-size:12px}
+.muted{color:var(--ink-2)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.gutter{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:8px;border:1.5px solid var(--line-strong);background:var(--surface);font-weight:600;font-size:14px}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--primary);color:var(--primary-ink);border-color:var(--primary)}
+.btn.accent{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.accent:hover{background:var(--accent-hover)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.sm{min-height:36px;padding:0 12px;font-size:13px}
+.chip{min-height:36px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line-strong);background:var(--surface);font-size:13px}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--primary);color:var(--primary-ink);border-color:var(--primary)}
+.cite{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border:1px solid var(--accent);border-radius:4px;background:transparent;color:var(--accent);font-family:var(--font-mono);font-size:11px;min-height:28px}
+.cite:hover{background:var(--accent-soft)}
+.iconbtn{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border:0;background:transparent;border-radius:8px}
+.iconbtn:hover{background:var(--surface-2)}
+
+/* facilitator bar */
+.fbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;border-bottom:3px solid var(--accent);display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding-block:8px;background:var(--primary);color:var(--primary-ink);font-size:13px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:31;background:var(--primary)}
+.fbar b{letter-spacing:.06em;text-transform:uppercase;font-size:12px}
+.fbar .sp{flex-grow:1}
+.fbar button{min-height:32px;padding:0 10px;border-radius:6px;border:1px solid currentColor;background:transparent;color:inherit;font-size:12px;font-weight:600}
+.timer{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.logpanel{position:fixed;z-index:40;right:calc(16px + env(safe-area-inset-right,0px));top:calc(56px + env(safe-area-inset-top,0px));width:min(380px,calc(100% - 32px));max-height:60vh;display:flex;flex-direction:column;background:var(--surface);border:1.5px solid var(--line-strong);border-radius:10px;}
+.logpanel ol{margin:0;padding:8px 16px 8px 40px;overflow:auto;font-size:12px;font-family:var(--font-mono)}
+
+/* start */
+.start{max-width:960px;margin:0 auto;padding-block:48px 64px;display:flex;flex-direction:column;gap:28px}
+.start h1{font-size:34px;line-height:1.15;letter-spacing:-.02em}
+.start p.lead{font-size:16px;color:var(--ink-2);max-width:62ch;margin:0}
+.tasks{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.task{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:12px}
+.task .tag{align-self:flex-start;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.task h2{font-size:20px}
+.task blockquote{margin:0;padding:12px 14px;background:var(--surface-2);border-radius:8px;font-size:14px;line-height:1.5}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:0;padding:0;list-style:none}
+.rules li{padding:12px 14px;border:1px dashed var(--line-strong);border-radius:8px;font-size:13px;color:var(--ink-2)}
+
+/* storefront */
+.store-h{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;padding-block:14px;background:var(--surface);border-bottom:1px solid var(--line)}
+.logo{width:112px;height:36px;border:1.5px solid var(--line-strong);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--ink-2)}
+.store-h nav{display:flex;gap:18px;font-size:14px;color:var(--ink-2)}
+.search{flex:1 1 220px;display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border:1.5px solid var(--line);border-radius:8px;color:var(--ink-2)}
+.store-body{display:flex;flex-wrap:wrap;gap:24px;padding-block:24px 120px;max-width:1280px;margin:0 auto}
+.filters{flex:1 1 220px;max-width:100%;display:flex;flex-direction:column;gap:10px}
+.facet{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2)}
+.catalog{flex:999 1 520px;min-width:0;display:flex;flex-direction:column;gap:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:6px;font-size:13px}
+.ph{background:var(--surface-2);border-radius:6px;aspect-ratio:4/3;max-width:100%;display:flex;align-items:center;justify-content:center;color:var(--ink-2);font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.launcher{position:fixed;z-index:20;right:calc(20px + env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:0 20px;border-radius:999px;border:0;background:var(--primary);color:var(--primary-ink);font-weight:700;border:2px solid var(--primary)}
+
+/* widget */
+.widget{position:fixed;z-index:25;right:calc(20px + env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));top:calc(var(--fbar-h,48px) + 16px + env(safe-area-inset-top,0px));width:min(440px,calc(100% - 32px));display:flex;flex-direction:column;background:var(--surface);border:2px solid var(--ink);border-radius:12px;overflow:hidden}
+@media (max-width:560px){.widget{right:0;left:0;bottom:0;width:100%;border-radius:0;top:calc(var(--fbar-h,48px) + env(safe-area-inset-top,0px));padding-bottom:env(safe-area-inset-bottom,0px)}}
+.w-h{display:flex;align-items:center;gap:6px;padding:6px 6px 6px 16px;border-bottom:1px solid var(--line)}
+.w-h h2{flex-grow:1;font-size:15px}
+.w-status{display:flex;align-items:center;gap:6px;padding:8px 16px;background:var(--surface-2);font-size:12px;color:var(--ink-2)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);flex-shrink:0}
+.timeline{flex-grow:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+.u{align-self:flex-end;max-width:85%;padding:10px 14px;background:var(--surface-2);border-radius:12px 12px 2px 12px}
+.a{max-width:100%;display:flex;flex-direction:column;gap:10px}
+.a p{margin:0}
+.empty{flex-grow:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:12px}
+.empty .stack{display:flex;flex-direction:column;gap:8px;width:100%;max-width:320px}
+.w-foot{border-top:1px solid var(--line);padding:10px 12px 12px;display:flex;flex-direction:column;gap:10px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.chips .chip{flex-shrink:0}
+.composer{display:flex;gap:8px}
+.composer input{flex-grow:1;min-width:0;height:44px;padding:0 12px;border:1.5px solid var(--line-strong);border-radius:8px;background:var(--surface)}
+
+/* product card */
+.card{border:1.5px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--surface)}
+.card.top{border-color:var(--ink)}
+.card{border-radius:8px}
+.card-h{display:flex;gap:12px}
+.thumb{width:72px;height:72px;flex-shrink:0;border-radius:4px;border:1.5px solid var(--line-strong);background:linear-gradient(to top right,transparent calc(50% - 1px),#B5B5B1 50%,transparent calc(50% + 1px)),linear-gradient(to top left,transparent calc(50% - 1px),#B5B5B1 50%,transparent calc(50% + 1px)),var(--bg)}
+.card-h .t{flex-grow:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.between{justify-content:space-between}
+.price{font-weight:700;font-size:16px;font-variant-numeric:tabular-nums}
+.stock{display:inline-flex;align-items:center;gap:6px;font-size:13px}
+.stock.ok b{color:var(--ok)} .stock.warn b{color:var(--warn)} .stock.bad b{color:var(--bad)}
+.stock .dot.warn{background:var(--warn)} .stock .dot.bad{background:var(--bad)}
+.spec{padding:3px 8px;border:1px solid var(--line);border-radius:4px;font-size:12px;color:var(--ink-2)}
+.stepper{display:inline-flex;align-items:center;border:1.5px solid var(--line-strong);border-radius:8px;overflow:hidden}
+.stepper button{width:40px;height:40px;border:0;background:transparent;font-size:18px}
+.stepper input{width:56px;height:40px;border:0;border-left:1px solid var(--line);border-right:1px solid var(--line);text-align:center;font-weight:700;background:var(--surface);font-variant-numeric:tabular-nums}
+.warnbox{padding:8px 10px;border-radius:6px;background:var(--surface-2);border-left:3px solid var(--warn);font-size:13px}
+.calc{padding:10px;border-radius:6px;background:var(--surface-2);font-family:var(--font-mono);font-size:12px;white-space:pre-wrap}
+.linkbtn{align-self:flex-start;padding:4px 0;border:0;background:none;color:var(--accent);font-size:13px;text-decoration:underline;min-height:28px}
+.confirm{border:1.5px solid var(--accent);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px;background:var(--accent-soft)}
+.hold{display:flex;flex-direction:column;gap:10px;padding-top:10px;border-top:1px solid var(--line)}
+.hold .warnline{font-size:13px;font-weight:600}
+.prog{display:flex;flex-direction:column;gap:12px}
+.prog .steps li{padding-bottom:10px}
+.prog .steps .m.now{animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 4px var(--accent-soft)}}
+@media (prefers-reduced-motion:reduce){.prog .steps .m.now{animation:none}}
+.lockbadge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:6px;background:var(--surface-2);font-weight:600;font-size:13px}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.steps li{display:flex;gap:10px;padding-bottom:12px;position:relative}
+.steps li:not(:last-child)::after{content:"";position:absolute;left:6px;top:18px;bottom:2px;width:2px;background:var(--line)}
+.steps .m{width:14px;height:14px;border-radius:50%;flex-shrink:0;margin-top:3px;border:2px solid var(--line-strong);background:var(--surface)}
+.steps .m.done{background:var(--ok);border-color:var(--ok)}
+.steps .m.now{border-color:var(--accent);background:var(--accent-soft)}
+.skel{background:var(--surface-2);border-radius:6px;animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.5}}
+@media (prefers-reduced-motion:reduce){.skel{animation:none}}
+.matrix-wrap{border:1.5px solid var(--line);border-radius:10px;overflow-x:auto}
+.matrix{width:100%;min-width:380px;border-collapse:collapse;font-size:13px}
+.matrix th,.matrix td{padding:8px 10px;text-align:left;border-top:1px solid var(--line)}
+.matrix thead th{border-top:0;background:var(--surface-2);position:sticky;top:0}
+.matrix tbody th{font-weight:500;color:var(--ink-2);position:sticky;left:0;background:var(--surface)}
+.matrix tr.diff td{font-weight:600}
+.pick{min-height:52px;padding:8px 12px;border:1.5px solid var(--line-strong);border-radius:10px;background:var(--surface);text-align:left;display:flex;flex-direction:column;gap:2px}
+.pick:hover{border-color:var(--accent)}
+.notice{border:1.5px solid var(--ink);border-radius:10px;padding:12px;background:var(--surface-2);display:flex;flex-direction:column;gap:6px}
+
+/* drawer */
+.scrim{position:fixed;inset:0;z-index:50;background:var(--scrim)}
+.drawer{position:fixed;z-index:51;top:0;right:0;bottom:0;width:min(28rem,100%);display:flex;flex-direction:column;background:var(--surface);border-left:2px solid var(--ink);padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);padding-right:env(safe-area-inset-right,0px)}
+.d-h{display:flex;align-items:center;gap:8px;padding:8px 8px 8px 20px;border-bottom:1px solid var(--line)}
+.d-h h2{flex-grow:1;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.d-b{flex-grow:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:18px}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.kpi{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.kpi b{font-size:20px;font-variant-numeric:tabular-nums}
+.tabs{display:flex;border-bottom:1px solid var(--line)}
+.tabs button{min-height:44px;padding:0 14px;border:0;background:none;border-bottom:3px solid transparent;margin-bottom:-1px;font-size:13px;color:var(--ink-2)}
+.tabs button[aria-selected="true"]{border-bottom-color:var(--ink);color:var(--ink);font-weight:700}
+.kv{border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.kv div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);border-top:1px solid var(--line)}
+.kv div:first-child{border-top:0;background:var(--surface-2);font-weight:600}
+.kv span{padding:7px 10px;font-size:12px;overflow-wrap:anywhere}
+.kv div:not(:first-child) span{font-family:var(--font-mono)}
+pre.sql{margin:0;padding:12px;border-radius:8px;background:var(--surface-2);font-family:var(--font-mono);font-size:12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.d-f{display:flex;flex-wrap:wrap;gap:8px;padding:12px 20px;border-top:1px solid var(--line)}
+.d-f .btn{flex:1 1 140px}
+.label{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2)}
+
+/* console */
+.c-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;padding-block:12px;background:var(--primary);color:var(--primary-ink);font-size:13px}
+.c-h .dot{background:var(--primary-ink)}
+.c-h .sp{flex-grow:1}
+.panes{display:flex;flex-wrap:wrap;align-items:stretch;min-height:calc(100vh - 110px)}
+.pane{background:var(--surface);display:flex;flex-direction:column;min-width:0}
+.queue{flex:1 1 240px;max-width:100%;border-right:1px solid var(--line)}
+.conv{flex:999 1 420px;border-right:1px solid var(--line)}
+.copilot{flex:1 1 380px;max-width:100%}
+.p-h{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);min-height:52px}
+.p-h h2{font-size:12px;letter-spacing:.07em;text-transform:uppercase;flex-grow:1}
+.qitem{display:flex;flex-direction:column;gap:3px;padding:12px 16px;border:0;border-bottom:1px solid var(--line);background:none;text-align:left;font-size:13px;width:100%}
+.qitem[aria-current="true"]{background:var(--surface-2);box-shadow:inset 4px 0 0 var(--ink)}
+.qitem:disabled{cursor:default;color:var(--ink-2)}
+.sev{align-self:flex-start;padding:1px 6px;border:1.5px solid var(--bad);color:var(--bad);border-radius:4px;font-size:11px;font-weight:700}
+.sev.done{border-color:var(--ok);color:var(--ok)}
+.msgs{flex-grow:1;padding:20px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
+.cm{max-width:80%;display:flex;flex-direction:column;gap:4px}
+.cm .b{padding:10px 14px;border-radius:14px 14px 14px 4px;background:var(--surface-2)}
+.am{align-self:flex-end;align-items:flex-end}
+.am .b{border-radius:12px 12px 2px 12px;background:var(--surface);border:1.5px solid var(--line-strong)}
+.sys{align-self:center;max-width:90%;font-size:12px;color:var(--ink-2);text-align:center}
+.reply{border-top:1px solid var(--line);padding:12px 16px;display:flex;flex-direction:column;gap:8px}
+.reply textarea{width:100%;min-height:72px;resize:vertical;padding:10px 12px;border:1.5px solid var(--line-strong);border-radius:8px;background:var(--surface)}
+.cp-b{flex-grow:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px}
+.cp-sec{display:flex;flex-direction:column;gap:8px}
+.cp-sec ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.policy{padding:12px;border-radius:8px;background:var(--surface-2);display:flex;flex-direction:column;gap:6px}
+.policy blockquote{margin:0;padding-left:10px;border-left:3px solid var(--line-strong)}
+.action{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);text-align:left;width:100%}
+.action[aria-checked="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--line-strong);flex-shrink:0;margin-top:2px}
+.action[aria-checked="true"] .radio{border:6px solid var(--ink)}
+.conf{padding:2px 8px;border-radius:999px;border:1.5px solid var(--ink);font-size:12px;font-weight:600}
+.cp-f{border-top:1px solid var(--line);padding:12px 16px;display:flex;flex-wrap:wrap;gap:8px}
+.cp-f .btn{flex:1 1 150px}
+.modalwrap{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px;background:var(--scrim)}
+.modal{width:min(440px,100%);background:var(--surface);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:14px;border:2px solid var(--ink)}
+.toast{position:fixed;z-index:70;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));width:max-content;max-width:calc(100% - 32px);padding:12px 16px;border-radius:6px;background:var(--primary);color:var(--primary-ink);font-size:13px;font-weight:600}
+.trackcard{border:1.5px solid var(--line);border-radius:10px;padding:12px;background:var(--surface);display:flex;flex-direction:column;gap:6px;font-size:13px}
+.done-banner{margin:16px;padding:14px 16px;border-radius:10px;border:1.5px solid var(--ok);display:flex;flex-direction:column;gap:4px}
+.facts{border:1.5px solid var(--line);border-radius:8px;overflow:hidden;font-size:13px}
+.facts div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border-top:1px solid var(--line)}
+.facts div:first-child{border-top:0;background:var(--surface-2);font-weight:600}
+.facts span{padding:7px 10px;overflow-wrap:anywhere}
+.verified{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid var(--accent);border-radius:999px;background:transparent;color:var(--accent);font-size:12px;font-weight:600;min-height:32px}
+.verified:hover{background:var(--accent-soft)}
+.verified .mono{font-size:10px;font-weight:400;opacity:.85}
+details.how{font-size:12px;color:var(--ink-2);border-top:1px dashed var(--line);padding-top:6px}
+details.how summary{cursor:pointer;min-height:28px;display:flex;align-items:center}
+details.how dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px;margin:6px 0 0}
+details.how dt{font-weight:600;color:var(--ink)}details.how dd{margin:0;overflow-wrap:anywhere}
+details.calc-d summary{cursor:pointer;color:var(--accent);font-size:13px;text-decoration:underline;min-height:28px;display:flex;align-items:center}
+/* ===================== High fidelity: CartesianRAG design system v1 =====================
+   Overrides the wireframe rules above. Component names follow the design system. */
+body{font-size:15px;line-height:1.47}
+h1,h2,h3,.start h1,.task h2{font-family:var(--font-display);letter-spacing:-.01em}
+.dot.warn{background:transparent!important;border:2px solid var(--warn)}
+.dot.bad{background:transparent!important;border:2px dashed var(--bad)}
+.bar{background:var(--line)}
+/* Button */
+.btn{border-radius:10px;font-size:15px}
+.btn:hover{border-color:var(--ink);background:var(--surface-2)}
+.btn.primary,.btn.accent{background:var(--primary);border-color:var(--primary);color:var(--primary-ink)}
+.btn.primary:hover,.btn.accent:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+.btn.secondary{background:var(--lantern);border-color:var(--lantern);color:var(--on-lantern)}
+.btn.secondary:hover{background:#e9b53e;border-color:#e9b53e}
+.btn[disabled]{opacity:1;background:var(--surface-2);border-color:var(--line);color:var(--ink-2)}
+.btn.sm{font-size:14px}
+/* Chips: full text, wrapping (R11); selected = lantern */
+.chips{flex-wrap:wrap;overflow:visible}
+.chips .chip,.chip{flex-shrink:1;white-space:normal;text-align:left;line-height:18px;padding:7px 14px;font-size:14px;font-weight:500}
+.chip:hover{border-color:var(--primary);color:var(--ink);background:var(--surface-2)}
+.chip[aria-pressed="true"]{background:var(--lantern);color:var(--on-lantern);border-color:var(--on-lantern);font-weight:600}
+.reqs{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.req{display:inline-flex;align-items:center;gap:2px;min-height:32px;padding:3px 4px 3px 12px;border-radius:999px;background:var(--accent-soft);border:1.5px solid var(--primary);font-size:13px;font-weight:500}
+.req.fixed{padding-right:12px}
+.req button{display:inline-flex;width:26px;height:26px;align-items:center;justify-content:center;border:0;border-radius:999px;background:transparent;color:var(--ink)}
+.req button:hover{background:var(--surface)}
+/* Tag (rare campfire accent) */
+.promo{display:inline-flex;align-self:flex-start;padding:2px 8px;border-radius:6px;background:var(--campfire);color:var(--on-campfire);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.pick-tag{display:inline-flex;padding:2px 8px;border-radius:6px;background:var(--lantern);color:var(--on-lantern);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+/* Receipts: their own paper style (old .cite and .verified both become receipts) */
+.verified,.cite{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:3px 10px 3px 8px;border-radius:6px;border:1.5px dashed var(--receipt-edge);background:var(--receipt-paper);color:var(--ink);font-family:var(--font-sans);font-size:13px;font-weight:600}
+.verified:hover,.cite:hover{border-style:solid;background:var(--receipt-paper)}
+.verified .ck{color:var(--receipt-check);font-weight:800}
+.verified .mono{font-size:11px;font-weight:400;opacity:1;color:var(--ink-2)}
+.cite{font-family:var(--font-mono);font-size:11px;font-weight:500}
+/* Facilitator bar: bark, with a lantern edge, so it never looks like part of the store */
+.fbar{background:var(--ink);color:#f3ece3;border-bottom:3px solid var(--lantern)}
+body::before{background:var(--ink)}
+/* Storefront */
+.store-h{background:var(--surface)}
+.logo{width:auto;height:auto;border:0;padding:0;font:700 20px/1 var(--font-display);letter-spacing:-.01em;color:var(--ink);gap:6px;text-transform:none}
+.logo .spark{width:9px;height:9px;border-radius:999px;background:var(--campfire)}
+.store-hero{display:flex;flex-direction:column;gap:6px}
+.store-hero h1{font-size:34px;line-height:1.1}
+.tile{border-radius:16px;padding:12px;gap:4px;box-shadow:var(--shadow-card);font-size:14px}
+.tile .ph{aspect-ratio:auto;height:132px;border-radius:10px;color:var(--ink-2)}
+.tile b{font-weight:600}
+.tile .price{font-size:15px}
+.launcher{background:var(--primary);color:var(--primary-ink);box-shadow:var(--shadow-pop)}
+/* Assistant */
+.widget{border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-pop);background:var(--surface)}
+.w-h h2{font-size:17px}
+.w-status{font-size:13px}
+.w-status .sp{flex-grow:1}
+.w-status .dot{background:var(--ok)}
+.w-status .dot.rec{background:transparent;border:2px solid var(--ink-2)}
+.w-status button{white-space:nowrap;flex-shrink:0;min-height:28px;padding:0 10px;border-radius:999px;border:1.5px solid var(--line-strong);background:var(--surface);font-size:12px;font-weight:600;color:var(--ink)}
+.w-status button[aria-pressed="true"]{background:var(--lantern);border-color:var(--on-lantern)}
+.u{background:var(--accent-soft)}
+/* Product card */
+.card{border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-card);padding:16px;gap:12px}
+.card.top{border-color:var(--line)}
+.card h3{font-family:var(--font-display);font-size:17px;line-height:22px}
+.thumb{border:0;border-radius:10px;background:var(--surface-2);display:flex;align-items:center;justify-content:center;color:var(--ink-2)}
+.spec{border:0;background:var(--surface-2);border-radius:6px;font-size:13px;color:var(--ink)}
+.stock{font-size:14px}
+.stock.ok b,.stock.ok{color:var(--ok)} .stock.warn b{color:var(--warn)} .stock.bad b{color:var(--bad)}
+.stock .where{color:var(--ink-2)}
+.stepper{border-radius:10px;background:var(--surface)}
+.stepper button:hover{background:var(--surface-2)}
+.hold{border-top:1px solid var(--line);padding-top:12px}
+.hold .warnline{color:var(--warn)}
+.confirm{border:1.5px solid var(--lantern);background:var(--lantern-soft);border-radius:10px}
+.lockbadge{background:var(--accent-soft);color:var(--ink);border-radius:10px;padding:8px 12px}
+.warnbox{border-left:0;background:var(--warn-soft);border-radius:10px;padding:10px 12px}
+.colours{font-size:13px;color:var(--ink-2)}
+/* Notices */
+.notice{border:1.5px solid var(--line-strong);background:var(--surface-2);border-radius:10px}
+.nomatch{display:flex;flex-direction:column;gap:8px;padding:12px 14px;border-radius:10px;background:var(--warn-soft)}
+.nomatch .btn{align-self:flex-start;text-align:left}
+/* Answer fact (R6) */
+.fact{display:flex;flex-direction:column;gap:6px}
+.fact .n{font:700 34px/38px var(--font-display);font-variant-numeric:tabular-nums}
+/* Waiting card */
+.prog{border-radius:16px;box-shadow:none}
+.prog .row b{font-family:var(--font-display);font-size:17px}
+.steps .m.done{background:var(--primary);border-color:var(--primary)}
+.steps .m.now{background:var(--lantern);border-color:var(--on-lantern)}
+.prog .steps .m.now{animation:hpulse 1.4s ease-in-out infinite}
+@keyframes hpulse{50%{box-shadow:0 0 0 5px var(--lantern-soft)}}
+@media (prefers-reduced-motion:reduce){.prog .steps .m.now{animation:none}}
+/* Drawer = receipt paper */
+.drawer{background:var(--receipt-paper);border-left:0;box-shadow:var(--shadow-pop)}
+.d-h{border-bottom:1.5px dashed var(--receipt-edge)}
+.d-h h2{font-family:var(--font-display);font-size:17px;letter-spacing:0;text-transform:none}
+.kpi,.kv{background:var(--surface)}
+.tabs button[aria-selected="true"]{border-bottom-color:var(--primary)}
+/* Console */
+.c-h{background:var(--primary);color:var(--primary-ink)}
+.qitem[aria-current="true"]{box-shadow:inset 4px 0 0 var(--primary)}
+.sev{border-color:var(--bad);color:var(--bad)}
+.sev.done{border-color:var(--ok);color:var(--ok)}
+.action[aria-checked="true"]{border-color:var(--primary);box-shadow:inset 0 0 0 1px var(--primary)}
+.action[aria-checked="true"] .radio{border-color:var(--primary)}
+.conf{border-color:var(--primary);color:var(--primary)}
+.modal{border:1px solid var(--line);box-shadow:var(--shadow-pop);border-radius:16px}
+.toast{background:var(--ink);color:#f3ece3;border-radius:10px}
+.done-banner{background:var(--ok-soft);border-color:var(--ok)}
+.task{border-radius:16px;box-shadow:var(--shadow-card)}
+.task .tag{color:var(--primary)}
+details.how{font-size:13px}
+@media (max-width:560px){.w-foot .chips .chip:nth-child(n+2){display:none}}
+.visitor{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:14px 16px;border-radius:12px;background:var(--lantern-soft);border:1.5px solid var(--lantern)}
+.visitor span{flex:1 1 320px;font-size:14px}
+.visitor a.btn{text-decoration:none;color:var(--ink)}
+.fbar a.cs{display:inline-flex;align-items:center;min-height:32px;padding:0 10px;border-radius:6px;border:1px solid var(--lantern);color:var(--lantern);font-size:12px;font-weight:600;text-decoration:none}
+.rec-tag{display:inline-block;padding:1px 6px;border:1px solid var(--line-strong);border-radius:4px;font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-2)}
+</style>
+
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+(function(){
+"use strict";
+var PRODUCTS = {
+  AT: { name:"AeroTask Pro Mesh", price:320, pdf:"spec_sheet.pdf:p3", specs:["Breathable mesh","4D armrests","300 lb rating"],
+        seat:"18.5″ – 22.0″", weight:"300 lb", mesh:"Breathable mesh",
+        variants:{
+          Navy:{sku:"AT-NAV-4D",stock:48,reserved:12,depot:"Indianapolis Regional",depotId:"IND-04",eta:"Monday",row:"row_441"},
+          Black:{sku:"AT-BLK-4D",stock:22,reserved:4,depot:"Indianapolis Regional",depotId:"IND-04",eta:"Monday",row:"row_442"},
+          Grey:{sku:"AT-GRY-4D",stock:6,reserved:0,depot:"Columbus Hub",depotId:"COL-02",eta:"Wednesday",row:"row_443"}
+        }},
+  EF: { name:"ErgoFlex Elite Shell", price:345, pdf:"spec_sheet.pdf:p7", specs:["Elastomer mesh","4D armrests","275 lb rating"],
+        seat:"[SEAT RANGE]", weight:"275 lb", mesh:"Elastomer mesh",
+        variants:{ Navy:{sku:"EF-ELT-NV",stock:62,reserved:5,depot:"Columbus Hub",depotId:"COL-02",eta:"Tuesday",row:"row_517"} }}
+};
+/* Real products from the engine's store (engine/data/csv/products.csv). [name, category, price, thumb, promo] */
+var CATALOG = [
+  ["AeroTask Pro Mesh","Office chairs",320,"chair",""], ["ErgoFlex Elite Shell","Office chairs",345,"chair","New"],
+  ["Harbor Shell Side Chair","Guest seating",129,"chair",""], ["Summit Trail Shell Jacket","Outdoor apparel",189,"jacket","Camp-to-desk"],
+  ["Span Standing Desk","Desks",484,"desk",""], ["Glow Desk Lamp","Accessories",64,"lamp",""],
+  ["Rest Footrest","Accessories",42,"desk",""], ["Braided USB-C Cable 2 m","Accessories",19,"cable",""]
+];
+var THUMB = {
+  chair:'<svg width="44" height="44" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M10 4h12l-1 12H11z"/><path d="M8 16h16M12 16l-2 12M20 16l2 12M16 16v8"/></svg>',
+  jacket:'<svg width="44" height="44" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 4l4 3 4-3 6 4-2 6-2-1v15H10V13l-2 1-2-6z"/><path d="M16 7v21"/></svg>',
+  desk:'<svg width="44" height="44" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M4 11h24M7 11v15M25 11v15M7 18h18"/></svg>',
+  lamp:'<svg width="44" height="44" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M9 28h14M16 28V16l-6-6M10 10l6-5 4 4-6 5z"/></svg>',
+  cable:'<svg width="44" height="44" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 8h5v5H6zM8.5 13v4a6 6 0 006 6h3a6 6 0 006-6v-4M21 8h5v5h-5z"/></svg>'
+};
+var DRAFTS = {
+  reship:"I'm sorry about the storm delay, David. I've arranged a priority replacement from our local depot that will arrive tomorrow by 10:00 AM. You don't need to send anything back.",
+  refund:"I'm sorry about the storm delay, David. I've issued a full refund to your original payment method, and the return fee is waived. You'll see it in 3–5 business days."
+};
+
+var S;
+function fresh(view){
+  return { view:view||"start", t0:null, log:(S&&S.log)||[], showLog:false,
+    // shopper
+    widgetOpen:false, msgs:[], draft:"", variant:"Navy", qty:40, showCalc:false, confirmReserve:false, diffOnly:true, lockEnd:null, drawer:null, taskDone:false,
+    // agent
+    agentPhase:"alert", action:"reship", reply:"", confirmExec:false, toast:null, convo:[
+      {who:"c", name:"David", time:"14:02", text:"Where is my order? It was supposed to be here Tuesday. I need it for an event tomorrow or I'm cancelling my card!"},
+      {who:"a", name:"Marcus", time:"14:03", text:"Let me look into that right now."}
+    ], resolvedAt:null };
+}
+S = fresh(viewFromHash());
+
+function viewFromHash(){ var h=(location.hash||"").replace("#",""); return (h==="shopper"||h==="agent")?h:"start"; }
+function esc(s){ return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];}); }
+function money(n){ return "$"+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function elapsed(){ if(!S.t0) return 0; return Math.floor(((S.doneAt||Date.now())-S.t0)/1000); }
+function mmss(s){ return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0"); }
+function log(evt){ S.log.push({task:S.view, t:elapsed(), evt:evt}); }
+function stockState(n){ return n>=10?["ok","In stock"]:(n>0?["warn","Low stock"]:["bad","Out of stock — backorder available"]); }
+function cur(){ return PRODUCTS.AT.variants[S.variant]; }
+
+var ICON = {
+  x:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  min:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14"/></svg>',
+  chat:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/></svg>',
+  lock:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="1"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+  search:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>'
+};
+
+/* ---------- views ---------- */
+function fbar(){
+  var label = S.view==="shopper"?"Task A · Shopper":(S.view==="agent"?"Task B · Support agent":"Choose a task");
+  return '<div class="fbar gutter"><b>Prototype</b><span>'+label+'</span><span class="sp"></span>'+
+    (S.view!=="start"?'<span>Time <span class="timer" id="timer">'+mmss(elapsed())+'</span></span><button type="button" data-a="restart">Restart task</button><button type="button" data-a="home">All tasks</button>':'')+
+    '<button type="button" data-a="toggleLog" aria-expanded="'+S.showLog+'">Session log ('+S.log.length+')</button><a class="cs" href="../case-study/">Case study</a></div>'+
+    (S.showLog?logPanel():'');
+}
+function logPanel(){
+  var items = S.log.map(function(l){return '<li>['+l.task+' '+mmss(l.t)+'] '+esc(l.evt)+'</li>';}).join("");
+  return '<section class="logpanel" aria-label="Session log"><div class="row between" style="padding:10px 12px;border-bottom:1px solid var(--line)"><b>Session log</b><div class="row"><button class="btn sm" type="button" data-a="copyLog">Copy</button><button class="btn sm" type="button" data-a="clearLog">Clear</button></div></div>'+
+    (items?'<ol>'+items+'</ol>':'<p class="muted" style="margin:0;padding:12px">Clicks and task milestones appear here. Copy the log into your notes after each session.</p>')+'</section>';
+}
+
+function startView(){
+  return '<main class="start gutter">'+
+  '<aside class="visitor" aria-label="For visitors"><b>Visiting from the case study?</b><span>This prototype was built for moderated usability tests, so it has a test bar with a timer and a session log. Pick <b>Task A</b> to try the assistant: its answers are real ones the engine gave, replayed.</span><a class="btn sm" href="../case-study/">← Back to the case study</a></aside>'+
+  '<div style="display:flex;flex-direction:column;gap:12px"><span class="label">CartesianRAG · high-fidelity usability test prototype</span>'+
+  '<h1>Pick the task your facilitator gave you</h1>'+
+  '<p class="lead">This is a test of the design, not of you. Please think out loud as you go: say what you expect, what surprises you and what you would click next. Everything uses sample data, so nothing you do here is real.</p></div>'+
+  '<div class="tasks">'+
+   '<article class="task"><span class="tag">Task A · Shoppers &amp; B2B buyers</span><h2>Source 40 office chairs</h2><blockquote>You buy furniture for your company. You need <b>40 ergonomic mesh chairs with 4D armrests in navy, under $350 each</b>, delivered to the Chicago office <b>by Tuesday</b>. Find a chair that fits, check that the stock number is real, and reserve the chairs.</blockquote><a class="btn accent" href="#shopper" data-a="go" data-v="shopper">Start Task A</a></article>'+
+   '<article class="task"><span class="tag">Task B · Support agents</span><h2>Resolve a delayed order</h2><blockquote>You are a support agent. An urgent ticket is about to arrive from an angry customer whose order is late. Find out what happened, decide what the customer is owed under company policy, and resolve the ticket. Your target handle time is <b>under 3 minutes</b>.</blockquote><a class="btn accent" href="#agent" data-a="go" data-v="agent">Start Task B</a></article>'+
+  '</div>'+
+  '<ul class="rules"><li><b>Facilitator:</b> the timer starts when a task opens. Use “Restart task” between participants.</li><li>The session log records clicks and milestones. Copy it into your notes after each participant.</li><li>Direct links: add <span class="mono">#shopper</span> or <span class="mono">#agent</span> to the address.</li></ul>'+
+  '</main>';
+}
+
+/* ----- shopper ----- */
+function shopperView(){
+  var tiles = CATALOG.map(function(p){
+    return '<div class="tile"><div class="ph">' + (THUMB[p[3]] || THUMB.chair) + '</div>' + (p[4] ? '<span class="promo">' + p[4] + '</span>' : "")
+      + '<b>' + esc(p[0]) + '</b><span class="muted">' + esc(p[1]) + '</span><span class="price">' + money(p[2]) + '</span></div>';
+  }).join("");
+  return '<header class="store-h gutter"><span class="logo"><span class="spark" aria-hidden="true"></span>CartesianRAG</span><nav aria-label="Store"><span style="color:var(--ink)">Categories \u25be</span><span style="color:var(--ink)">B2B Hub</span></nav><div class="search">'+ICON.search+'<span>Search catalog\u2026</span></div><span class="btn sm" style="border-color:var(--ink)" aria-label="Cart, 0 items">Cart (0)</span></header>'+
+   '<main class="store-body gutter" style="flex-direction:column;flex-wrap:nowrap"><div style="display:flex;flex-direction:column;gap:10px"><div class="store-hero"><h1>Camp to desk</h1><p class="muted" style="margin:0;max-width:60ch">Chairs, desks and gear that work as hard at the office as they do outdoors. Need 40 of something by Tuesday? Ask the assistant.</p></div></div><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px">'+tiles+'</div></main>'+
+   (S.widgetOpen? '<div class="store-scrim" aria-hidden="true"></div>'+widget() : '<button type="button" class="launcher" data-a="openWidget">'+ICON.chat+'Ask CartesianRAG</button>');
+}
+function widget(){
+  var body = S.msgs.length? '<div class="timeline" id="timeline" aria-live="polite">'+S.msgs.map(msgHtml).join("")+'</div>' :
+    '<div class="empty"><b style="font-size:19px;font-family:var(--font-display)">Ask about products, stock or orders</b><span class="muted" style="max-width:36ch">'+(ENGINE.mode==="recorded"?"These are real answers the engine gave, each with a source for every number.":(ENGINE.mode==="live"?"Answers come from the store\u2019s database, with a source for every number.":"Answers come from live inventory, with a source for every number."))+'</span><div class="stack">'+
+    (ENGINE.mode!=="scripted" ? engineChips(3) :
+    '<button type="button" class="chip" data-a="chipQuery" data-q="Need 40 ergonomic mesh chairs with 4D armrests in navy, under $350 each, delivered to Chicago by Tuesday.">Bulk quote: chairs for an office</button>'+
+    '<button type="button" class="chip" data-a="chipQuery" data-q="Show me the navy shell">Find a product by name</button>'+
+    '<button type="button" class="chip" data-a="chipQuery" data-q="Track my recent order">Track recent order</button>')+'</div></div>';
+  var chips = (S.msgs.length && ENGINE.mode!=="scripted") ? '<div class="chips" aria-label="More questions">'+engineChips(2)+'</div>' : S.msgs.length? '<div class="chips" aria-label="Suggestions"><button type="button" class="chip" data-a="compare">Compare specs</button><button type="button" class="chip" data-a="chipQuery" data-q="When would 40 chairs arrive in Chicago?">Check ETA</button><button type="button" class="chip" data-a="chipQuery" data-q="Track my recent order">Track recent order</button></div>':'';
+  return '<section class="widget" role="dialog" aria-label="CartesianRAG assistant">'+
+   '<div class="w-h"><h2>CartesianRAG Assistant</h2><button class="iconbtn" type="button" aria-label="Minimise assistant" data-a="closeWidget">'+ICON.min+'</button><button class="iconbtn" type="button" aria-label="Close assistant" data-a="closeWidget">'+ICON.x+'</button></div>'+
+   '<div class="w-status">'+statusText()+'</div>'+
+   body+
+   '<form class="w-foot" data-form="ask">'+chips+'<div class="composer"><label for="ask" class="sr">Message the assistant</label><input id="ask" autocomplete="off" placeholder="Ask about specs, inventory, or orders…" value="'+esc(S.draft)+'"><button class="btn primary" type="submit">Send</button></div></form></section>';
+}
+function msgHtml(m, idx){
+  if(m.who==="u") return '<div class="u">'+esc(m.text)+'</div>';
+  if(m.kind==="progress") return '<div class="a" role="status" id="prog">' + progressHtml(m) + '</div>';
+  if(m.kind==="loading") return '<div class="a" role="status"><span class="muted">'+esc(m.text||"Checking live inventory…")+'</span><div class="card"><div class="card-h"><div class="thumb skel"></div><div class="t" style="gap:8px"><div class="skel" style="height:12px"></div><div class="skel" style="height:10px;width:60%"></div></div></div><div class="skel" style="height:36px"></div></div></div>';
+  if(m.kind==="text") return '<div class="a"><p>'+m.html+'</p></div>';
+  if(m.kind==="results") return resultsHtml();
+  if(m.kind==="compare") return compareHtml();
+  if(m.kind==="disambig") return '<div class="a"><p>Three product lines match “navy shell”. Which one do you mean?</p><div role="group" aria-label="Pick a match" style="display:flex;flex-direction:column;gap:8px">'+
+     '<button type="button" class="pick" data-a="pickMatch" data-m="chair"><b>Navy mesh office chair</b><span class="muted" style="font-size:12px">Office seating · 2 models</span></button>'+
+     '<button type="button" class="pick" data-a="pickMatch" data-m="leather"><b>Navy leather chair</b><span class="muted" style="font-size:12px">Executive seating · 1 model</span></button>'+
+     '<button type="button" class="pick" data-a="pickMatch" data-m="jacket"><b>Navy trail shell jacket</b><span class="muted" style="font-size:12px">Outdoor · DWR nylon</span></button></div>'+
+     '<button type="button" class="linkbtn" data-a="handoff">None of these — talk to a person</button></div>';
+  if(m.kind==="handoff") return '<div class="a"><div class="notice"><b>Connecting you to a specialist</b><span>They’ll see this chat and your order details, so you won’t need to repeat anything.</span><span class="muted" style="font-size:12px">Sent with handoff: conversation summary · retrieved records · your account context</span></div></div>';
+  if(m.kind==="track") return '<div class="a"><p>Your most recent order is on its way.</p><div class="trackcard"><b>Order #NX-77104 <span class="muted" style="font-weight:400">· sample</span></b>'+stepsHtml(2,"Thursday")+'<button type="button" class="cite" data-a="drawer" data-k="track">Source: orders.db:row_77104</button></div></div>';
+  if(m.kind==="ticket") return ticketHtml(ENGINE.tickets[m.qid]);
+  if(m.kind==="locked") return lockedHtml();
+  return "";
+}
+function resultsHtml(){
+  var A=PRODUCTS.AT, v=cur(), st=stockState(v.stock), over=S.qty>v.stock, total=S.qty*A.price;
+  var variants=Object.keys(A.variants).map(function(k){return '<button type="button" class="chip" aria-pressed="'+(S.variant===k)+'" data-a="variant" data-v="'+k+'">'+k+'</button>';}).join("");
+  var locked = !!S.lockEnd;
+  var card='<article class="card top" aria-label="'+A.name+'">'+
+    '<div class="card-h"><div class="thumb" role="img" aria-label="Product photo placeholder"></div><div class="t"><div class="row between"><h3 style="font-size:15px">'+A.name+' — '+S.variant+'</h3><span class="price">'+money(A.price)+'</span></div><span class="mono muted">SKU '+v.sku+'</span>'+
+    '<span class="stock '+st[0]+'"><span class="dot '+st[0]+'" aria-hidden="true"></span><b>'+st[1]+'</b> · '+v.stock+' units at '+v.depot+'</span><span class="muted" style="font-size:12px">Guaranteed delivery to Chicago by '+v.eta+'</span></div></div>'+
+    '<div class="row">'+A.specs.map(function(s){return '<span class="spec">'+s+'</span>';}).join("")+'</div>'+
+    '<div class="row"><span class="muted" style="font-size:13px">Colour</span>'+variants+'</div>'+
+    '<button type="button" class="cite" data-a="drawer" data-k="AT">Source: '+v.row+' | '+A.pdf+'</button>'+
+    '<div class="row" style="padding-top:10px;border-top:1px solid var(--line)"><div class="stepper"><button type="button" aria-label="Decrease quantity" data-a="qty" data-d="-1"'+(locked?" disabled":"")+'>−</button><label for="qty" class="sr">Quantity</label><input id="qty" inputmode="numeric" value="'+S.qty+'"'+(locked?" disabled":"")+'><button type="button" aria-label="Increase quantity" data-a="qty" data-d="1"'+(locked?" disabled":"")+'>+</button></div><span style="flex-grow:1">Total <b class="price" style="font-size:15px">'+money(total)+'</b></span></div>'+
+    (over?'<div class="warnbox">Only '+v.stock+' '+S.variant+' units are at this depot. Lower the quantity or pick another colour.</div>':'')+
+    '<button type="button" class="linkbtn" data-a="calc" aria-expanded="'+S.showCalc+'">'+(S.showCalc?"Hide":"Show")+' calculation</button>'+
+    (S.showCalc?'<div class="calc">unit_price  = 320.00   (inventory_live.'+v.row+')\nquantity    = '+S.qty+'\ntotal       = '+S.qty+' × 320.00 = '+total.toFixed(2)+'\nbudget_cap  = 350.00 per unit → within budget</div>':'')+
+    (S.confirmReserve? '<div class="confirm" role="group" aria-label="Confirm reservation"><b>Reserve '+S.qty+' × '+A.name+' ('+S.variant+') for '+money(total)+'?</b><span style="font-size:13px">We hold the stock for 15 minutes while your purchase order is processed. Other buyers can’t take these units during the hold.</span><div class="row"><button type="button" class="btn sm" data-a="cancelReserve">Cancel</button><button type="button" class="btn sm accent" data-a="confirmReserve">Confirm &amp; lock inventory</button></div></div>' :
+     (locked? '<span class="lockbadge">'+ICON.lock+' Inventory reserved</span>' :
+     '<div class="row"><button type="button" class="btn" style="flex:1 1 130px" data-a="drawer" data-k="AT" data-tab="1">View live specs</button><button type="button" class="btn primary" style="flex:2 1 180px" data-a="reserve"'+(over?" disabled":"")+'>Reserve stock &amp; create PO</button></div>'))+
+    '</article>';
+  var E=PRODUCTS.EF, ev=E.variants.Navy;
+  var card2='<article class="card" aria-label="'+E.name+'"><div class="card-h"><div class="thumb" role="img" aria-label="Product photo placeholder"></div><div class="t"><div class="row between"><h3 style="font-size:15px">'+E.name+' — Navy</h3><span class="price">'+money(E.price)+'</span></div><span class="mono muted">SKU '+ev.sku+'</span><span class="stock ok"><span class="dot" aria-hidden="true"></span><b>In stock</b> · 62 units at Columbus Hub</span></div></div>'+
+    '<div class="row">'+E.specs.map(function(s){return '<span class="spec">'+s+'</span>';}).join("")+'</div>'+
+    '<div class="row between"><button type="button" class="cite" data-a="drawer" data-k="EF">Source: '+ev.row+' | '+E.pdf+'</button><button type="button" class="btn sm" data-a="compare">Compare side-by-side</button></div></article>';
+  return '<div class="a"><p>Found <b>2 chairs</b> with 40+ units that can reach Chicago by Tuesday, both under $350:</p>'+card+card2+'</div>';
+}
+function compareHtml(){
+  var A=PRODUCTS.AT, E=PRODUCTS.EF, a=A.variants.Navy, e=E.variants.Navy;
+  var rows=[["Price / unit",money(A.price),money(E.price),1],["Mesh",A.mesh,E.mesh,1],["Armrests","4D","4D",0],["Colour","Navy","Navy",0],["Weight rating",A.weight,E.weight,1],["Seat height",A.seat,E.seat,1],["Stock",a.stock+" · "+a.depotId,e.stock+" · "+e.depotId,1],["Delivery to Chicago","By "+a.eta,"By "+e.eta,1]];
+  var shown=rows.filter(function(r){return !S.diffOnly||r[3];});
+  var hidden=rows.length-shown.length;
+  return '<div class="a"><div class="row between"><b>Spec comparison</b><label class="row" style="gap:6px;font-size:13px;min-height:44px"><input type="checkbox" id="diffOnly" data-a="diffOnly"'+(S.diffOnly?" checked":"")+'> Differences only</label></div>'+
+   '<div class="matrix-wrap"><table class="matrix"><thead><tr><th scope="col">Spec</th><th scope="col">AeroTask Pro</th><th scope="col">ErgoFlex Elite</th></tr></thead><tbody>'+
+   shown.map(function(r){return '<tr class="'+(r[3]?"diff":"")+'"><th scope="row">'+r[0]+'</th><td>'+esc(r[1])+'</td><td>'+esc(r[2])+'</td></tr>';}).join("")+
+   '</tbody></table></div>'+(hidden?'<span class="muted" style="font-size:12px">'+hidden+' matching rows hidden</span>':'')+
+   '<button type="button" class="cite" data-a="drawer" data-k="AT" data-tab="1">Source: spec_sheet.pdf:p3, p7 | inv_replica_02</button></div>';
+}
+function stepsHtml(nowIdx, eta){
+  var labels=["Order logged","Stock reserved","In transit","Delivery ETA "+eta];
+  return '<ol class="steps">'+labels.map(function(l,i){var c=i<nowIdx?"done":(i===nowIdx?"now":"");return '<li><span class="m '+c+'" aria-hidden="true"></span><span>'+(i<nowIdx?'<b>'+l+'</b>':l)+(i===nowIdx?' <span class="muted">(next)</span>':'')+'</span></li>';}).join("")+'</ol>';
+}
+function lockedHtml(){
+  var A=PRODUCTS.AT,v=cur();
+  return '<div class="a"><div class="card top"><b style="font-size:15px">Reserved: '+S.qty+' × '+A.name+' ('+S.variant+')</b>'+
+   '<span class="lockbadge">'+ICON.lock+' Inventory held · <span class="timer" data-countdown>15:00</span> left</span>'+
+   '<span class="muted" style="font-size:13px">Purchase order <span class="mono">PO-SAMPLE-0040</span> · '+money(S.qty*A.price)+' · ships from '+v.depot+'</span>'+
+   stepsHtml(2,v.eta+" 11:00 AM")+
+   '<div class="row"><button type="button" class="btn sm" data-a="copyTrack">Copy tracking link</button><button type="button" class="cite" data-a="drawer" data-k="AT">Source: '+v.row+' | ledger</button></div></div></div>';
+}
+
+/* ----- agent ----- */
+function agentView(){
+  var ready = S.agentPhase==="ready"||S.agentPhase==="done";
+  var done = S.agentPhase==="done";
+  var head='<div class="c-h gutter"><b style="letter-spacing:.06em;text-transform:uppercase;font-size:12px">Cartesian Operations Console</b><span class="sp"></span><span>Agent: <b>Marcus Vance</b></span><span><span class="dot" style="display:inline-block" aria-hidden="true"></span> Online</span><span>AHT avg <b>112 s</b> / target 180 s</span><span>Queue <b>3</b></span></div>';
+  var q='<nav class="pane queue" aria-label="Ticket queue"><div class="p-h"><h2>Ticket queue</h2></div>'+
+    (S.agentPhase==="alert"?'':'<button type="button" class="qitem" aria-current="true"><span class="sev'+(done?" done":"")+'">'+(done?"RESOLVED":"! URGENT")+'</span><b class="mono">#NX-88219</b><span>Delivery delay · chargeback risk</span><span class="muted">Anger 0.92 · 78 h late · SLA 48 h</span></button>')+
+    '<button type="button" class="qitem" disabled><b class="mono">#NX-88204</b><span>Return authorization · 12 m</span><span style="font-size:11px">Not part of this test</span></button>'+
+    '<button type="button" class="qitem" disabled><b class="mono">#NX-88190</b><span>Dimension check · 25 m</span><span style="font-size:11px">Not part of this test</span></button></nav>';
+  var conv='<main class="pane conv"><div class="p-h"><div style="display:flex;flex-direction:column;flex-grow:1"><b>'+(S.agentPhase==="alert"?"No ticket open":"David Miller <span class=\"spec\">Gold tier</span>")+'</b>'+(S.agentPhase==="alert"?'':'<span class="muted" style="font-size:12px">Live storefront chat · Order #NX-88219</span>')+'</div></div>'+
+    '<div class="msgs" id="msgs" aria-live="polite">'+(S.agentPhase==="alert"?'<p class="sys">Waiting for the next ticket…</p>':S.convo.map(convHtml).join(""))+'</div>'+
+    (S.agentPhase==="alert"?'':'<form class="reply" data-form="reply"><label for="reply" class="label">Reply to customer</label><textarea id="reply" placeholder="Type a reply, or insert the co-pilot draft…"'+(done?" disabled":"")+'>'+esc(S.reply)+'</textarea><div class="row" style="justify-content:flex-end"><button class="btn primary sm" type="submit"'+(done?" disabled":"")+'>Send reply only</button></div></form>')+'</main>';
+  var cp='<aside class="pane copilot" aria-label="CartesianRAG co-pilot"><div class="p-h"><h2>CartesianRAG co-pilot</h2>'+(ready?'<span class="conf">Confidence 0.97</span>':'')+'</div>'+copilotBody()+'</aside>';
+  var modal = S.agentPhase==="alert"? '<div class="modalwrap"><div class="modal" role="alertdialog" aria-labelledby="al-h" aria-describedby="al-d"><span class="sev">! URGENT · ESCALATION RISK HIGH</span><h2 id="al-h" style="font-size:20px">Incoming ticket #NX-88219</h2><p id="al-d" style="margin:0">Customer requesting refund: order delayed in transit for 4 days. Sentiment: anger 0.92. Customer mentions a card chargeback.</p><div class="row"><button type="button" class="btn primary" style="flex-grow:1" data-a="accept" id="acceptBtn">Accept ticket</button></div></div></div>':'';
+  var toast = S.toast? '<div class="toast" role="status">'+esc(S.toast)+'</div>':'';
+  return head+'<div class="panes">'+q+conv+cp+'</div>'+modal+toast;
+}
+function convHtml(m){
+  if(m.who==="sys") return '<p class="sys">'+esc(m.text)+'</p>';
+  if(m.who==="track") return '<div class="cm am"><span class="muted" style="font-size:12px">Sent to customer’s chat widget</span><div class="trackcard" style="text-align:left"><b>Priority replacement · #NX-88219-R</b>'+stepsHtml(1,"tomorrow 10:00 AM")+'</div></div>';
+  return '<div class="cm '+(m.who==="a"?"am":"")+'"><span class="muted" style="font-size:12px">'+esc(m.name)+' · '+m.time+'</span><div class="b">'+esc(m.text)+'</div></div>';
+}
+function copilotBody(){
+  if(S.agentPhase==="alert") return '<div class="cp-b"><p class="muted">The co-pilot loads data when you open a ticket.</p></div>';
+  if(S.agentPhase==="loading") return '<div class="cp-b" role="status"><span class="muted">Checking order, courier feed and policy…</span><div class="skel" style="height:80px"></div><div class="skel" style="height:110px"></div><div class="skel" style="height:140px"></div></div>';
+  var done=S.agentPhase==="done";
+  var act=function(id,title,sub){return '<button type="button" class="action" role="radio" aria-checked="'+(S.action===id)+'" data-a="pickAction" data-v="'+id+'"'+(done?" disabled":"")+'><span class="radio" aria-hidden="true"></span><span style="display:flex;flex-direction:column;gap:2px"><b>'+title+'</b><span class="muted" style="font-size:12px">'+sub+'</span></span></button>';};
+  var body='<div class="cp-b">'+
+   '<section class="cp-sec"><span class="label">Situation analysis</span><ul><li>Order is <b>delayed at the sorting hub</b> (DELAYED_IN_HUB)</li><li>Reason: severe winter storm — courier weather exception</li><li><b>78.4 h</b> in transit vs <b>48 h</b> SLA</li></ul><div class="row"><button type="button" class="cite" data-a="drawer" data-k="order">Source: orders_live_view:row_88219</button><button type="button" class="cite" data-a="drawer" data-k="courier">Source: courier_feed:FX-exception</button></div></section>'+
+   '<section class="policy"><span class="label">Policy grounding</span><b>Clause §4.2 · Transit guarantee</b><blockquote>“A delay of more than 48 hours entitles the customer to a free replacement or a full refund, with the return fee waived.”</blockquote><button type="button" class="cite" data-a="drawer" data-k="policy">Source: returns_policy.md:§4.2</button></section>'+
+   '<section class="cp-sec"><span class="label" id="act-l">Recommended actions</span><div role="radiogroup" aria-labelledby="act-l" style="display:flex;flex-direction:column;gap:8px">'+
+     act("reship","⚡ Priority reship (recommended)","Reserves 1 unit from local depot · ETA tomorrow 10:00 AM · $0 to customer")+
+     act("refund","↩ Issue full refund","Refunds original payment · return fee waived ($0.00)")+'</div></section>'+
+   '<section class="cp-sec"><span class="label">Pre-drafted reply</span><div style="padding:10px 12px;border:1.5px dashed var(--line-strong);border-radius:8px;font-size:13px">'+esc(DRAFTS[S.action])+'</div><button type="button" class="btn sm" data-a="insert"'+(done?" disabled":"")+'>Insert draft into reply</button></section>';
+  if(S.confirmExec){
+    body+='<section class="confirm" role="group" aria-label="Confirm action"><b>'+(S.action==="reship"?"Dispatch priority replacement?":"Issue full refund?")+'</b><span style="font-size:13px">'+(S.action==="reship"?"Creates a WMS priority pick from the Chicago depot and a prepaid shipping label. ETA tomorrow 10:00 AM.":"Refunds the order total to the original card. Return fee waived.")+' Your reply is sent and the action is logged under your agent ID.</span><div class="row"><button type="button" class="btn sm" data-a="cancelExec">Cancel</button><button type="button" class="btn sm accent" data-a="confirmExec">Confirm &amp; send</button></div></section>';
+  }
+  body+='</div>';
+  if(done) return body+'<div class="done-banner" role="status"><b>Ticket resolved in '+mmss(S.resolvedAt)+'</b><span class="muted" style="font-size:13px">Audit ledger entry AL-SAMPLE-219 · agent Marcus Vance · '+(S.action==="reship"?"priority reship":"full refund")+'</span></div>';
+  return body+'<div class="cp-f"><button type="button" class="btn" data-a="escalate">Escalate to Tier-2</button><button type="button" class="btn primary" data-a="exec">'+(S.action==="reship"?"Send reply &amp; reship":"Send reply &amp; refund")+'</button></div>';
+}
+
+/* ----- audit drawer ----- */
+function drawerHtml(){
+  var d=S.drawer; if(!d) return "";
+  if(d.k==="ticket") return ticketDrawerHtml(d);
+  var title, kp, tabs, rows, sql, extra="";
+  if(d.k==="AT"||d.k==="EF"){
+    var P=PRODUCTS[d.k], v=d.k==="AT"?cur():P.variants.Navy, vname=d.k==="AT"?S.variant:"Navy";
+    title=P.name+' <span class="mono muted">'+v.sku+'</span>';
+    kp=['0.98','Deterministic SQL + verified spec','2 min ago','2026-11-04 20:12:02 UTC'];
+    tabs=["Live inventory row","Spec document excerpt"];
+    if(d.tab===1){
+      rows=[["Field","Value"],["seat_height",P.seat],["weight_rating",P.weight],["armrests","4D"],["mesh",P.mesh],["colour",vname]];
+      sql=null; extra='<p class="muted" style="margin:0;font-size:13px">Excerpt from <span class="mono">'+P.pdf+'</span>, matched by the cross-encoder reranker. Sample values; brackets mark specs not in the source.</p>';
+    } else {
+      rows=[["Field","Value"],["sku",v.sku],["product_name",P.name+" ("+vname+")"],["unit_price",P.price.toFixed(2)],["available_stock",String(v.stock)],["reserved_stock",String(v.reserved)],["warehouse_hub",v.depotId+" "+v.depot],["transit_sla_hours","48 (Chicago metro)"]];
+      sql="SELECT sku, product_name, unit_price,\n       available_stock, warehouse_hub\nFROM inventory_live\nWHERE sku = '"+v.sku+"';";
+      extra='<p class="muted" style="margin:0;font-size:13px">Database <span class="mono">postgres_warehouse_replica_02</span> · table <span class="mono">inventory_live</span></p>';
+    }
+  } else if(d.k==="order"||d.k==="courier"){
+    title='Order <span class="mono muted">#NX-88219</span>'; kp=['1.00','Exact primary-key match','Live','2026-11-05 14:03:11 UTC']; tabs=["Order row","Courier event"];
+    if(d.tab===1){ rows=[["Field","Value"],["carrier","FedEx (sample)"],["event","WEATHER_EXCEPTION"],["facility","Sorting hub"],["logged","2026-11-03 06:40 UTC"]]; sql=null; extra='<p class="muted" style="margin:0;font-size:13px">Courier webhook payload, matched by tracking ID.</p>'; }
+    else { rows=[["Field","Value"],["order_id","NX-88219"],["customer_id","CUST-9021"],["order_date","2026-10-18"],["current_status","DELAYED_IN_HUB"],["transit_delay_hr","78.4 (SLA 48)"]]; sql="SELECT * FROM orders_live_view\nWHERE order_id = 'NX-88219';"; extra='<p class="muted" style="margin:0;font-size:13px">Table <span class="mono">orders_live_view</span> on PostgreSQL Replica-02</p>'; }
+  } else if(d.k==="policy"){
+    title='Returns policy <span class="mono muted">§4.2</span>'; kp=['0.94','Hybrid search + reranker','Policy v3','Updated 2026-09-01 (sample)']; tabs=["Clause text"];
+    rows=null; sql=null; extra='<blockquote style="margin:0;padding:12px;border-left:3px solid var(--line-strong);background:var(--surface-2);border-radius:0 8px 8px 0">§4.2 Transit guarantee. A delay of more than 48 hours past the promised delivery window entitles the customer to a free replacement or a full refund, with the return fee waived.</blockquote><p class="muted" style="margin:0;font-size:13px">Sample clause text for the prototype.</p>';
+  } else {
+    title='Order <span class="mono muted">#NX-77104</span>'; kp=['1.00','Exact primary-key match','Live','sample']; tabs=["Order row"];
+    rows=[["Field","Value"],["order_id","NX-77104"],["current_status","IN_TRANSIT"],["eta","Thursday"]]; sql="SELECT * FROM orders_live_view\nWHERE order_id = 'NX-77104';";
+  }
+  var t=tabs.map(function(x,i){return '<button type="button" role="tab" aria-selected="'+((d.tab||0)===i)+'" data-a="tab" data-i="'+i+'">'+x+'</button>';}).join("");
+  return '<div class="scrim" data-a="closeDrawer"></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="Source verification" id="drawer">'+
+   '<div class="d-h"><h2>Audit &amp; data provenance</h2><button type="button" class="iconbtn" aria-label="Close inspector" data-a="closeDrawer" id="drawerClose">'+ICON.x+'</button></div>'+
+   '<div class="d-b"><div style="display:flex;flex-direction:column;gap:4px"><span class="label">Verified citation</span><b style="font-size:17px">'+title+'</b></div>'+
+   '<div class="kpis"><div class="kpi"><span class="muted" style="font-size:12px">Grounding confidence</span><b>'+kp[0]+'</b><span class="muted" style="font-size:12px">'+kp[1]+'</span></div><div class="kpi"><span class="muted" style="font-size:12px">Extracted</span><b style="font-size:16px">'+kp[2]+'</b><span class="mono muted" style="font-size:11px">'+kp[3]+'</span></div></div>'+
+   '<div class="tabs" role="tablist" aria-label="Source type">'+t+'</div>'+extra+
+   (rows?'<div class="kv">'+rows.map(function(r){return '<div><span>'+esc(r[0])+'</span><span>'+esc(r[1])+'</span></div>';}).join("")+'</div>':'')+
+   (sql?'<div style="display:flex;flex-direction:column;gap:6px"><span class="label">Executed SQL</span><pre class="sql">'+esc(sql)+'</pre></div>':'')+
+   '</div><div class="d-f"><button type="button" class="btn" data-a="closeDrawer">Close inspector</button><button type="button" class="btn primary" data-a="export">Export audit log (.JSON)</button></div></aside>';
+}
+
+/* ---------- render ---------- */
+var app=document.getElementById("app"), lastFocus=null;
+function render(focusId){
+  var v = S.view==="shopper"?shopperView():(S.view==="agent"?agentView():startView());
+  app.innerHTML = fbar()+v+drawerHtml();
+  measureBar();
+  var tl=document.getElementById("timeline"); if(tl) tl.scrollTop=tl.scrollHeight;
+  var ms=document.getElementById("msgs"); if(ms) ms.scrollTop=ms.scrollHeight;
+  tickCountdown();
+  if(focusId){ var el=document.getElementById(focusId); if(el) el.focus(); }
+}
+/* R2: the facilitator bar wraps to 2 rows on phones; the assistant must start below its real height,
+   not a guessed 48 px, or the bar covers the assistant's title and close button. */
+function measureBar(){ var b=document.querySelector(".fbar"); if(b) document.documentElement.style.setProperty("--fbar-h", b.offsetHeight+"px"); }
+window.addEventListener("resize", measureBar);
+function tickCountdown(){
+  if(!S.lockEnd) return;
+  var left=Math.max(0,Math.round((S.lockEnd-Date.now())/1000));
+  document.querySelectorAll("[data-countdown]").forEach(function(n){n.textContent=mmss(left);});
+}
+setInterval(function(){
+  var t=document.getElementById("timer"); if(t&&S.t0&&!S.taskDone) t.textContent=mmss(elapsed());
+  tickCountdown();
+},1000);
+
+function setView(v){
+  ENGINE.pending=null;
+  var keepLog=S.log; S=fresh(v); S.log=keepLog; ENGINE.last=null;
+  if(v!=="start"){ S.t0=Date.now(); log("task started"); }
+  if(location.hash.replace("#","")!==(v==="start"?"":v)){ history.replaceState(null,"",v==="start"?location.pathname+location.search:"#"+v); }
+  render(v==="agent"?"acceptBtn":null);
+}
+
+/* ================= ENGINE MODE =================
+   The widget can answer three ways:
+   - "live":     ?api=http://localhost:8000 in the address -> calls the real Python engine
+   - "recorded": answers.json exists (GitHub Pages)       -> replays REAL tickets the engine produced
+   - "scripted": neither (e.g. the file opened directly)   -> the original hand-written demo
+*/
+var ENGINE = { mode: "scripted", api: null, data: null, byQ: {}, byDrop: {}, tickets: {}, last: null, ready: false, details: false };
+try{ ENGINE.details = localStorage.getItem("cr-details") === "1"; }catch(e){}
+
+function norm(s){ return String(s).toLowerCase().replace(/[^a-z0-9$ ]+/g," ").replace(/\s+/g," ").trim(); }
+
+function loadEngine(){
+  var api = (location.search.match(/[?&]api=([^&]+)/) || [])[1];
+  if(api){
+    ENGINE.api = decodeURIComponent(api).replace(/\/$/,"");
+    fetch(ENGINE.api + "/health").then(function(r){ return r.json(); }).then(function(h){
+      ENGINE.mode = "live"; ENGINE.preset = h.preset; ENGINE.ready = true; render();
+    }).catch(function(){ loadRecorded(); });
+  } else { loadRecorded(); }
+}
+function loadRecorded(){
+  fetch("answers.json").then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(d){
+    ENGINE.data = d; ENGINE.byDrop = {};
+    d.answers.forEach(function(a){
+      if(a.drop) ENGINE.byDrop[norm(a.follows) + "|" + a.drop] = a;     // a recorded one-tap removal (R4, R5)
+      else ENGINE.byQ[norm(a.question)] = a;
+    });
+    ENGINE.mode = "recorded"; ENGINE.ready = true; render();
+  }).catch(function(){ ENGINE.mode = "scripted"; ENGINE.ready = true; render(); });
+}
+function niceDate(iso){ var d = new Date(iso); return isNaN(d) ? String(iso).slice(0,10) : d.toLocaleDateString("en-GB", {day:"numeric", month:"short", year:"numeric"}); }
+function detailsToggle(){ return '<span class="sp"></span><button type="button" data-a="engineDetails" aria-pressed="' + !!ENGINE.details + '">Engine details</button>'; }
+function statusText(){
+  /* R12: say what is true for this session. R8: model names live in "Engine details", not here. */
+  if(ENGINE.mode === "live") return '<span class="dot" aria-hidden="true"></span>Live answers from the store\u2019s database' + detailsToggle();
+  if(ENGINE.mode === "recorded") return '<span class="dot rec" aria-hidden="true"></span>Real answers, recorded ' + esc(niceDate(ENGINE.data.recorded_at)) + ', replayed for this demo' + detailsToggle();
+  return '<span class="dot" aria-hidden="true"></span>Connected to live inventory · synced 2 min ago';
+}
+function demoQuestions(){
+  if(ENGINE.mode !== "recorded") return [];
+  return ENGINE.data.answers.filter(function(a){ return !a.from_chip && !a.drop; }).map(function(a){ return a.question; });
+}
+function engineChips(limit){
+  var asked = {}; S.msgs.forEach(function(m){ if(m.who === "u") asked[norm(m.text)] = 1; });
+  return demoQuestions().filter(function(q){ return !asked[norm(q)]; }).slice(0, limit).map(function(q){
+    return '<button type="button" class="chip" data-a="chipQuery" data-q="' + esc(q) + '">' + esc(q) + '</button>';
+  }).join("");
+}
+/* R3: an honest waiting state. The real engine takes 6–40 s on a home PC, almost all of it the small AI
+   model writing. Recorded answers replay their REAL step timings (from timing_ms) at 4× speed, labelled,
+   with a skip button. Live mode shows a real timer; the engine reports its steps only at the end today. */
+var REPLAY_SPEED = 4;
+function replaySteps(t){
+  var tm = t.timing_ms || {}, total = tm.total || 0, st = (t.trace || {}).station;
+  var gen = tm.generation || 0, ret = tm.retrieval || 0;
+  if(st === "hybrid") return [["Reading your request (small AI model)", total - ret], ["Checking stock, prices and delivery in 5 warehouses", ret]];
+  if(st === "sql") return [["Turning your question into a database query (small AI model)", total - ret], ["Looking it up", ret]];
+  if(st === "search") return [["Working out what kind of question this is", total - ret], ["Searching the catalog by meaning and by keyword", ret]];
+  return [["Understanding your request", total]];
+}
+function progressHtml(m){
+  var real = (Date.now() - m.started) * (m.speed || 1), steps = m.steps, i = 0, acc = 0;
+  if(steps){ for(i = 0; i < steps.length; i++){ acc += steps[i][1]; if(real < acc) break; } }
+  var timer = '<span class="timer" id="prog-t" aria-hidden="true">' + mmss(Math.floor(real / 1000)) + '</span>';
+  var list = steps ? '<ol class="steps">' + steps.map(function(s, j){
+      var c = j < i ? "done" : (j === i ? "now" : "");
+      return '<li><span class="m ' + c + '" aria-hidden="true"></span><span>' + (j < i ? '<b>' + esc(s[0]) + '</b>' : esc(s[0])) + '</span></li>'; }).join("") + '</ol>'
+    : '<ol class="steps"><li><span class="m now" aria-hidden="true"></span><span>Working on your answer</span></li></ol>';
+  var note = m.speed > 1
+    ? 'Demo replay at ' + m.speed + '× speed. The real engine took <b>' + (m.realTotal / 1000).toFixed(1) + ' s</b> on a home PC.'
+    : (real > 20000 ? 'Still working. Questions with many requirements take the longest.' : 'A small AI model on a home PC usually takes 6–40 s.');
+  return '<div class="card prog"><div class="row between"><b>Working on it</b>' + timer + '</div>' + list
+    + '<span class="muted" style="font-size:12px">' + note + '</span>'
+    + (m.speed > 1 ? '<div><button type="button" class="btn sm" data-a="skipWait">Skip the wait</button></div>' : "") + '</div>';
+}
+function startProgress(m, ticket, meta){
+  m.who = "a"; m.kind = "progress"; m.started = Date.now(); m._step = -1;
+  S.msgs.push(m); ENGINE.pending = {msg: m, ticket: ticket, meta: meta}; render("ask");
+}
+function finishPending(){
+  var p = ENGINE.pending; if(!p) return; ENGINE.pending = null;
+  var i = S.msgs.indexOf(p.msg); if(i < 0) return;            // the shopper left the task meanwhile
+  S.msgs.splice(i, 1); if(p.ticket) showTicket(p.ticket, p.meta); else render("ask");
+}
+setInterval(function(){
+  var p = ENGINE.pending; if(!p) return;
+  var m = p.msg, real = (Date.now() - m.started) * (m.speed || 1);
+  if(m.speed > 1 && real >= m.realTotal){ finishPending(); return; }
+  var box = document.getElementById("prog"); if(!box) return;
+  var steps = m.steps || [], i = 0, acc = 0;
+  for(i = 0; i < steps.length; i++){ acc += steps[i][1]; if(real < acc) break; }
+  var stale = m.speed === 1 && real > 20000 && !m._late;
+  if(i !== m._step || stale){ m._step = i; if(stale) m._late = true; box.innerHTML = progressHtml(m); }
+  else { var tEl = document.getElementById("prog-t"); if(tEl) tEl.textContent = mmss(Math.floor(real / 1000)); }
+}, 250);
+
+function engineAsk(text){
+  if(ENGINE.pending){ flash("Wait for the current answer, or skip the wait"); return; }
+  S.draft = ""; S.msgs.push({who:"u", text:text}); log("asked: " + text);
+  if(ENGINE.mode === "live"){
+    var lm = {speed:1}; startProgress(lm, null, null);
+    var t0 = Date.now();
+    fetch(ENGINE.api + "/ask", {method:"POST", headers:{"Content-Type":"application/json"},
+          body: JSON.stringify({question:text, previous:ENGINE.last})})
+      .then(function(r){ return r.json(); })
+      .then(function(ticket){ ENGINE.pending.ticket = ticket; ENGINE.pending.meta = {waited_ms: Date.now() - t0}; finishPending(); })
+      .catch(function(){ ENGINE.pending = null; var i = S.msgs.indexOf(lm); if(i >= 0) S.msgs.splice(i, 1); S.msgs.push({who:"a", kind:"text", html:"The engine didn't answer. Is <span class=\"mono\">uvicorn</span> running?"}); render("ask"); });
+    return;
+  }
+  var hit = ENGINE.byQ[norm(text)];
+  if(!hit){
+    S.msgs.push({who:"a", kind:"text", html:"This online demo replays answers the real engine gave. Try one of these questions:"
+      + '<span class="chips" style="flex-wrap:wrap;margin-top:8px">' + engineChips(6) + '</span>'});
+    log("not in recording: " + text); render("ask"); return;
+  }
+  var real = Math.max(hit.ticket.timing_ms.total, 1600);       // even instant answers show their step briefly
+  startProgress({speed: REPLAY_SPEED, steps: replaySteps(hit.ticket), realTotal: real}, hit.ticket, {recorded:true, follows: hit.follows});
+}
+var DROP_WORDS = {quantity:"the quantity", category:"the category", color:"the colour", material:"the material", armrests:"the armrest type",
+  max_unit_price:"the price limit", destination_city:"the delivery city", max_delivery_days:"the delivery-time limit", single_depot:"the one-warehouse rule"};
+/* R4 + R5: ask again with one requirement removed. Live: the engine re-runs the same form minus that box (no AI).
+   Recorded: replay the removal the engine recorded for this answer. */
+function engineDrop(qid, field){
+  if(ENGINE.pending){ flash("Wait for the current answer, or skip the wait"); return; }
+  var src = ENGINE.tickets[qid]; if(!src) return;
+  var label = "Without " + (DROP_WORDS[field] || field);
+  S.msgs.push({who:"u", text: label}); log("removed requirement: " + field);
+  if(ENGINE.mode === "live"){
+    var lm = {speed:1}; startProgress(lm, null, null); var t0 = Date.now();
+    fetch(ENGINE.api + "/ask", {method:"POST", headers:{"Content-Type":"application/json"},
+          body: JSON.stringify({question: label, previous: src.constraints, drop: field})})
+      .then(function(r){ return r.json(); })
+      .then(function(ticket){ ENGINE.pending.ticket = ticket; ENGINE.pending.meta = {waited_ms: Date.now() - t0, follows: src.question}; finishPending(); })
+      .catch(function(){ ENGINE.pending = null; var i = S.msgs.indexOf(lm); if(i >= 0) S.msgs.splice(i, 1); S.msgs.push({who:"a", kind:"text", html:"The engine didn\u2019t answer. Is <span class=\"mono\">uvicorn</span> running?"}); render("ask"); });
+    return;
+  }
+  var hit = ENGINE.byDrop[norm(src.question) + "|" + field];
+  if(!hit){ S.msgs.push({who:"a", kind:"text", html:"That change wasn\u2019t recorded for this demo."}); render("ask"); return; }
+  startProgress({speed: REPLAY_SPEED, steps: [["Removing that requirement and checking stock again", hit.ticket.timing_ms.total]], realTotal: 1600},
+                hit.ticket, {recorded:true, follows: src.question});
+}
+function showTicket(ticket, meta){
+  ticket = JSON.parse(JSON.stringify(ticket)); ticket._meta = meta || {};
+  ENGINE.tickets[ticket.query_id] = ticket;
+  if(ticket.constraints) ENGINE.last = ticket.constraints;
+  S.msgs.push({who:"a", kind:"ticket", qid: ticket.query_id});
+  log("engine answer: " + ticket.state + " via " + ((ticket.trace||{}).station || ticket.route) + " (" + Math.round(ticket.timing_ms.total) + " ms)");
+  render("ask");
+}
+function friendly(msg){ return String(msg).replace(/pass(es)? every rule/g, function(m, es){ return es ? "matches everything you asked for" : "match everything you asked for"; })
+  .replace(/all of those rules/g, "everything you asked for").replace(/\b([a-z]+)_([a-z_]+): /g, function(m,a,b){ return (a + " " + b.replace(/_/g," ")) + ": "; }).replace(/^([a-z])/, function(c){ return c.toUpperCase(); }); }
+function stockWords(st){ return {in_stock:["ok","In stock"], low_stock:["warn","Low stock"], out_of_stock:["bad","Out of stock"]}[st.status] || ["ok", st.status]; }
+function receiptButton(t, cid, label){
+  var c = (t.citations || []).filter(function(x){ return x.id === cid; })[0]; if(!c) return "";
+  var key = c.row_key ? (c.row_key.sku || (t.subject && t.subject.sku) || c.row_key.aggregate || "") : "";
+  var table = /stock_available/.test(c.table) ? "inventory" : (TABLE_WORDS[c.table] || String(c.table).split(",")[0].replace(/_/g, " "));
+  return '<button type="button" class="verified" data-a="tdrawer" data-q="' + esc(t.query_id) + '" data-c="' + esc(cid) + '"><span class="ck" aria-hidden="true">✓</span>' + esc(label || "Verified · see source")
+    + ' <span class="mono">' + esc(table + (key ? " · " + key : "")) + '</span></button>';
+}
+var TABLE_WORDS = { stock_available: "inventory", products: "products", orders: "orders", delivery_times: "delivery" };
+var REQ_ORDER = ["quantity","product_name","category","color","material","armrests","max_unit_price","destination_city","max_delivery_days","single_depot"];
+function reqLabel(k, v){
+  switch(k){
+    case "quantity": return v + (v === 1 ? " unit" : " units");
+    case "armrests": return v + " armrests";
+    case "max_unit_price": return "Under " + money(v).replace(".00","") + " each";
+    case "destination_city": return "To " + v;
+    case "max_delivery_days": return "Within " + v + " day" + (v === 1 ? "" : "s");
+    case "single_depot": return v === false ? "From several warehouses" : null;
+    default: v = String(v); return v.charAt(0).toUpperCase() + v.slice(1);
+  }
+}
+/* R4: the requirements the engine is using, as chips. x = ask again without that one (no AI, milliseconds). */
+function reqChips(t){
+  var c = t.constraints || {}; if(!c.intent || t.route === "handoff") return "";
+  var canDrop = function(k){
+    if(c.intent !== "find_products" || k === "product_name" || (k === "single_depot")) return false;
+    if(ENGINE.mode === "live") return true;
+    return !!ENGINE.byDrop[norm(t.question) + "|" + k];
+  };
+  var chips = REQ_ORDER.filter(function(k){ return c[k] !== undefined && c[k] !== null && reqLabel(k, c[k]); }).map(function(k){
+    var lab = reqLabel(k, c[k]);
+    return canDrop(k) ? '<span class="req">' + esc(lab) + '<button type="button" data-a="drop" data-q="' + esc(t.query_id) + '" data-f="' + k + '" aria-label="Remove ' + esc(lab) + '">' + ICON.x + '</button></span>'
+                      : '<span class="req fixed">' + esc(lab) + '</span>';
+  }).join("");
+  return chips ? '<div class="reqs" role="group" aria-label="What you asked for"><span class="muted" style="font-size:13px">Looking for</span>' + chips + '</div>' : "";
+}
+function holdNoun(t, n){
+  var cat = ((t.constraints || {}).category || "").toLowerCase();
+  if(/chair/.test(cat)) return n === 1 ? "chair" : "chairs";
+  if(/desk/.test(cat)) return n === 1 ? "desk" : "desks";
+  return n === 1 ? "unit" : "units";
+}
+/* R6: a lookup says what its number is about, from the ticket's checked 'subject' */
+function factHtml(t){
+  var cols = t.table.columns, row = t.table.rows[0], s = t.subject || {};
+  if(!(t.table.rows.length === 1 && cols.length === 1) || !Object.keys(s).length) return "";
+  var col = cols[0], v = row[0];
+  var what = [s.color ? s.color.toLowerCase() : "", s.product || s.category || ""].filter(Boolean).join(" ");
+  var where = s.depot ? " at " + s.depot : (s.city ? " in " + s.city : "");
+  var num = /price|cost|total/.test(col) ? money(Number(v)) : String(v);
+  var sentence = col === "available" ? what + " available" + where : col.replace(/_/g, " ") + " · " + what + where;
+  return '<div class="fact"><span class="n">' + esc(num) + '</span><p>' + esc(sentence.charAt(0).toUpperCase() === sentence.charAt(0) ? sentence : sentence) + '.</p></div>';
+}
+function ticketCard(c, t){
+  var sw = stockWords(c.stock);
+  var deliv = c.delivery ? '<span class="muted" style="font-size:12px">Delivers to ' + esc(c.delivery.destination_city) + ' in ' + c.delivery.days + ' day' + (c.delivery.days === 1 ? "" : "s") + (c.delivery.meets_deadline === false ? " (misses your deadline)" : "") + '</span>' : "";
+  /* R7: variants carry no stock in the ticket, so they are plain text, not chips that look tappable */
+  var others = (c.variants || []).filter(function(v){ return v.sku !== c.sku; }).map(function(v){ return v.color; });
+  var variants = others.length ? '<span class="colours">Also in ' + esc(others.join(", ")) + '</span>' : "";
+  return '<article class="card" aria-label="' + esc(c.name) + '"><div class="card-h"><div class="thumb" role="img" aria-label="Product photo placeholder">' + (/jacket/i.test(c.name) ? THUMB.jacket : /cable/i.test(c.name) ? THUMB.cable : /lamp/i.test(c.name) ? THUMB.lamp : /desk|footrest/i.test(c.name) ? THUMB.desk : THUMB.chair) + '</div><div class="t">'
+    + '<div class="row between"><h3 style="font-size:15px">' + esc(c.name) + (c.color ? ' — ' + esc(c.color) : "") + '</h3><span class="price">' + money(c.unit_price) + '</span></div>'
+    + '<span class="mono muted">SKU ' + esc(c.sku) + '</span>'
+    + '<span class="stock ' + sw[0] + '"><span class="dot ' + sw[0] + '" aria-hidden="true"></span><b>' + sw[1] + '</b><span class="where">· ' + c.stock.available + ' at ' + esc(c.stock.depot_name) + '</span></span>' + deliv
+    + '</div></div>'
+    + (c.specs && c.specs.length ? '<div class="row">' + c.specs.map(function(s){ return '<span class="spec">' + esc(s) + '</span>'; }).join("") + '</div>' : "")
+    + variants
+    + '<div class="row">' + c.citation_ids.map(function(id){ return receiptButton(t, id); }).join("") + '</div>'
+    + holdHtml(c, t)
+    + '</article>';
+}
+/* R1: every engine-built card can be acted on. The quantity starts at the number the shopper asked for
+   (the ticket's constraints.quantity), so "40 chairs" arrives already filled in. */
+function holdKey(t, c){ return t.query_id + "|" + c.sku; }
+function holdState(t, c){
+  var k = holdKey(t, c);
+  if(!S.eq) S.eq = {};
+  if(!S.eq[k]) S.eq[k] = {qty: Math.max(1, (t.constraints || {}).quantity || 1), confirm:false};
+  return S.eq[k];
+}
+function holdHtml(c, t){
+  if(t.state !== "answer") return "";
+  var k = holdKey(t, c), st = holdState(t, c), total = st.qty * c.unit_price;
+  var avail = c.stock.available, over = st.qty > avail, held = S.hold && S.hold.key === k;
+  var unit = holdNoun(t, st.qty);
+  if(held) return '<div class="hold"><span class="lockbadge">' + ICON.lock + ' Held: ' + S.hold.qty + ' × ' + esc(c.name) + (c.color ? ' (' + esc(c.color) + ')' : "") + ' · <span class="timer" data-countdown>15:00</span> left</span>'
+    + '<span class="muted" style="font-size:13px">Purchase order <span class="mono">PO-SAMPLE-0040</span> · ' + money(S.hold.qty * c.unit_price) + ' · ships from ' + esc(c.stock.depot_name) + '. At zero they go back on sale; you can hold them again if they\u2019re still there.</span></div>';
+  if(st.confirm) return '<div class="hold"><div class="confirm" role="group" aria-label="Confirm hold"><b>Hold ' + st.qty + ' × ' + esc(c.name) + (c.color ? ' (' + esc(c.color) + ')' : "") + ' for ' + money(total) + '?</b>'
+    + '<span style="font-size:13px">We keep these ' + unit + ' for 15 minutes while your purchase order is created. No charge until it is approved.</span>'
+    + '<div class="row"><button type="button" class="btn sm" data-a="eCancel" data-k="' + esc(k) + '">Cancel</button><button type="button" class="btn sm accent" data-a="eConfirm" data-k="' + esc(k) + '">Confirm hold</button></div></div></div>';
+  var locked = !!S.hold;
+  return '<div class="hold"><div class="row"><div class="stepper"><button type="button" aria-label="Decrease quantity" data-a="eqty" data-k="' + esc(k) + '" data-d="-1"' + (locked ? " disabled" : "") + '>−</button>'
+    + '<label class="sr" for="eq-' + esc(k) + '">Quantity of ' + esc(c.name) + '</label><input id="eq-' + esc(k) + '" class="eqty-in" data-k="' + esc(k) + '" inputmode="numeric" value="' + st.qty + '"' + (locked ? " disabled" : "") + '>'
+    + '<button type="button" aria-label="Increase quantity" data-a="eqty" data-k="' + esc(k) + '" data-d="1"' + (locked ? " disabled" : "") + '>+</button></div>'
+    + '<span style="flex-grow:1">Total <b class="price" style="font-size:15px">' + money(total) + '</b></span></div>'
+    + (over ? '<span class="warnline">Only ' + avail + ' available at ' + esc(c.stock.depot_name) + '. Lower the quantity to hold them.</span>' : "")
+    + '<button type="button" class="btn primary" data-a="eHold" data-k="' + esc(k) + '"' + (over || locked ? " disabled" : "") + '>Hold ' + st.qty + ' ' + unit + ' for 15 min</button>'
+    + '<span class="muted" style="font-size:13px">No charge until your purchase order is approved.</span></div>';
+}
+function ticketHtml(t){
+  if(!t) return "";
+  var h = '<div class="a">';
+  if(t._meta && t._meta.follows) h += '<span class="muted" style="font-size:12px">Continues: “' + esc(t._meta.follows.slice(0,60)) + '…”</span>';
+  h += reqChips(t);
+  var isHandoff = (t.components || []).some(function(c){ return c.type === "handoff"; });
+  var fact = (t.route === "sql" && t.state === "answer" && t.table) ? factHtml(t) : "";
+  if(t.state === "no_results" && t.relax && t.relax.length){
+    var ways = t.relax.filter(function(o){ return ENGINE.mode === "live" || ENGINE.byDrop[norm(t.question) + "|" + o.field]; });
+    h += '<div class="nomatch"><b>Nothing matches everything you asked for right now.</b>'
+      + (ways.length ? '<span style="font-size:14px">These would match if you let go of one thing:</span>' + ways.map(function(o, i){
+          return '<button type="button" class="btn ' + (i === 0 ? "secondary" : "") + ' sm" data-a="drop" data-q="' + esc(t.query_id) + '" data-f="' + esc(o.field) + '">Show ' + o.matches + ' option' + (o.matches > 1 ? "s" : "") + ' without ' + esc(o.label) + '</button>'; }).join("")
+        : '<span style="font-size:14px">' + esc(friendly(t.message).replace(/^Nothing matches[^.]*\.\s*/, "")) + '</span>') + '</div>';
+  } else if(fact){
+    h += fact;
+  } else if(!isHandoff){
+    h += '<p>' + esc(friendly(t.message)) + '</p>';
+  }
+  if(t.relax && t.state === "answer") t.relax.forEach(function(o){
+    if(ENGINE.mode === "live" || ENGINE.byDrop[norm(t.question) + "|" + o.field])
+      h += '<button type="button" class="btn secondary sm" style="align-self:flex-start" data-a="drop" data-q="' + esc(t.query_id) + '" data-f="' + esc(o.field) + '">Also show options that ship from several warehouses</button>';
+  });
+  (t.components || []).forEach(function(c){
+    if(c.type === "product_card") h += ticketCard(c, t);
+    else if(c.type === "choices") h += '<div role="group" aria-label="' + esc(c.prompt) + '" style="display:flex;flex-direction:column;gap:8px">' + c.options.map(function(o){
+        return '<button type="button" class="pick" data-a="chipQuery" data-q="' + esc(o.follow_up_question) + '"><b>' + esc(o.label) + '</b>' + (o.description ? '<span class="muted" style="font-size:12px">' + esc(o.description) + '</span>' : "") + '</button>'; }).join("") + '</div>';
+    else if(c.type === "handoff") h += '<div class="notice"><b>Connecting you to a specialist</b><span>They’ll see this conversation, so you won’t need to repeat anything.</span></div>';
+  });
+  var cards = (t.components || []).some(function(c){ return c.type === "product_card"; });
+  if(fact && t.citations && t.citations.length) h += '<div class="row">' + receiptButton(t, t.citations[0].id) + '</div>';
+  if(!cards && !fact && t.table && t.table.rows && t.table.rows.length && t.state === "answer"){
+    // Show the most useful columns: drop the sku code when a readable name exists, then keep the LAST 4
+    // (the answer, like "total", is usually the last column; showing only the first 4 hid it).
+    var all = t.table.columns, idx = all.map(function(c, i){ return i; });
+    if(all.indexOf("name") >= 0 && all.indexOf("sku") >= 0) idx = idx.filter(function(i){ return all[i] !== "sku"; });
+    idx = idx.slice(-4);
+    var grid = 'style="grid-template-columns:repeat(' + idx.length + ',minmax(0,1fr))"';
+    h += '<div class="facts">' + '<div ' + grid + '>' + idx.map(function(i){ return '<span>' + esc(all[i].replace(/_/g," ")) + '</span>'; }).join("") + '</div>'
+      + t.table.rows.slice(0,5).map(function(r){ return '<div ' + grid + '>' + idx.map(function(i){ var v = r[i]; return '<span>' + esc(v === null ? "—" : v) + '</span>'; }).join("") + '</div>'; }).join("") + '</div>';
+    if(t.citations && t.citations.length) h += '<div class="row">' + receiptButton(t, t.citations[0].id) + '</div>';
+  }
+  if(t.calculation){
+    var ins = t.calculation.inputs || {};
+    h += '<details class="calc-d"><summary>Show calculation</summary><div class="calc">' + esc(t.calculation.formula) + '\n'
+      + Object.keys(ins).map(function(k){ return esc(k) + " = " + esc(ins[k]); }).join("\n") + '\nresult = ' + esc(t.calculation.result) + '</div></details>';
+  }
+  var tr = t.trace || {}, tm = t.timing_ms || {}, m = t._meta || {};
+  if(!ENGINE.details) return h + '</div>';           // R10: engine details only when switched on
+  h += '<details class="how"><summary>How this was answered' + (m.recorded ? ' &nbsp;<span class="rec-tag">recorded</span>' : "") + '</summary><dl>'
+    + '<dt>Station</dt><dd>' + esc(tr.station || t.route) + '</dd>'
+    + '<dt>Why</dt><dd>' + esc(tr.router_reason || "—") + '</dd>'
+    + '<dt>Confidence</dt><dd>' + esc(t.confidence) + '</dd>'
+    + (ENGINE.mode === "recorded" ? '<dt>Model</dt><dd>' + esc(ENGINE.data.preset === "ai" ? (ENGINE.data.model || "local model") : "rules only, no AI") + '</dd>' : "")
+    + '<dt>Engine time</dt><dd>' + (tm.total / 1000).toFixed(2) + ' s' + (tm.generation ? ' (AI ' + (tm.generation / 1000).toFixed(2) + ' s)' : "") + '</dd>'
+    + (tr.sql ? '<dt>SQL</dt><dd class="mono">' + esc(tr.sql) + '</dd>' : "")
+    + (t.constraints ? '<dt>Form</dt><dd class="mono">' + esc(JSON.stringify(t.constraints)) + '</dd>' : "")
+    + '</dl></details>';
+  return h + '</div>';
+}
+function ticketDrawerHtml(d){
+  var t = ENGINE.tickets[d.qid]; if(!t) return "";
+  var c = (t.citations || []).filter(function(x){ return x.id === d.cid; })[0]; if(!c) return "";
+  var fields = c.fields || {};
+  var rows = Object.keys(fields).map(function(k){ return '<div><span>' + esc(k) + '</span><span>' + esc(fields[k] === null ? "—" : fields[k]) + '</span></div>'; }).join("");
+  var when = new Date(c.read_at), mins = Math.round((Date.now() - when) / 60000);
+  var ago = (t._meta && t._meta.recorded) ? "at recording" : (mins < 1 ? "just now" : mins + " min ago");
+  return '<div class="scrim" data-a="closeDrawer"></div><aside class="drawer" role="dialog" aria-modal="true" aria-label="Source verification" id="drawer">'
+    + '<div class="d-h"><h2>Where this number came from</h2><button type="button" class="iconbtn" aria-label="Close" data-a="closeDrawer" id="drawerClose">' + ICON.x + '</button></div>'
+    + '<div class="d-b"><div style="display:flex;flex-direction:column;gap:4px"><span class="label">Read from the store\u2019s database</span><b style="font-size:17px">' + esc(fields.name || (c.row_key && (c.row_key.sku || c.row_key.aggregate)) || c.table) + '</b></div>'
+    + '<div class="kpis"><div class="kpi"><span class="muted" style="font-size:12px">Grounding confidence</span><b>' + esc(c.confidence != null ? c.confidence : t.confidence) + '</b><span class="muted" style="font-size:12px">' + (c.kind === "db_row" ? "Read straight from the database" : "From a document") + '</span></div>'
+    + '<div class="kpi"><span class="muted" style="font-size:12px">Read</span><b style="font-size:16px">' + ago + '</b><span class="mono muted" style="font-size:11px">' + esc(c.read_at) + '</span></div></div>'
+    + '<p class="muted" style="margin:0;font-size:13px">Database <span class="mono">' + esc(c.database || "") + '</span> · table <span class="mono">' + esc(c.table || "") + '</span></p>'
+    + (rows ? '<div class="kv"><div><span>Field</span><span>Value</span></div>' + rows + '</div>' : "")
+    + (c.sql ? '<div style="display:flex;flex-direction:column;gap:6px"><span class="label">Executed SQL</span><pre class="sql">' + esc(c.sql) + '</pre></div>' : "")
+    + '</div><div class="d-f"><button type="button" class="btn" data-a="closeDrawer">Close</button><button type="button" class="btn primary" data-a="copyTicket" data-q="' + esc(t.query_id) + '">Copy ticket (JSON)</button></div></aside>';
+}
+/* ================= end ENGINE MODE ================= */
+
+/* ---------- shopper logic ---------- */
+function ask(text){
+  text=text.trim(); if(!text) return;
+  if(ENGINE.mode!=="scripted"){ engineAsk(text); return; }
+  S.draft=""; S.msgs.push({who:"u",text:text}); log("asked: "+text);
+  var kind, wait=1100, label="Checking live inventory…";
+  if(/refund|late|angry|cancel|chargeback|complain/i.test(text)) { kind="handoff"; wait=700; label="Understanding your request…"; }
+  else if(/track|my order|recent order/i.test(text)) { kind="track"; label="Looking up your order…"; }
+  else if(/shell/i.test(text) && !/chair/i.test(text)) { kind="disambig"; wait=800; label="Searching the catalog…"; }
+  else if(/eta|arrive|deliver/i.test(text) && !/chair.*navy|navy.*chair|mesh/i.test(text)) { kind="eta"; label="Checking delivery times…"; }
+  else if(/chair|mesh|navy|armrest|4d|seat/i.test(text)) kind="results";
+  else kind="fallback";
+  S.msgs.push({who:"a",kind:"loading",text:label}); render("ask");
+  setTimeout(function(){
+    S.msgs.pop();
+    if(kind==="eta") S.msgs.push({who:"a",kind:"text",html:"From the Indianapolis depot, 40 AeroTask Pro chairs (navy) arrive in Chicago by <b>Monday 11:00 AM</b> if reserved today. <button type=\"button\" class=\"cite\" data-a=\"drawer\" data-k=\"AT\">Source: row_441 | depot_schedule</button>"});
+    else if(kind==="fallback") S.msgs.push({who:"a",kind:"text",html:"I can help with product specs, stock, prices and orders. Try describing what you need, for example how many, which colour, your budget and a delivery date."});
+    else S.msgs.push({who:"a",kind:kind});
+    log("answer shown: "+kind);
+    render("ask");
+  }, wait);
+}
+
+/* ---------- actions ---------- */
+function act(a, el){
+  switch(a){
+    case "go": setView(el.dataset.v); return true;
+    case "home": log("left task"); setView("start"); return;
+    case "restart": setView(S.view); return;
+    case "toggleLog": S.showLog=!S.showLog; render(); return;
+    case "clearLog": S.log=[]; render(); return;
+    case "copyLog":
+      var txt=S.log.map(function(l){return l.task+"\t"+mmss(l.t)+"\t"+l.evt;}).join("\n");
+      try{ navigator.clipboard.writeText(txt).then(function(){flash("Log copied");},function(){flash("Copy blocked — select the log text instead");}); }catch(e){ flash("Copy blocked — select the log text instead"); }
+      return;
+    case "openWidget": S.widgetOpen=true; log("opened assistant"); render("ask"); return;
+    case "closeWidget": S.widgetOpen=false; log("closed assistant"); render(); return;
+    case "chipQuery": log("chip: "+el.dataset.q); ask(el.dataset.q); return;
+    case "variant": S.variant=el.dataset.v; log("variant → "+S.variant+" (stock "+cur().stock+")"); render(); return;
+    case "qty": if(S.lockEnd) return; S.qty=Math.max(1,S.qty+Number(el.dataset.d)); log("qty → "+S.qty); render(); return;
+    case "calc": S.showCalc=!S.showCalc; log((S.showCalc?"opened":"closed")+" calculation log"); render(); return;
+    case "compare": S.msgs.push({who:"u",text:"Compare these side by side"}); S.msgs.push({who:"a",kind:"compare"}); log("opened comparison"); render(); return;
+    case "diffOnly": S.diffOnly=el.checked; log("differences only: "+S.diffOnly); render("diffOnly"); return;
+    case "pickMatch":
+      log("disambiguation pick: "+el.dataset.m);
+      if(el.dataset.m==="chair"){ S.msgs.push({who:"u",text:"Navy mesh office chair"}); S.msgs.push({who:"a",kind:"results"}); }
+      else { S.msgs.push({who:"u",text:el.textContent.trim()}); S.msgs.push({who:"a",kind:"text",html:"That product isn’t part of this prototype. Try the navy mesh office chair instead."}); }
+      render(); return;
+    case "handoff": log("asked for a person"); S.msgs.push({who:"a",kind:"handoff"}); render(); return;
+    case "reserve": S.confirmReserve=true; log("clicked reserve"); render(); return;
+    case "cancelReserve": S.confirmReserve=false; log("cancelled reserve"); render(); return;
+    case "confirmReserve":
+      S.confirmReserve=false; S.lockEnd=Date.now()+15*60*1000; S.msgs.push({who:"a",kind:"locked"});
+      S.doneAt=Date.now(); log("TASK A COMPLETE — reserved "+S.qty+" "+S.variant+" at "+mmss(elapsed())); S.taskDone=true; render(); return;
+    case "eqty": if(S.hold) return; var q=S.eq[el.dataset.k]; q.qty=Math.max(1,q.qty+Number(el.dataset.d)); log("engine card qty → "+q.qty); render(); return;
+    case "eHold": S.eq[el.dataset.k].confirm=true; log("clicked hold on "+el.dataset.k.split("|")[1]); render(); return;
+    case "eCancel": S.eq[el.dataset.k].confirm=false; log("cancelled hold"); render(); return;
+    case "eConfirm":
+      var hk=el.dataset.k, hq=S.eq[hk]; hq.confirm=false; S.hold={key:hk, qty:hq.qty}; S.lockEnd=Date.now()+15*60*1000;
+      S.doneAt=Date.now(); log("TASK A COMPLETE — held "+hq.qty+" × "+hk.split("|")[1]+" at "+mmss(elapsed())); S.taskDone=true; render(); return;
+    case "drop": engineDrop(el.dataset.q, el.dataset.f); return;
+    case "engineDetails": ENGINE.details = !ENGINE.details; try{ localStorage.setItem("cr-details", ENGINE.details ? "1" : ""); }catch(e){} log("engine details " + (ENGINE.details ? "on" : "off")); render(); return;
+    case "skipWait": if(ENGINE.pending){ log("skipped the wait"); finishPending(); } return;
+    case "copyTrack": flash("Tracking link copied (sample)"); log("copied tracking link"); return;
+    case "tdrawer":
+      lastFocus=el; S.drawer={k:"ticket", qid:el.dataset.q, cid:el.dataset.c}; log("opened receipt "+el.dataset.c+" of "+el.dataset.q); render("drawerClose"); return;
+    case "copyTicket":
+      var tk=JSON.parse(JSON.stringify(ENGINE.tickets[el.dataset.q])); delete tk._meta;
+      try{ navigator.clipboard.writeText(JSON.stringify(tk,null,2)).then(function(){flash("Ticket copied");},function(){flash("Copy blocked by the browser");}); }catch(e){ flash("Copy blocked by the browser"); }
+      return;
+    case "drawer":
+      lastFocus=el; S.drawer={k:el.dataset.k, tab:Number(el.dataset.tab||0)}; log("opened source drawer: "+el.dataset.k+(el.dataset.tab?" tab "+el.dataset.tab:"")); render("drawerClose"); return;
+    case "tab": S.drawer.tab=Number(el.dataset.i); log("drawer tab "+el.dataset.i); render("drawerClose"); return;
+    case "closeDrawer": S.drawer=null; log("closed source drawer"); render(); if(lastFocus&&lastFocus.dataset){ var sel='[data-a="'+lastFocus.dataset.a+'"][data-k="'+lastFocus.dataset.k+'"]'; var b=document.querySelector(sel); if(b) b.focus(); } return;
+    case "export": flash("Audit log exported (prototype: no file is created)"); log("export audit log"); return;
+    /* agent */
+    case "accept":
+      S.agentPhase="loading"; log("accepted ticket"); render();
+      setTimeout(function(){ if(S.view!=="agent") return; S.agentPhase="ready"; log("co-pilot loaded"); render(); }, 900); return;
+    case "pickAction": S.action=el.dataset.v; S.confirmExec=false; log("selected action: "+S.action); render(); return;
+    case "insert": S.reply=DRAFTS[S.action]; log("inserted draft ("+S.action+")"); render("reply"); return;
+    case "exec": syncReply(); S.confirmExec=true; log("clicked execute ("+S.action+")"); render(); return;
+    case "cancelExec": S.confirmExec=false; log("cancelled execute"); render(); return;
+    case "confirmExec":
+      syncReply(); var text=S.reply.trim()||DRAFTS[S.action];
+      S.convo.push({who:"a",name:"Marcus",time:"14:04",text:text});
+      if(S.action==="reship") S.convo.push({who:"track"}); else S.convo.push({who:"sys",text:"Refund of order total issued · return fee waived"});
+      S.agentPhase="done"; S.confirmExec=false; S.doneAt=Date.now(); S.resolvedAt=elapsed(); S.taskDone=true; S.reply="";
+      S.toast=(S.action==="reship"?"Priority reship dispatched":"Refund issued")+" · logged to audit ledger";
+      log("TASK B COMPLETE — "+S.action+" at "+mmss(S.resolvedAt)+(text===DRAFTS[S.action]?" (draft unedited)":" (draft edited)"));
+      render();
+      setTimeout(function(){ if(S.view!=="agent") return; S.toast=null; S.convo.push({who:"c",name:"David",time:"14:05",text:"Okay, tomorrow by 10 works. Thank you."}); render(); },2600);
+      return;
+    case "escalate": log("escalated to Tier-2"); S.toast="Escalated to Tier-2 with summary, SQL logs and customer context"; render(); setTimeout(function(){S.toast=null; render();},2600); return;
+  }
+}
+function syncReply(){ var r=document.getElementById("reply"); if(r) S.reply=r.value; }
+function flash(msg){ var keep=S.toast; S.toast=msg; if(S.view==="agent"){ render(); setTimeout(function(){S.toast=keep;render();},2200); return; }
+  var t=document.createElement("div"); t.className="toast"; t.setAttribute("role","status"); t.textContent=msg; document.body.appendChild(t); setTimeout(function(){t.remove();},2200); }
+
+document.addEventListener("click",function(e){
+  var el=e.target.closest("[data-a]"); if(!el||el.disabled) return;
+  if(el.tagName==="INPUT") return;
+  if(el.tagName==="A") e.preventDefault();
+  act(el.dataset.a, el);
+});
+document.addEventListener("change",function(e){
+  if(e.target.id==="diffOnly") act("diffOnly", e.target);
+  if(e.target.classList && e.target.classList.contains("eqty-in")){ var en=parseInt(e.target.value,10), eq=S.eq[e.target.dataset.k]; if(eq&&!isNaN(en)&&en>0){ eq.qty=en; log("engine card qty typed → "+en);} render(); }
+  if(e.target.id==="qty"){ var n=parseInt(e.target.value,10); if(!isNaN(n)&&n>0){ S.qty=n; log("qty typed → "+n);} render(); }
+});
+document.addEventListener("input",function(e){
+  if(e.target.id==="ask") S.draft=e.target.value;
+  if(e.target.id==="reply") S.reply=e.target.value;
+});
+document.addEventListener("submit",function(e){
+  e.preventDefault();
+  var f=e.target.dataset.form;
+  if(f==="ask"){ ask(document.getElementById("ask").value); }
+  if(f==="reply"){ syncReply(); if(!S.reply.trim()) return; S.convo.push({who:"a",name:"Marcus",time:"14:04",text:S.reply}); log("sent reply without action"); S.reply=""; render(); }
+});
+document.addEventListener("keydown",function(e){ if(e.key==="Escape"&&S.drawer){ act("closeDrawer",{}); } });
+window.addEventListener("hashchange",function(){ var v=viewFromHash(); if(v!==S.view) setView(v); });
+
+if(S.view!=="start"){ S.t0=Date.now(); log("task started"); }
+render(S.view==="agent"?"acceptBtn":null);
+loadEngine();
+})();
+</script>
+
+</body>
+</html>

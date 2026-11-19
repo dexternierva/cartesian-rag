@@ -1,0 +1,299 @@
+{
+  "writer": "ollama (qwen2.5-coder:3b)",
+  "cold_start_s": 64.0114343999885,
+  "accuracy": 0.0,
+  "right": 0,
+  "handoff": 0,
+  "wrong": 6,
+  "total": 6,
+  "contract_valid": 6,
+  "median_ms": 16584.9,
+  "results": [
+    {
+      "id": "Q11",
+      "question": "What would 40 navy AeroTask Pro Mesh chairs cost in total?",
+      "expected": 12800.0,
+      "outcome": "WRONG",
+      "correct": false,
+      "ticket_valid": true,
+      "sql": "SELECT SUM(p.unit_price * o.quantity) AS total_cost FROM orders o JOIN products p ON o.sku = p.sku WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' AND o.quantity = 40 LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_a9beb69fb8",
+        "question": "What would 40 navy AeroTask Pro Mesh chairs cost in total?",
+        "route": "sql",
+        "state": "no_results",
+        "confidence": 0.85,
+        "message": "No. Nothing in the store matches that right now.",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "orders, products",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "total_cost": null
+            },
+            "sql": "SELECT SUM(p.unit_price * o.quantity) AS total_cost FROM orders o JOIN products p ON o.sku = p.sku WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' AND o.quantity = 40 LIMIT 50",
+            "read_at": "2026-11-12T05:01:41Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "total_cost"
+          ],
+          "rows": [
+            [
+              null
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT SUM(p.unit_price * o.quantity) AS total_cost FROM orders o JOIN products p ON o.sku = p.sku WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' AND o.quantity = 40 LIMIT 50",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 17106.9,
+          "retrieval": 143.2,
+          "total": 17646.5
+        }
+      }
+    },
+    {
+      "id": "Q12",
+      "question": "What's the average price of mesh office chairs?",
+      "expected": 414.38,
+      "outcome": "WRONG",
+      "correct": false,
+      "ticket_valid": true,
+      "sql": "SELECT AVG(unit_price) FROM products WHERE category = 'Office chairs' AND material = 'Mesh' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_140b23f6cb",
+        "question": "What's the average price of mesh office chairs?",
+        "route": "sql",
+        "state": "no_results",
+        "confidence": 0.85,
+        "message": "No. Nothing in the store matches that right now.",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "AVG(unit_price)": null
+            },
+            "sql": "SELECT AVG(unit_price) FROM products WHERE category = 'Office chairs' AND material = 'Mesh' LIMIT 50",
+            "read_at": "2026-11-12T05:01:52Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "AVG(unit_price)"
+          ],
+          "rows": [
+            [
+              null
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT AVG(unit_price) FROM products WHERE category = 'Office chairs' AND material = 'Mesh' LIMIT 50",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 10738.4,
+          "retrieval": 6.5,
+          "total": 10749.3
+        }
+      }
+    },
+    {
+      "id": "Q13",
+      "question": "Need 40 ergonomic mesh chairs with 4D armrests in navy, under $350 each, delivered to Chicago within 3 days.",
+      "expected": [
+        "AT-NAV-4D",
+        "EF-ELT-NV"
+      ],
+      "outcome": "WRONG",
+      "correct": false,
+      "ticket_valid": true,
+      "sql": "SELECT o.order_id, o.customer_id, o.sku, o.quantity, o.order_date, o.promised_date, o.status, o.transit_delay_hr, o.depot_id FROM orders o JOIN products p USING (sku) WHERE p.category = 'Office chairs' AND p.name = 'Ergonomic Mesh Chair' AND p.armrests = '4D' AND p.color = 'Navy' AND p.unit_price < 350 AND o.quantity = 40 AND o.status = 'IN_TRANSIT' AND o.promised_date = DATE('now', '+3 days') AND o.depot_id IN (SELECT depot_id FROM delivery_times WHERE destination_city = 'Chicago' AND days = 3) LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_fb81d86833",
+        "question": "Need 40 ergonomic mesh chairs with 4D armrests in navy, under $350 each, delivered to Chicago within 3 days.",
+        "route": "sql",
+        "state": "no_results",
+        "confidence": 0.85,
+        "message": "No. Nothing in the store matches that right now.",
+        "components": [],
+        "citations": [],
+        "table": {
+          "columns": [
+            "order_id",
+            "customer_id",
+            "sku",
+            "quantity",
+            "order_date",
+            "promised_date",
+            "status",
+            "transit_delay_hr",
+            "depot_id"
+          ],
+          "rows": []
+        },
+        "trace": {
+          "sql": "SELECT o.order_id, o.customer_id, o.sku, o.quantity, o.order_date, o.promised_date, o.status, o.transit_delay_hr, o.depot_id FROM orders o JOIN products p USING (sku) WHERE p.category = 'Office chairs' AND p.name = 'Ergonomic Mesh Chair' AND p.armrests = '4D' AND p.color = 'Navy' AND p.unit_price < 350 AND o.quantity = 40 AND o.status = 'IN_TRANSIT' AND o.promised_date = DATE('now', '+3 days') AND o.depot_id IN (SELECT depot_id FROM delivery_times WHERE destination_city = 'Chicago' AND days = 3) LIMIT 50",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 37178.8,
+          "retrieval": 7.3,
+          "total": 37189.0
+        }
+      }
+    },
+    {
+      "id": "Q14",
+      "question": "Same chairs, but they must arrive in Chicago within 2 days.",
+      "expected": [
+        "AT-NAV-4D"
+      ],
+      "outcome": "WRONG",
+      "correct": false,
+      "ticket_valid": true,
+      "sql": "SELECT o.order_id, o.customer_id, o.sku, o.quantity, o.order_date, o.promised_date, o.status, o.transit_delay_hr, o.depot_id FROM orders o JOIN stock_available s ON o.sku = s.sku WHERE o.status = 'IN_TRANSIT' AND s.depot_id = 'CHI-01' AND o.promised_date = DATE('now', '+2 days') LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_30074c2ed9",
+        "question": "Same chairs, but they must arrive in Chicago within 2 days.",
+        "route": "sql",
+        "state": "no_results",
+        "confidence": 0.85,
+        "message": "No. Nothing in the store matches that right now.",
+        "components": [],
+        "citations": [],
+        "table": {
+          "columns": [
+            "order_id",
+            "customer_id",
+            "sku",
+            "quantity",
+            "order_date",
+            "promised_date",
+            "status",
+            "transit_delay_hr",
+            "depot_id"
+          ],
+          "rows": []
+        },
+        "trace": {
+          "sql": "SELECT o.order_id, o.customer_id, o.sku, o.quantity, o.order_date, o.promised_date, o.status, o.transit_delay_hr, o.depot_id FROM orders o JOIN stock_available s ON o.sku = s.sku WHERE o.status = 'IN_TRANSIT' AND s.depot_id = 'CHI-01' AND o.promised_date = DATE('now', '+2 days') LIMIT 50",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 16577.1,
+          "retrieval": 5.3,
+          "total": 16584.9
+        }
+      }
+    },
+    {
+      "id": "Q15",
+      "question": "I need 60 navy mesh chairs with 4D armrests under $350, all from one warehouse.",
+      "expected": [
+        "EF-ELT-NV"
+      ],
+      "outcome": "WRONG",
+      "correct": false,
+      "ticket_valid": true,
+      "sql": "SELECT s.depot_id, s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'Mesh Chair' AND p.color = 'Navy' AND p.armrests = '4D' AND p.category = 'Office chairs' AND p.unit_price < 350 AND s.available >= 60 LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_252b0a5ded",
+        "question": "I need 60 navy mesh chairs with 4D armrests under $350, all from one warehouse.",
+        "route": "sql",
+        "state": "no_results",
+        "confidence": 0.85,
+        "message": "No. Nothing in the store matches that right now.",
+        "components": [],
+        "citations": [],
+        "table": {
+          "columns": [
+            "depot_id",
+            "available"
+          ],
+          "rows": []
+        },
+        "trace": {
+          "sql": "SELECT s.depot_id, s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'Mesh Chair' AND p.color = 'Navy' AND p.armrests = '4D' AND p.category = 'Office chairs' AND p.unit_price < 350 AND s.available >= 60 LIMIT 50",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 14192.6,
+          "retrieval": 3.5,
+          "total": 14197.5
+        }
+      }
+    },
+    {
+      "id": "Q16",
+      "question": "I need 50 navy mesh chairs with 4D armrests under $350 and don't mind which warehouses they come from.",
+      "expected": [
+        "AT-NAV-4D",
+        "CM-NAV-4D",
+        "EF-ELT-NV",
+        "PT-NAV-4D"
+      ],
+      "outcome": "WRONG",
+      "correct": false,
+      "ticket_valid": true,
+      "sql": "SELECT s.depot_id, s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'Mesh Chair' AND p.color = 'Navy' AND p.armrests = '4D' AND p.unit_price < 350 AND s.available >= 50 LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_c2e2006c76",
+        "question": "I need 50 navy mesh chairs with 4D armrests under $350 and don't mind which warehouses they come from.",
+        "route": "sql",
+        "state": "no_results",
+        "confidence": 0.85,
+        "message": "No. Nothing in the store matches that right now.",
+        "components": [],
+        "citations": [],
+        "table": {
+          "columns": [
+            "depot_id",
+            "available"
+          ],
+          "rows": []
+        },
+        "trace": {
+          "sql": "SELECT s.depot_id, s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'Mesh Chair' AND p.color = 'Navy' AND p.armrests = '4D' AND p.unit_price < 350 AND s.available >= 50 LIMIT 50",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 12865.6,
+          "retrieval": 2.4,
+          "total": 12870.3
+        }
+      }
+    }
+  ]
+}

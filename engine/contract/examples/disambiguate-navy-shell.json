@@ -1,0 +1,23 @@
+{
+  "contract_version": "0.1",
+  "query_id": "q_example_disambiguate",
+  "question": "Show me the navy shell",
+  "route": "search",
+  "state": "disambiguate",
+  "confidence": 0.71,
+  "message": "Three different products match \"navy shell\". Which one do you mean?",
+  "constraints": { "color": "Navy", "features": ["shell"] },
+  "components": [
+    {
+      "type": "choices",
+      "prompt": "Pick a match",
+      "options": [
+        { "label": "ErgoFlex Elite Shell chair", "description": "Office chairs · navy · $345", "follow_up_question": "Show me the navy ErgoFlex Elite Shell chair" },
+        { "label": "Summit Trail Shell jacket", "description": "Outdoor apparel · navy · DWR nylon", "follow_up_question": "Show me the navy Summit Trail Shell jacket" },
+        { "label": "Harbor Shell side chair", "description": "Guest seating · navy · molded shell", "follow_up_question": "Show me the navy Harbor Shell side chair" }
+      ]
+    }
+  ],
+  "citations": [],
+  "timing_ms": { "routing": 90, "retrieval": 310, "total": 520 }
+}

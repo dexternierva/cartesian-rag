@@ -1,0 +1,134 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+
+/* CartesianRAG components. Every colour, space and radius comes from tokens.css.
+   Class prefix: cr-. Plain HTML + CSS: the components need no framework. */
+
+.cr { font-family: var(--font-sans); font-size: 15px; line-height: 22px; color: var(--ink); }
+.cr *, .cr *::before, .cr *::after { box-sizing: border-box; }
+.cr-stack { display: flex; flex-direction: column; gap: var(--space-3); }
+.cr-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+.cr-muted { color: var(--ink-muted); }
+.cr-sm { font-size: 13px; line-height: 18px; }
+.cr-mono { font-family: var(--font-mono); font-size: 12px; line-height: 16px; }
+.cr-label { font-size: 12px; line-height: 16px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.cr-icon { width: 16px; height: 16px; flex-shrink: 0; stroke: currentColor; fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+.cr :focus-visible { outline: 2px solid var(--forest-strong); outline-offset: 2px; }
+
+/* ---------- Button ---------- */
+.cr-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: 44px; padding: 0 18px;
+  border-radius: var(--radius-md); border: 1.5px solid transparent; font: 600 15px/1 var(--font-sans); cursor: pointer; text-decoration: none; }
+.cr-btn--primary { background: var(--forest); color: var(--on-forest); }
+.cr-btn--primary:hover { background: var(--forest-strong); }
+.cr-btn--secondary { background: var(--lantern); color: var(--on-lantern); }
+.cr-btn--quiet { background: var(--surface); color: var(--ink); border-color: var(--line-strong); }
+.cr-btn--quiet:hover { background: var(--surface-sunk); }
+.cr-btn--sm { min-height: 36px; padding: 0 14px; font-size: 14px; }
+.cr-btn--block { width: 100%; }
+.cr-btn[disabled] { background: var(--surface-sunk); color: var(--ink-muted); border-color: var(--line); cursor: not-allowed; }
+.cr-link { color: var(--forest); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; background: none; border: 0; padding: 0; font: inherit; cursor: pointer; }
+
+/* ---------- Chips ---------- */
+.cr-chip { display: inline-flex; align-items: center; gap: var(--space-1); min-height: 36px; max-width: 100%; padding: 6px 14px;
+  border-radius: var(--radius-pill); border: 1.5px solid var(--line-strong); background: var(--surface); color: var(--ink);
+  font: 500 14px/18px var(--font-sans); text-align: left; cursor: pointer; }
+.cr-chip:hover { background: var(--surface-sunk); }
+.cr-chip--suggest { white-space: normal; }
+.cr-chip--req { background: var(--forest-soft); border-color: var(--forest); padding-right: 6px; cursor: default; }
+.cr-chip--req button { display: inline-flex; width: 28px; height: 28px; align-items: center; justify-content: center; border: 0; border-radius: var(--radius-pill); background: transparent; color: var(--ink); cursor: pointer; }
+.cr-chip--req button:hover { background: var(--surface); }
+.cr-chip--variant[aria-pressed="true"] { background: var(--lantern); border-color: var(--on-lantern); color: var(--on-lantern); font-weight: 600; }
+.cr-swatch { width: 14px; height: 14px; border-radius: var(--radius-pill); border: 1px solid var(--line-strong); }
+.cr-choice { display: flex; flex-direction: column; gap: 2px; width: 100%; padding: 12px 16px; border-radius: var(--radius-md); border: 1.5px solid var(--line-strong);
+  background: var(--surface); color: var(--ink); text-align: left; font: inherit; cursor: pointer; }
+.cr-choice:hover { border-color: var(--forest); background: var(--forest-soft); }
+.cr-choice b { font-weight: 600; }
+
+/* ---------- Tag (rare campfire accent) ---------- */
+.cr-tag { display: inline-flex; align-items: center; gap: var(--space-1); padding: 2px 8px; border-radius: var(--radius-sm);
+  font: 600 12px/16px var(--font-sans); letter-spacing: .06em; text-transform: uppercase; }
+.cr-tag--promo { background: var(--campfire); color: var(--on-campfire); }
+.cr-tag--pick { background: var(--lantern); color: var(--on-lantern); }
+
+/* ---------- Stock status: colour + shape + word ---------- */
+.cr-stock { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; }
+.cr-stock b { font-weight: 600; }
+.cr-dot { width: 10px; height: 10px; border-radius: var(--radius-pill); flex-shrink: 0; }
+.cr-stock--ok { color: var(--status-ok); } .cr-stock--ok .cr-dot { background: var(--status-ok); }
+.cr-stock--warn { color: var(--status-warn); } .cr-stock--warn .cr-dot { border: 2px solid var(--status-warn); }
+.cr-stock--bad { color: var(--status-bad); } .cr-stock--bad .cr-dot { border: 2px dashed var(--status-bad); }
+.cr-stock .cr-where { color: var(--ink-muted); }
+
+/* ---------- Receipt badge + drawer ---------- */
+.cr-receipt { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 3px 10px 3px 8px; border-radius: var(--radius-sm);
+  border: 1.5px dashed var(--receipt-edge); background: var(--receipt-paper); color: var(--receipt-ink); font: 600 13px/18px var(--font-sans); cursor: pointer; }
+.cr-receipt .cr-icon { stroke: var(--receipt-check); stroke-width: 2.25; }
+.cr-receipt .cr-mono { color: var(--ink-muted); font-weight: 400; }
+.cr-receipt:hover { border-style: solid; }
+.cr-drawer { display: flex; flex-direction: column; width: 100%; max-width: 448px; background: var(--receipt-paper); color: var(--receipt-ink);
+  border-radius: var(--radius-lg); box-shadow: var(--shadow-pop); overflow: hidden; }
+.cr-drawer__h { display: flex; align-items: center; gap: var(--space-2); padding: 14px 16px; border-bottom: 1.5px dashed var(--receipt-edge); }
+.cr-drawer__h h3 { flex-grow: 1; margin: 0; font: 700 17px/22px var(--font-display); }
+.cr-drawer__b { display: flex; flex-direction: column; gap: var(--space-3); padding: 16px; }
+.cr-kv { display: grid; grid-template-columns: minmax(0, 9rem) minmax(0, 1fr); border: 1px solid var(--line); border-radius: var(--radius-md); overflow: hidden; }
+.cr-kv > * { padding: 7px 10px; border-top: 1px solid var(--line); min-width: 0; overflow-wrap: anywhere; }
+.cr-kv > :nth-child(-n+2) { border-top: 0; }
+.cr-kv dt { font: 500 12px/16px var(--font-mono); color: var(--ink-muted); background: var(--surface-sunk); margin: 0; }
+.cr-kv dd { margin: 0; font: 500 13px/18px var(--font-mono); }
+.cr-sql { margin: 0; padding: 10px 12px; border-radius: var(--radius-md); background: var(--surface-sunk); font: 400 12px/18px var(--font-mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* ---------- Product card ---------- */
+.cr-card { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-4); border-radius: var(--radius-lg); background: var(--surface);
+  border: 1px solid var(--line); box-shadow: var(--shadow-card); }
+.cr-card__top { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: var(--space-3); }
+.cr-thumb { width: 72px; height: 72px; border-radius: var(--radius-md); background: var(--surface-sunk); display: flex; align-items: center; justify-content: center; color: var(--ink-muted); }
+.cr-card__name { display: flex; justify-content: space-between; gap: var(--space-2); align-items: baseline; }
+.cr-card__name h4 { margin: 0; font: 700 17px/22px var(--font-display); }
+.cr-price { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cr-specs { display: flex; flex-wrap: wrap; gap: 6px; }
+.cr-spec { padding: 2px 8px; border-radius: var(--radius-sm); background: var(--surface-sunk); font-size: 13px; line-height: 18px; }
+.cr-card__act { display: flex; flex-direction: column; gap: var(--space-2); padding-top: var(--space-3); border-top: 1px solid var(--line); }
+
+/* ---------- Quantity stepper ---------- */
+.cr-stepper { display: inline-flex; align-items: center; border: 1.5px solid var(--line-strong); border-radius: var(--radius-md); overflow: hidden; background: var(--surface); }
+.cr-stepper button { width: 40px; height: 40px; border: 0; background: transparent; color: var(--ink); font-size: 18px; cursor: pointer; }
+.cr-stepper button:hover { background: var(--surface-sunk); }
+.cr-stepper input { width: 56px; height: 40px; border: 0; border-inline: 1px solid var(--line); text-align: center; font: 700 15px var(--font-sans); color: var(--ink); background: var(--surface); font-variant-numeric: tabular-nums; }
+
+/* ---------- Notices: hold, caution, nothing-matches, hand-off ---------- */
+.cr-notice { display: flex; flex-direction: column; gap: var(--space-2); padding: 12px 14px; border-radius: var(--radius-md); }
+.cr-notice--held { background: var(--forest-soft); }
+.cr-notice--held .cr-timer { font: 500 14px/18px var(--font-mono); font-variant-numeric: tabular-nums; }
+.cr-notice--confirm { background: var(--lantern-soft); border: 1.5px solid var(--lantern); }
+.cr-notice--warn { background: var(--status-warn-soft); color: var(--ink); }
+.cr-notice--warn .cr-icon { stroke: var(--status-warn); }
+.cr-notice--handoff { background: var(--surface-sunk); border: 1.5px solid var(--line-strong); }
+.cr-notice b { font-weight: 600; }
+
+/* ---------- Waiting (progress) card ---------- */
+.cr-progress { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-4); border-radius: var(--radius-lg); background: var(--surface); border: 1px solid var(--line); }
+.cr-progress__h { display: flex; justify-content: space-between; align-items: baseline; }
+.cr-progress__h b { font: 700 17px/22px var(--font-display); }
+.cr-timer { font: 500 14px/18px var(--font-mono); font-variant-numeric: tabular-nums; color: var(--ink-muted); }
+.cr-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.cr-steps li { display: flex; gap: 10px; padding-bottom: 12px; position: relative; }
+.cr-steps li:not(:last-child)::after { content: ""; position: absolute; left: 7px; top: 20px; bottom: 2px; width: 2px; background: var(--line); }
+.cr-steps .cr-m { width: 16px; height: 16px; border-radius: var(--radius-pill); flex-shrink: 0; margin-top: 3px; border: 2px solid var(--line-strong); background: var(--surface); }
+.cr-steps .cr-m--done { background: var(--forest); border-color: var(--forest); }
+.cr-steps .cr-m--now { background: var(--lantern); border-color: var(--on-lantern); }
+@media (prefers-reduced-motion: no-preference) { .cr-steps .cr-m--now { animation: cr-pulse 1.4s ease-in-out infinite; } }
+@keyframes cr-pulse { 50% { box-shadow: 0 0 0 5px var(--lantern-soft); } }
+
+/* ---------- Status line ---------- */
+.cr-statusline { display: flex; align-items: center; gap: var(--space-2); padding: 6px 16px; background: var(--surface-sunk); color: var(--ink-muted); font-size: 13px; line-height: 18px; }
+.cr-statusline .cr-dot { background: var(--status-ok); }
+.cr-statusline--recorded .cr-dot { background: transparent; border: 2px solid var(--ink-muted); }
+
+/* ---------- Answer fact (lookups) ---------- */
+.cr-fact { display: flex; flex-direction: column; gap: var(--space-2); }
+.cr-fact__n { font: 700 32px/36px var(--font-display); font-variant-numeric: tabular-nums; }
+
+/* ---------- Composer ---------- */
+.cr-composer { display: flex; gap: var(--space-2); }
+.cr-composer input { flex: 1 1 auto; min-width: 0; min-height: 44px; padding: 0 14px; border-radius: var(--radius-md); border: 1.5px solid var(--line-strong); background: var(--surface); color: var(--ink); font: 400 15px var(--font-sans); }
+.cr-composer input::placeholder { color: var(--ink-muted); }
+.cr-composer input:focus-visible { outline: 2px solid var(--forest-strong); outline-offset: 1px; border-color: var(--forest-strong); }

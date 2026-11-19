@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CartesianRAG — UX &amp; Design Engineering Case Study</title>
+<meta name="description" content="Case study by Dex: CartesianRAG, an assistant that answers from a store's own tables with a receipt for every number. Designed, built, measured, then redesigned from what the measurements showed.">
+<meta name="author" content="Dex">
+<meta name="theme-color" content="#faf6ef">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CartesianRAG — UX &amp; Design Engineering Case Study">
+<meta property="og:description" content="Case study by Dex: CartesianRAG, an assistant that answers from a store's own tables with a receipt for every number. Designed, built, measured, then redesigned from what the measurements showed.">
+<meta property="og:site_name" content="CartesianRAG case study by Dex">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Crect x=%224%22 y=%224%22 width=%2224%22 height=%2224%22 rx=%226%22 fill=%22%232f6b3b%22/%3E%3Ccircle cx=%2222%22 cy=%2210%22 r=%224%22 fill=%22%23c8452b%22/%3E%3C/svg%3E">
+<script>try{var t=localStorage.getItem('crcs-theme');if(t==='dark'||t==='light')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&amp;family=Figtree:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<link rel="stylesheet" href="styles.css">
+<script src="js/menu-dismiss.js" defer></script>
+<script src="js/lightbox.js" defer></script>
+<script src="js/theme.js" defer></script>
+<script src="js/anatomy.js" defer></script>
+</head>
+<body>
+<div class="page">
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-h">
+<input class="menu-toggle" type="checkbox" id="menu-toggle" aria-controls="site-menu" aria-label="Case study pages menu">
+<div class="m-bar">
+<a class="brand" href="index.html"><span class="dot" aria-hidden="true"></span>CartesianRAG</a>
+<div class="right"><button type="button" class="theme-btn" data-theme-toggle hidden>Night</button><label class="menu-button" for="menu-toggle" title="Open or close the page menu"><span class="when-closed">Menu</span><span class="when-open">Close</span><svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 6h14M2 12h14"></path></svg></label></div>
+</div>
+<nav id="site-menu" class="m-menu" aria-label="Case study pages menu">
+<a href="#design"><span>Design</span><span>1</span></a><a href="#build"><span>Build</span><span>2</span></a><a href="#measure"><span>Measure</span><span>3</span></a><a href="#redesign"><span>Redesign</span><span>4</span></a><a href="appendix.html"><span>Appendix</span><span>A</span></a><a href="research.html"><span>Research &amp; Discovery</span><span>A1</span></a><a href="ia.html"><span>Information Architecture</span><span>A2</span></a><a href="engine.html"><span>Design ↔ Engine</span><span>A3</span></a><a href="evaluation.html"><span>Evaluation</span><span>A4</span></a><a href="system.html"><span>Design System</span><span>A5</span></a><a href="ui.html"><span>High‑Fidelity UI</span><span>A6</span></a><a href="../prototype/"><span>Try the demo</span><span>→</span></a>
+</nav>
+<nav class="d-nav" aria-label="Case study sections">
+<a class="brand" href="index.html"><span class="dot" aria-hidden="true"></span>CartesianRAG</a>
+<div class="links"><a href="#design">Design</a><a href="#build">Build</a><a href="#measure">Measure</a><a href="#redesign">Redesign</a><a href="appendix.html">Appendix</a><button type="button" class="theme-btn" data-theme-toggle hidden>Night</button><a class="demo" href="../prototype/">Try the demo</a></div>
+</nav>
+</header>
+<main id="content">
+
+<section class="hero">
+<div class="eyebrow mono"><span class="pip" aria-hidden="true"></span>UX &amp; design engineering case study · Tabular RAG</div>
+<h1 class="title">CartesianRAG<span class="spark">.</span></h1>
+<p class="thesis">The engine got the answers right <em>before the screens were ready for them</em>.</p>
+<p class="lead" style="margin-top:20px">I designed an assistant that answers a camp‑to‑desk store’s questions from its own tables, with a receipt for every number. Then I built the engine behind it, measured it, and let what I measured redesign the screens.</p>
+<div class="cta"><a class="btn primary" href="../prototype/">Try the demo →</a><a class="btn" href="#design">Read the story</a></div>
+<div class="facts"><div><div class="mono">Designer</div><div class="v">Dex</div></div><div><div class="mono">Product</div><div class="v">Tabular RAG assistant · B2B e‑commerce</div></div><div><div class="mono">Built with</div><div class="v">Python · SQLite · Ollama · a 3B local model</div></div><div><div class="mono">Scope</div><div class="v">Design → Engine → Hi‑fi UI</div></div></div>
+<ol class="loop" aria-label="The loop this case study follows">
+<li><a href="#design"><span class="mono">Step 1</span><b>Design</b><span class="d">Personas, an answer contract, wireframes.</span></a></li>
+<li><a href="#build"><span class="mono">Step 2</span><b>Build</b><span class="d">A working engine, smaller than the plan.</span></a></li>
+<li><a href="#measure"><span class="mono">Step 3</span><b>Measure</b><span class="d">An answer key, a stopwatch, the misses.</span></a></li>
+<li><a href="#redesign"><span class="mono">Step 4</span><b>Redesign</b><span class="d">12 review fixes and high‑fidelity UI.</span></a></li>
+</ol>
+<p class="loop-back">… and the redesign changed what the engine sends back, so the loop went round again.</p>
+</section>
+
+<section class="sec" id="anatomy-sec">
+<div class="lab"><div class="mono"><span>Start here</span></div></div>
+<div class="con">
+<h2 class="big">One answer, two ways: the data, and the screen it becomes.</h2>
+<div class="body" style="margin-top:20px"><p>Pick a real answer the engine gave. Point at a field on the left to see what it draws on the right, or point at the screen to find its data.</p></div>
+<div class="evid"><span class="label-pill lp-measured">Measured</span><span class="mono" style="text-transform:none;letter-spacing:0;align-self:center">Recorded 19 Nov 2026 · qwen2.5‑coder:3b</span></div>
+<div class="anat" id="anatomy" hidden>
+<div class="seg" role="group" aria-label="Pick a recorded answer"></div>
+<div class="panes"><pre class="json" aria-label="The ticket the engine returned"></pre><div class="screen" aria-label="What the shopper sees"></div></div>
+<p class="hint">Only fields with a match on the screen are highlighted. The full ticket also carries the SQL, the timing and every citation.</p>
+</div>
+<div id="anatomy-fallback"><figure class="">
+<div class="frame"><img src="images/hifi-elena.webp" width="2000" height="1344" alt="Assistant answering Elena with requirement chips and product cards" fetchpriority="high" decoding="async"></div>
+<figcaption><span>Elena’s answer, drawn from its ticket</span><span></span></figcaption>
+</figure></div>
+<script type="application/json" id="tickets">[{"label": "Elena’s 40 chairs", "question": "Need 40 ergonomic mesh chairs with 4D armrests in navy, under $350 each, delivered to Chicago within 3 days.", "ticket": {"state": "answer", "message": "Found 2 products that match everything you asked for. 1 more qualifies if the units can come from several warehouses.", "constraints": {"intent": "find_products", "category": "Office chairs", "color": "Navy", "material": "mesh", "armrests": "4D", "destination_city": "Chicago", "max_unit_price": 350.0, "quantity": 40, "max_delivery_days": 3}, "relax": [{"field": "single_depot", "label": "the one-warehouse rule", "matches": 3}], "components": [{"type": "product_card", "sku": "AT-NAV-4D", "name": "AeroTask Pro Mesh", "color": "Navy", "unit_price": 320.0, "citation_ids": ["c1"], "stock": {"available": 48, "depot_name": "Indianapolis Regional"}}, {"type": "product_card", "sku": "EF-ELT-NV", "name": "ErgoFlex Elite Shell", "color": "Navy", "unit_price": 345.0, "citation_ids": ["c2"], "stock": {"available": 62, "depot_name": "Columbus Hub"}}], "citations": [{"id": "c1", "table": "stock_available", "row_key": {"sku": "AT-NAV-4D", "depot_id": "IND-04"}}, "…"], "timing_ms": {"total": 8968.2}}}, {"label": "Nothing matches", "question": "40 navy mesh chairs with 4D armrests under $300 delivered to Chicago within 2 days", "ticket": {"state": "no_results", "message": "Nothing matches everything you asked for right now. Without the delivery-time limit, 1 option would match.", "constraints": {"intent": "find_products", "category": "Office chairs", "color": "Navy", "material": "mesh", "armrests": "4D", "destination_city": "Chicago", "max_unit_price": 300.0, "quantity": 40, "max_delivery_days": 2}, "relax": [{"field": "max_delivery_days", "label": "the delivery-time limit", "matches": 1}, {"field": "max_unit_price", "label": "the price limit", "matches": 2}, {"field": "color", "label": "the colour", "matches": 1}, {"field": "armrests", "label": "the armrest type", "matches": 1}], "timing_ms": {"total": 7931.8}}}, {"label": "A lookup", "question": "How many navy AeroTask Pro Mesh chairs are available in Indianapolis?", "ticket": {"state": "answer", "message": "available: 48", "subject": {"product": "AeroTask Pro Mesh", "color": "Navy", "depot_id": "IND-04", "depot": "Indianapolis Regional", "sku": "AT-NAV-4D"}, "table": {"columns": ["available"], "rows": [[48]]}, "citations": [{"id": "c1", "table": "products, stock_available", "row_key": {"result_row": 1}}], "timing_ms": {"total": 6739.9}}}, {"label": "An upset customer", "question": "My order is 4 days late and I want a refund right now!", "ticket": {"state": "handoff", "message": "Connecting you to a specialist. They'll see this chat and your details, so you won't need to repeat anything.", "components": [{"type": "handoff", "reason": "critical_intent"}], "timing_ms": {"total": 0.1}}}]</script>
+</div>
+</section>
+
+<section class="sec" id="design">
+<div class="lab"><span class="step-n" aria-hidden="true">1</span><div class="mono"><span>Design</span></div><a href="research.html">Detail in the appendix →</a></div>
+<div class="con">
+<h2 class="big">Two people, one rule: show your working.</h2>
+
+<div class="evid"><span class="label-pill lp-assumed">Assumed</span></div>
+<div class="grid " style="--min:280px"><div><div class="mono">Storefront</div><h3 class="h">Elena Rostova</h3><p>B2B facilities buyer. “Tell me if you have forty ergonomic mesh chairs with 4D armrests in navy, under $350 each, delivered to Chicago by Tuesday.”</p></div><div><div class="mono">Console</div><h3 class="h">Marcus Vance</h3><p>Tier‑1 support specialist. “If a tool suggests an action, I need to see the exact database row it came from.”</p></div></div>
+<div class="body"><p>The design’s one big idea was a <b>contract</b>: every answer is a ticket with the rows it used, a receipt for each number, and the requirements it understood. Screens draw from the ticket, never from loose text. Marcus’s console was designed but is still a hand‑built prototype; only Elena’s half was built for real.</p></div>
+<figure class="">
+<div class="frame"><img src="images/s1-storefront-widget.webp" width="2000" height="1562" alt="Low-fidelity wireframe of the storefront with the assistant and two product cards" loading="lazy" decoding="async"></div>
+<figcaption><span>Wireframe S1 — the plan, greyscale on purpose</span><span></span></figcaption>
+</figure>
+
+</div>
+</section>
+
+
+<section class="sec" id="build">
+<div class="lab"><span class="step-n" aria-hidden="true">2</span><div class="mono"><span>Build</span></div><a href="engine.html">Detail in the appendix →</a></div>
+<div class="con">
+<h2 class="big">The smallest engine that could test the design.</h2>
+
+<div class="evid"><span class="label-pill lp-measured">Measured</span></div>
+<pre class="diagram" aria-label="Diagram: the router sends each question to one of four stations; answers pass a grounding check and become a ticket">
+ Question ─► ROUTER: rules first ─► (no rule? the AI picks ONE word)
+                │
+   ┌────────────┼─────────────┬──────────────┬─────────────┐
+   HAND‑OFF     SQL           HYBRID         SEARCH
+   0–1 ms       AI writes a   AI fills a     keyword + meaning,
+                SELECT        form; code     fused (RRF)
+                              builds SQL
+   └────────────┴─────────────┴──────┬───────┴─────────────┘
+                                     ▼
+        grounding check: does every searched value really exist?
+                                     ▼
+        TICKET: message · cards · rows · receipts · requirements · timing
+</pre>
+<h3 class="sub">Decisions I’d defend</h3>
+<div class="grid dec" style="--min:280px"><div><div class="mono">Decision 1</div><h3 class="h">Let the AI fill a form, not write SQL</h3><p class="alt">Considered: a bigger model writing whole queries.</p><p class="why"><b>0/6 → 5/6</b> with the same model. Code builds the SQL from checked values.</p></div><div><div class="mono">Decision 2</div><h3 class="h">Rules first, AI only for the leftovers</h3><p class="alt">Considered: AI on every question.</p><p class="why">Known questions stay instant; the AI writes one word for the rest. Fresh routing <b>4/8 → 8/8</b>.</p></div><div><div class="mono">Decision 3</div><h3 class="h">Remove a requirement without asking the AI again</h3><p class="alt">Considered: re‑sending a reworded question.</p><p class="why">The form minus one box goes straight to the database: <b>1–4 ms</b>, and it can’t mishear.</p></div><div><div class="mono">Decision 4</div><h3 class="h">Replay real recordings on GitHub Pages</h3><p class="alt">Considered: hand‑written demo answers, or a paid server.</p><p class="why">Free and honest: every demo answer came out of the engine, and the status line says when.</p></div><div><div class="mono">Decision 5</div><h3 class="h">Keep status colours out of the brand</h3><p class="alt">Considered: brand green for “in stock”.</p><p class="why">Lake blue + shape + word, so stock never depends on telling red from green.</p></div></div>
+
+</div>
+</section>
+
+
+<section class="sec" id="measure">
+<div class="lab"><span class="step-n" aria-hidden="true">3</span><div class="mono"><span>Measure</span></div><a href="engine.html">Detail in the appendix →</a></div>
+<div class="con">
+<h2 class="big">An answer key, a stopwatch, and the misses left in.</h2>
+
+<div class="evid"><span class="label-pill lp-measured">Measured</span></div>
+<div class="body" style="margin-top:20px"><p>35 questions with proven answers, run through the whole engine (Runs 11 and 12, 12 Nov 2026). Each dot is one question.</p></div>
+<div class="dots" role="group" aria-label="One dot per answer-key question">
+<div class="row"><span class="mono">Rules only</span><ol><li class="r" title="Q01 · right · How many navy AeroTask Pro Mesh chairs are available in Indianapolis?"><span class="visually-hidden">Q01 right</span></li><li class="r" title="Q02 · right · What does the AeroTask Pro Mesh cost?"><span class="visually-hidden">Q02 right</span></li><li class="h" title="Q03 · safe hand‑off · Which depot has the most navy ErgoFlex Elite Shell chairs?"><span class="visually-hidden">Q03 safe hand‑off</span></li><li class="r" title="Q04 · right · How many navy AeroTask Pro Mesh chairs do you have in total, across all depots?"><span class="visually-hidden">Q04 right</span></li><li class="h" title="Q05 · safe hand‑off · Are black AeroTask chairs in stock in Columbus?"><span class="visually-hidden">Q05 safe hand‑off</span></li><li class="r" title="Q06 · right · How many grey AeroTask Pro Mesh chairs are left?"><span class="visually-hidden">Q06 right</span></li><li class="h" title="Q07 · safe hand‑off · What's the cheapest office chair with 4D armrests?"><span class="visually-hidden">Q07 safe hand‑off</span></li><li class="h" title="Q08 · safe hand‑off · How many office chair products cost under $300?"><span class="visually-hidden">Q08 safe hand‑off</span></li><li class="r" title="Q09 · right · How many days does delivery from the Columbus Hub to Chicago take?"><span class="visually-hidden">Q09 right</span></li><li class="r" title="Q10 · right · What's the status of order NX-88219?"><span class="visually-hidden">Q10 right</span></li><li class="r" title="Q11 · right · What would 40 navy AeroTask Pro Mesh chairs cost in total?"><span class="visually-hidden">Q11 right</span></li><li class="r" title="Q12 · right · What's the average price of mesh office chairs?"><span class="visually-hidden">Q12 right</span></li><li class="r" title="Q13 · right · Need 40 ergonomic mesh chairs with 4D armrests in navy, under $350 each, delivered to Chicago within 3 days."><span class="visually-hidden">Q13 right</span></li><li class="r" title="Q14 · right · Same chairs, but they must arrive in Chicago within 2 days."><span class="visually-hidden">Q14 right</span></li><li class="r" title="Q15 · right · I need 60 navy mesh chairs with 4D armrests under $350, all from one warehouse."><span class="visually-hidden">Q15 right</span></li><li class="r" title="Q16 · right · I need 50 navy mesh chairs with 4D armrests under $350 and don't mind which warehouses they come from."><span class="visually-hidden">Q16 right</span></li><li class="r" title="Q17 · right · A breathable chair that's comfortable for long shifts"><span class="visually-hidden">Q17 right</span></li><li class="r" title="Q18 · right · Water-resistant trail shell"><span class="visually-hidden">Q18 right</span></li><li class="r" title="Q19 · right · Navy blue charging cable"><span class="visually-hidden">Q19 right</span></li><li class="r" title="Q20 · right · Show me the navy shell"><span class="visually-hidden">Q20 right</span></li><li class="h" title="Q21 · safe hand‑off · Do you sell pink office chairs?"><span class="visually-hidden">Q21 safe hand‑off</span></li><li class="r" title="Q22 · right · My order is 4 days late and I want a refund right now or I'm cancelling my card."><span class="visually-hidden">Q22 right</span></li><li class="r" title="Q23 · right · Stackable chairs for a waiting room"><span class="visually-hidden">Q23 right</span></li><li class="w" title="Q24 · wrong · Something to charge my laptop"><span class="visually-hidden">Q24 wrong</span></li><li class="r" title="Q25 · right · A desk I can stand at"><span class="visually-hidden">Q25 right</span></li><li class="r" title="Q26 · right · A light for my desk"><span class="visually-hidden">Q26 right</span></li><li class="r" title="Q27 · right · Rain jacket for hiking"><span class="visually-hidden">Q27 right</span></li><li class="w" title="Q28 · wrong · Somewhere to put my feet up under the desk"><span class="visually-hidden">Q28 wrong</span></li><li class="r" title="Q29 · right · Got any navy mesh chairs with fully adjustable 4D arms for less than $330? We need at least 45 shipped from a single location."><span class="visually-hidden">Q29 right</span></li><li class="w" title="Q30 · wrong · How much for 25 grey AeroTask Pro Mesh chairs?"><span class="visually-hidden">Q30 wrong</span></li><li class="r" title="Q31 · right · Mean price of chairs with 4D armrests?"><span class="visually-hidden">Q31 right</span></li><li class="r" title="Q32 · right · We're opening an office in Chicago next week and need 3 navy chairs with 4D armrests and a mesh back, max $350, there in 1 day."><span class="visually-hidden">Q32 right</span></li><li class="r" title="Q33 · right · Which navy chairs with 4D arms can you get to New York in 2 days? 20 units, any price."><span class="visually-hidden">Q33 right</span></li><li class="r" title="Q34 · right · Same thing but leather only."><span class="visually-hidden">Q34 right</span></li><li class="w" title="Q35 · wrong · I'd like forty navy mesh chairs, 4D arms, under $350, to Chicago within 3 days."><span class="visually-hidden">Q35 wrong</span></li></ol><span class="sc">26<small style="font-size:.55em;color:var(--muted)">/35</small></span></div>
+<div class="row"><span class="mono">With AI</span><ol><li class="r" title="Q01 · right · How many navy AeroTask Pro Mesh chairs are available in Indianapolis?"><span class="visually-hidden">Q01 right</span></li><li class="r" title="Q02 · right · What does the AeroTask Pro Mesh cost?"><span class="visually-hidden">Q02 right</span></li><li class="r" title="Q03 · right · Which depot has the most navy ErgoFlex Elite Shell chairs?"><span class="visually-hidden">Q03 right</span></li><li class="r" title="Q04 · right · How many navy AeroTask Pro Mesh chairs do you have in total, across all depots?"><span class="visually-hidden">Q04 right</span></li><li class="r" title="Q05 · right · Are black AeroTask chairs in stock in Columbus?"><span class="visually-hidden">Q05 right</span></li><li class="w" title="Q06 · wrong · How many grey AeroTask Pro Mesh chairs are left?"><span class="visually-hidden">Q06 wrong</span></li><li class="r" title="Q07 · right · What's the cheapest office chair with 4D armrests?"><span class="visually-hidden">Q07 right</span></li><li class="r" title="Q08 · right · How many office chair products cost under $300?"><span class="visually-hidden">Q08 right</span></li><li class="r" title="Q09 · right · How many days does delivery from the Columbus Hub to Chicago take?"><span class="visually-hidden">Q09 right</span></li><li class="r" title="Q10 · right · What's the status of order NX-88219?"><span class="visually-hidden">Q10 right</span></li><li class="r" title="Q11 · right · What would 40 navy AeroTask Pro Mesh chairs cost in total?"><span class="visually-hidden">Q11 right</span></li><li class="r" title="Q12 · right · What's the average price of mesh office chairs?"><span class="visually-hidden">Q12 right</span></li><li class="r" title="Q13 · right · Need 40 ergonomic mesh chairs with 4D armrests in navy, under $350 each, delivered to Chicago within 3 days."><span class="visually-hidden">Q13 right</span></li><li class="w" title="Q14 · wrong · Same chairs, but they must arrive in Chicago within 2 days."><span class="visually-hidden">Q14 wrong</span></li><li class="r" title="Q15 · right · I need 60 navy mesh chairs with 4D armrests under $350, all from one warehouse."><span class="visually-hidden">Q15 right</span></li><li class="r" title="Q16 · right · I need 50 navy mesh chairs with 4D armrests under $350 and don't mind which warehouses they come from."><span class="visually-hidden">Q16 right</span></li><li class="r" title="Q17 · right · A breathable chair that's comfortable for long shifts"><span class="visually-hidden">Q17 right</span></li><li class="r" title="Q18 · right · Water-resistant trail shell"><span class="visually-hidden">Q18 right</span></li><li class="r" title="Q19 · right · Navy blue charging cable"><span class="visually-hidden">Q19 right</span></li><li class="r" title="Q20 · right · Show me the navy shell"><span class="visually-hidden">Q20 right</span></li><li class="r" title="Q21 · right · Do you sell pink office chairs?"><span class="visually-hidden">Q21 right</span></li><li class="r" title="Q22 · right · My order is 4 days late and I want a refund right now or I'm cancelling my card."><span class="visually-hidden">Q22 right</span></li><li class="r" title="Q23 · right · Stackable chairs for a waiting room"><span class="visually-hidden">Q23 right</span></li><li class="r" title="Q24 · right · Something to charge my laptop"><span class="visually-hidden">Q24 right</span></li><li class="r" title="Q25 · right · A desk I can stand at"><span class="visually-hidden">Q25 right</span></li><li class="r" title="Q26 · right · A light for my desk"><span class="visually-hidden">Q26 right</span></li><li class="r" title="Q27 · right · Rain jacket for hiking"><span class="visually-hidden">Q27 right</span></li><li class="r" title="Q28 · right · Somewhere to put my feet up under the desk"><span class="visually-hidden">Q28 right</span></li><li class="r" title="Q29 · right · Got any navy mesh chairs with fully adjustable 4D arms for less than $330? We need at least 45 shipped from a single location."><span class="visually-hidden">Q29 right</span></li><li class="r" title="Q30 · right · How much for 25 grey AeroTask Pro Mesh chairs?"><span class="visually-hidden">Q30 right</span></li><li class="r" title="Q31 · right · Mean price of chairs with 4D armrests?"><span class="visually-hidden">Q31 right</span></li><li class="r" title="Q32 · right · We're opening an office in Chicago next week and need 3 navy chairs with 4D armrests and a mesh back, max $350, there in 1 day."><span class="visually-hidden">Q32 right</span></li><li class="r" title="Q33 · right · Which navy chairs with 4D arms can you get to New York in 2 days? 20 units, any price."><span class="visually-hidden">Q33 right</span></li><li class="r" title="Q34 · right · Same thing but leather only."><span class="visually-hidden">Q34 right</span></li><li class="r" title="Q35 · right · I'd like forty navy mesh chairs, 4D arms, under $350, to Chicago within 3 days."><span class="visually-hidden">Q35 right</span></li></ol><span class="sc">33<small style="font-size:.55em;color:var(--muted)">/35</small></span></div>
+<div class="legend"><span><i style="background:var(--forest);border-radius:50%"></i>Right</span><span><i style="border:2.5px solid var(--warn);border-radius:50%;background:transparent"></i>Safe hand‑off to a person</span><span><i style="background:var(--bad);border-radius:50%"></i>Wrong (the dangerous kind)</span><span>Hover a dot for its question.</span></div>
+</div>
+<div class="body" style="margin-top:16px"><p style="font-size:14px">With AI, 2 answers were wrong: a grey‑chair count (a column the safety check didn’t cover) and a follow‑up that lost its requirements after a speed fix. Both were fixed and confirmed by replaying the AI’s real answers; a fresh live run is still to do (E37, E38).</p></div>
+<h3 class="sub">The wait the design planned for, and the one it got</h3>
+<div class="budget" role="group" aria-label="Planned wait against measured waits, drawn to the same scale">
+<div class="b"><span>Design budget</span><div class="track"><div class="fill plan" style="width:2.97%"></div></div><span class="v">1.2 s</span></div>
+<div class="b"><span>Median answer (Run 12)</span><div class="track"><div class="fill" style="width:17.4%"></div></div><span class="v">7.0 s</span></div>
+<div class="b"><span>Elena’s question (19 Nov)</span><div class="track"><div class="fill" style="width:22.2%"></div></div><span class="v">9.0 s</span></div>
+<div class="b"><span>Slowest (18 Nov)</span><div class="track"><div class="fill" style="width:100%"></div></div><span class="v">40.4 s</span></div>
+<span class="mono" style="text-transform:none;letter-spacing:0">Drawn to scale. Over 99.9% of a lookup’s wait is the AI writing; the database takes milliseconds. <a class="link" href="engine.html#where-the-time-goes">Replay a real wait →</a></span>
+</div>
+<h3 class="sub">Failure gallery</h3>
+<div class="fails"><article class="fail"><span class="mono">E16</span><h3 class="h">Right number, wrong question</h3>
+<div class="said"><span class="mono">It said</span>“What would 40 chairs cost?” → <s>$320.00</s></div><div class="truth"><span class="mono">The truth</span>40 × $320.00 = <b>$12,800.00</b></div><p>The rules saw “cost” and returned one chair’s price, with a perfectly real receipt. A receipt proves where a number came from, not that it answers the question.</p></article><article class="fail"><span class="mono">E19</span><h3 class="h">The confident “No”</h3>
+<div class="said"><span class="mono">It said</span><s>“Nothing in the store matches that.”</s></div><div class="truth"><span class="mono">The truth</span><b>48</b> matching chairs sat in Indianapolis</div><p>The AI wrote SQL with invented product names. A grounding check now treats invented values as a reason to hand off, not to say no.</p></article><article class="fail"><span class="mono">E25</span><h3 class="h">Right for the wrong reason</h3>
+<div class="said"><span class="mono">It said</span>Navy asked for → receipt for the <s>black</s> chair</div><div class="truth"><span class="mono">The truth</span>Same price, so the total was right; the citation wasn’t</div><p>With no colour in the form, the engine silently picked one. Now it says “any colour, same price” and cites every colour.</p></article><article class="fail"><span class="mono">E32</span><h3 class="h">An upset customer, shown a catalog</h3>
+<div class="said"><span class="mono">It said</span>“This is ridiculous, nobody answers my emails” → <s>product list</s></div><div class="truth"><span class="mono">The truth</span>Hand‑off to a person</div><p>The rules router scored 35/35 on its own questions and 4/8 on fresh ones. A one‑word AI tie‑breaker fixed all four.</p></article></div>
+
+</div>
+</section>
+
+
+<section class="sec" id="redesign">
+<div class="lab"><span class="step-n" aria-hidden="true">4</span><div class="mono"><span>Redesign</span></div><a href="evaluation.html">Detail in the appendix →</a></div>
+<div class="con">
+<h2 class="big">Twelve review findings, none of them about wrong data.</h2>
+
+<div class="evid"><span class="label-pill lp-review">Expert review</span><span class="label-pill lp-measured">Measured</span></div>
+<div class="grid " style="--min:220px"><div><div class="stat"><div class="n">3</div><p>Major: Task A couldn’t be finished; the close button was hidden on phones; the wait was misrepresented.</p></div></div><div><div class="stat"><div class="n">5</div><p>Minor: invisible memory, a hint you couldn’t tap, a number with no subject, fake buttons, engine words.</p></div></div><div><div class="stat"><div class="n">12<small>/12</small></div><p>Fixed. Three needed the engine to send <b>data</b> instead of sentences.</p></div></div></div>
+<div class="ba"><span class="before">“Without the delivery‑time limit, 1 option would match.”</span><span class="arrow" aria-hidden="true">→</span><span class="after">[ Show 1 option without the delivery‑time limit ]</span><span class="mono note">A sentence can only be read. The same fact as data (relax: field, label, matches) can be a button. That one change answers in 1–4 ms, with no AI.</span></div>
+<figure class="">
+<div class="frame"><img src="images/hifi-nomatch.webp" width="2000" height="1344" alt="High-fidelity assistant: nothing matches, with one button per requirement that would give results if dropped" loading="lazy" decoding="async"></div>
+<figcaption><span>High fidelity — ways out you can tap</span><span>Recorded 19 Nov 2026</span></figcaption>
+</figure>
+<div class="swatches" style="margin-top:32px">
+<div class="sw"><div class="chip" style="background:#2f6b3b;color:#fff">Forest</div><div class="meta">Primary</div></div>
+<div class="sw"><div class="chip" style="background:#f2c14e;color:#2b2118">Lantern</div><div class="meta">Secondary · ways out</div></div>
+<div class="sw"><div class="chip" style="background:#c8452b;color:#fff">Campfire</div><div class="meta">Rare accent</div></div>
+<div class="sw"><div class="chip" style="background:#2b2118;color:#f3ece3">Bark</div><div class="meta">Text</div></div>
+<div class="sw"><div class="chip" style="background:#1d6782;color:#fff">Lake</div><div class="meta">Status: in stock</div></div>
+</div>
+
+</div>
+</section>
+
+
+<section class="sec">
+<div class="lab"><div class="mono"><span>What I learned about RAG</span></div></div>
+<div class="con">
+<h2 class="big">Six ideas, in plain words.</h2>
+<div class="grid gl" style="--min:260px"><div><div class="k"><span class="mono">RAG</span><span class="mono">Retrieval‑augmented generation</span></div><p style="color:var(--ink)">Look things up first, then answer from what you found.</p><p class="an">An open‑book exam: the answer must come from the book on the desk.</p></div><div><div class="k"><span class="mono">Router</span><span class="mono">Which desk handles this?</span></div><p style="color:var(--ink)">Rules recognise most questions; an AI picks one word for the rest.</p><p class="an">A receptionist who knows most visitors by sight.</p></div><div><div class="k"><span class="mono">BM25 + embeddings</span><span class="mono">Two kinds of search</span></div><p style="color:var(--ink)">Keyword search matches rare words; meaning search matches ideas.</p><p class="an">Two detectives with different blind spots.</p></div><div><div class="k"><span class="mono">RRF</span><span class="mono">Reciprocal Rank Fusion</span></div><p style="color:var(--ink)">Each search gives a product 1 / (60 + its rank); the scores are added.</p><p class="an">Two judges’ rankings combined into one.</p></div><div><div class="k"><span class="mono">Grounding check</span><span class="mono">Is that value real?</span></div><p style="color:var(--ink)">Before saying “no”, every value a query searched for is checked against the database.</p><p class="an">A librarian who checks your spelling before saying “we don’t have it”.</p></div><div><div class="k"><span class="mono">Contract</span><span class="mono">The answer ticket</span></div><p style="color:var(--ink)">Every answer follows one JSON shape: rows, receipts, requirements, timing.</p><p class="an">A receipt the screen knows how to read.</p></div></div>
+</div>
+</section>
+
+
+<section class="sec">
+<div class="lab"><div class="mono"><span>Limits &amp; how I worked</span></div></div>
+<div class="con">
+<h2 class="big">What this case study can’t claim, and who did what.</h2>
+
+<div class="grid " style="--min:260px"><div><div class="mono">Not yet tested</div><h3 class="h">No real participants</h3><p>The usability round was simulated and the expert review had one reviewer. Next: 2–3 informal Task A sessions, one on a phone.</p></div><div><div class="mono">Not yet built</div><h3 class="h">Marcus’s console</h3><p>The operations console is styled but hand‑built; it doesn’t talk to the engine yet.</p></div><div><div class="mono">How I worked</div><h3 class="h">Tools</h3><p>Python, SQLite and Ollama on a home PC. An AI assistant (Claude) helped write and review code, ran the heuristic review, and drafted copy that I edited. The design calls, the evaluation plan and the runs on my PC are mine.</p></div></div>
+<div class="evid" style="margin-top:24px"><span class="label-pill lp-measured">Measured</span><span class="label-pill lp-review">Expert review</span><span class="label-pill lp-sim">Simulated</span><span class="label-pill lp-assumed">Assumed</span><span class="mono" style="text-transform:none;letter-spacing:0;align-self:center">Every claim on these pages carries one of these labels.</span></div>
+
+</div>
+</section>
+
+
+
+</main>
+<footer class="site-f">
+<div class="in">
+<div>
+<p class="claim">Designing for an AI that can be slow, unsure and wrong, and showing its working anyway.</p>
+<div class="links">
+<a class="u" href="mailto:dexternierva@gmail.com">dexternierva@gmail.com</a>
+<a class="u" href="../prototype/">Try the demo</a>
+<a href="#content" style="color:var(--muted)">Back to top ↑</a>
+</div>
+</div>
+<div class="mono" style="display:flex;align-items:center;gap:10px;text-transform:none;letter-spacing:0"><span class="dot" aria-hidden="true" style="width:6px;height:6px;box-shadow:none"></span>CartesianRAG · Case study by Dex · Nov 2026</div>
+</div>
+</footer>
+</div>
+</body>
+</html>

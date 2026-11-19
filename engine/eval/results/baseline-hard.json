@@ -1,0 +1,231 @@
+{
+  "writer": "baseline (rules, no AI)",
+  "cold_start_s": null,
+  "accuracy": 0.0,
+  "right": 0,
+  "handoff": 5,
+  "wrong": 1,
+  "total": 6,
+  "contract_valid": 6,
+  "median_ms": 2.5,
+  "results": [
+    {
+      "id": "Q11",
+      "question": "What would 40 navy AeroTask Pro Mesh chairs cost in total?",
+      "expected": 12800.0,
+      "outcome": "WRONG",
+      "correct": false,
+      "ticket_valid": true,
+      "sql": "SELECT DISTINCT p.unit_price FROM products p WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_943d0ece79",
+        "question": "What would 40 navy AeroTask Pro Mesh chairs cost in total?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.9,
+        "message": "unit_price: 320.0",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "unit_price": 320.0
+            },
+            "sql": "SELECT DISTINCT p.unit_price FROM products p WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' LIMIT 50",
+            "read_at": "2026-11-12T04:15:38Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "unit_price"
+          ],
+          "rows": [
+            [
+              320.0
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT DISTINCT p.unit_price FROM products p WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' LIMIT 50",
+          "tries": 1,
+          "writer": "baseline (rules, no AI)"
+        },
+        "timing_ms": {
+          "generation": 0.7,
+          "retrieval": 121.6,
+          "total": 126.0
+        }
+      }
+    },
+    {
+      "id": "Q12",
+      "question": "What's the average price of mesh office chairs?",
+      "expected": 414.38,
+      "outcome": "handoff",
+      "correct": false,
+      "ticket_valid": true,
+      "sql": null,
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_df260c6d8c",
+        "question": "What's the average price of mesh office chairs?",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.3,
+        "message": "I couldn't answer that reliably, so I'm connecting you to a specialist.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "low_confidence",
+            "summary": "The SQL writer could not turn this question into a query."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "generation": 2.4,
+          "total": 2.5
+        }
+      }
+    },
+    {
+      "id": "Q13",
+      "question": "Need 40 ergonomic mesh chairs with 4D armrests in navy, under $350 each, delivered to Chicago within 3 days.",
+      "expected": [
+        "AT-NAV-4D",
+        "EF-ELT-NV"
+      ],
+      "outcome": "handoff",
+      "correct": false,
+      "ticket_valid": true,
+      "sql": null,
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_6b79e3bb04",
+        "question": "Need 40 ergonomic mesh chairs with 4D armrests in navy, under $350 each, delivered to Chicago within 3 days.",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.3,
+        "message": "I couldn't answer that reliably, so I'm connecting you to a specialist.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "low_confidence",
+            "summary": "The SQL writer could not turn this question into a query."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "generation": 6.1,
+          "total": 6.2
+        }
+      }
+    },
+    {
+      "id": "Q14",
+      "question": "Same chairs, but they must arrive in Chicago within 2 days.",
+      "expected": [
+        "AT-NAV-4D"
+      ],
+      "outcome": "handoff",
+      "correct": false,
+      "ticket_valid": true,
+      "sql": null,
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_8a8fbbd29b",
+        "question": "Same chairs, but they must arrive in Chicago within 2 days.",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.3,
+        "message": "I couldn't answer that reliably, so I'm connecting you to a specialist.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "low_confidence",
+            "summary": "The SQL writer could not turn this question into a query."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "generation": 0.2,
+          "total": 0.3
+        }
+      }
+    },
+    {
+      "id": "Q15",
+      "question": "I need 60 navy mesh chairs with 4D armrests under $350, all from one warehouse.",
+      "expected": [
+        "EF-ELT-NV"
+      ],
+      "outcome": "handoff",
+      "correct": false,
+      "ticket_valid": true,
+      "sql": null,
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_77399e4a9f",
+        "question": "I need 60 navy mesh chairs with 4D armrests under $350, all from one warehouse.",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.3,
+        "message": "I couldn't answer that reliably, so I'm connecting you to a specialist.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "low_confidence",
+            "summary": "The SQL writer could not turn this question into a query."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "generation": 0.2,
+          "total": 0.3
+        }
+      }
+    },
+    {
+      "id": "Q16",
+      "question": "I need 50 navy mesh chairs with 4D armrests under $350 and don't mind which warehouses they come from.",
+      "expected": [
+        "AT-NAV-4D",
+        "CM-NAV-4D",
+        "EF-ELT-NV",
+        "PT-NAV-4D"
+      ],
+      "outcome": "handoff",
+      "correct": false,
+      "ticket_valid": true,
+      "sql": null,
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_16be72b0c5",
+        "question": "I need 50 navy mesh chairs with 4D armrests under $350 and don't mind which warehouses they come from.",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.3,
+        "message": "I couldn't answer that reliably, so I'm connecting you to a specialist.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "low_confidence",
+            "summary": "The SQL writer could not turn this question into a query."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "generation": 0.2,
+          "total": 0.3
+        }
+      }
+    }
+  ]
+}

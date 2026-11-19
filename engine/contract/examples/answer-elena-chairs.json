@@ -1,0 +1,89 @@
+{
+  "contract_version": "0.1",
+  "query_id": "q_example_answer",
+  "question": "Need 40 ergonomic mesh chairs with 4D armrests in navy, under $350 each, delivered to Chicago within 3 days.",
+  "route": "hybrid",
+  "state": "answer",
+  "confidence": 0.93,
+  "message": "Found 2 chairs with 40+ units at one depot that can reach Chicago within 3 days, both under $350.",
+  "constraints": {
+    "quantity": 40,
+    "color": "Navy",
+    "max_unit_price": 350,
+    "destination_city": "Chicago",
+    "max_delivery_days": 3,
+    "features": ["mesh", "4D armrests"],
+    "category": "Office chairs"
+  },
+  "components": [
+    {
+      "type": "product_card",
+      "sku": "AT-NAV-4D",
+      "name": "AeroTask Pro Mesh",
+      "color": "Navy",
+      "unit_price": 320.0,
+      "currency": "USD",
+      "specs": ["Breathable mesh", "4D armrests", "300 lb rating"],
+      "variants": [
+        { "color": "Navy", "sku": "AT-NAV-4D", "available": 48 },
+        { "color": "Black", "sku": "AT-BLK-4D", "available": 22 },
+        { "color": "Grey", "sku": "AT-GRY-4D", "available": 6 }
+      ],
+      "stock": { "status": "in_stock", "available": 48, "depot_id": "IND-04", "depot_name": "Indianapolis Regional" },
+      "delivery": { "destination_city": "Chicago", "days": 2, "meets_deadline": true },
+      "citation_ids": ["c1", "c2"]
+    },
+    {
+      "type": "product_card",
+      "sku": "EF-ELT-NV",
+      "name": "ErgoFlex Elite Shell",
+      "color": "Navy",
+      "unit_price": 345.0,
+      "currency": "USD",
+      "specs": ["Elastomer mesh", "4D armrests", "275 lb rating"],
+      "stock": { "status": "in_stock", "available": 62, "depot_id": "COL-02", "depot_name": "Columbus Hub" },
+      "delivery": { "destination_city": "Chicago", "days": 3, "meets_deadline": true },
+      "citation_ids": ["c3"]
+    }
+  ],
+  "citations": [
+    {
+      "id": "c1",
+      "kind": "db_row",
+      "database": "store.db",
+      "table": "inventory",
+      "row_key": { "sku": "AT-NAV-4D", "depot_id": "IND-04" },
+      "fields": { "sku": "AT-NAV-4D", "depot_id": "IND-04", "on_hand": 60, "reserved": 12, "available": 48 },
+      "sql": "SELECT sku, depot_id, on_hand, reserved, on_hand - reserved AS available FROM inventory WHERE sku = 'AT-NAV-4D' AND depot_id = 'IND-04';",
+      "read_at": "2026-11-12T01:52:00Z",
+      "confidence": 1.0
+    },
+    {
+      "id": "c2",
+      "kind": "document",
+      "document": "spec_sheets/AT-family.pdf",
+      "page": 3,
+      "excerpt": "Seat height 18.5-22.0 in. Weight rating 300 lb. 4D adjustable armrests.",
+      "read_at": "2026-11-12T01:52:00Z",
+      "confidence": 0.91
+    },
+    {
+      "id": "c3",
+      "kind": "db_row",
+      "database": "store.db",
+      "table": "inventory",
+      "row_key": { "sku": "EF-ELT-NV", "depot_id": "COL-02" },
+      "fields": { "sku": "EF-ELT-NV", "depot_id": "COL-02", "on_hand": 67, "reserved": 5, "available": 62 },
+      "sql": "SELECT sku, depot_id, on_hand, reserved, on_hand - reserved AS available FROM inventory WHERE sku = 'EF-ELT-NV' AND depot_id = 'COL-02';",
+      "read_at": "2026-11-12T01:52:00Z",
+      "confidence": 1.0
+    }
+  ],
+  "calculation": {
+    "formula": "quantity x unit_price",
+    "inputs": { "quantity": 40, "unit_price": 320.0 },
+    "result": 12800.0,
+    "citation_ids": ["c1"]
+  },
+  "timing_ms": { "routing": 95, "retrieval": 380, "generation": 410, "total": 885 }
+}

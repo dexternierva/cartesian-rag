@@ -1,0 +1,34 @@
+<!-- @dsCard height=288 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>CartesianRAG cover</title>
+<style>
+  html,body{margin:0;background:var(--canvas)}
+  .cv{position:relative;width:960px;height:288px;overflow:hidden;background:var(--canvas)}
+  svg{position:absolute;left:0;top:0}
+  .forest{fill:var(--forest)} .bark{fill:var(--ink)} .lantern{fill:var(--lantern)}
+  .camp{fill:var(--campfire)} .soft{fill:var(--forest-soft)} .ground{fill:var(--canvas)}
+  .txt{position:absolute;left:32px;bottom:32px;max-width:900px}
+  .name{margin:0;font:700 64px/.95 var(--font-display);color:var(--ink);letter-spacing:-0.01em}
+  .tag{margin:12px 0 0;font:400 14px/20px var(--font-sans);color:var(--ink-muted);max-width:440px}
+</style></head>
+<body>
+<div class="cv">
+<svg width="960" height="112" viewBox="0 0 960 112" aria-hidden="true">
+  <!-- blocks: forest 448×112, ink (bark) 208×112, forest-soft 192×112, lantern 112×112, one campfire disc r=8 (radius-pill)
+       arrangement: a strip of unequal bands across the top (the top-band skeleton: the name is too wide for its zone at 64px)
+       pattern: "a literal motif → arcs built from radii": hills cut from the forest band in the canvas ground, a lantern sun rising over the bark band; chosen because the brand is the outdoors brought indoors
+       scales: band 112 = space-8 × 3.5; hill radius 32 = space-8; pitch 64; sun radius 24 = space-6; spark r 8 = space-2 -->
+  <rect class="forest" x="0" y="0" width="448" height="112"/>
+  <rect class="bark" x="448" y="0" width="208" height="112"/>
+  <rect class="soft" x="656" y="0" width="192" height="112"/>
+  <rect class="lantern" x="848" y="0" width="112" height="112"/>
+  <circle class="ground" cx="32" cy="112" r="32"/><circle class="ground" cx="96" cy="112" r="32"/><circle class="ground" cx="160" cy="112" r="32"/>
+  <circle class="ground" cx="224" cy="112" r="32"/><circle class="ground" cx="288" cy="112" r="32"/><circle class="ground" cx="352" cy="112" r="32"/><circle class="ground" cx="416" cy="112" r="32"/>
+  <circle class="lantern" cx="552" cy="80" r="24"/>
+  <circle class="camp" cx="752" cy="56" r="8"/>
+</svg>
+<div class="txt"><h1 class="name">CartesianRAG</h1><p class="tag">Camp-to-desk gear, answered from the store's own tables, with a receipt for every number.</p></div>
+</div>
+</body>
+</html>

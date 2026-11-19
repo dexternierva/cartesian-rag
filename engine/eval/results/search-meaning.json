@@ -1,0 +1,2458 @@
+{
+  "mode": "meaning",
+  "hit_at_5": 10,
+  "total": 10,
+  "contract_valid": 10,
+  "median_ms": 2250.4,
+  "results": [
+    {
+      "id": "Q17",
+      "question": "A breathable chair that's comfortable for long shifts",
+      "expected": [
+        "AT-NAV-4D",
+        "AT-BLK-4D",
+        "AT-GRY-4D"
+      ],
+      "position": 1,
+      "top5": [
+        "AT-NAV-4D",
+        "MX-NAV-4D",
+        "F16-GRAP-4D",
+        "PT-NAV-4D",
+        "CM-NAV-4D"
+      ],
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_95353bd262",
+        "question": "A breathable chair that's comfortable for long shifts",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"A breathable chair that's comfortable for long shifts\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "AT-NAV-4D",
+            "name": "AeroTask Pro Mesh",
+            "color": "Navy",
+            "unit_price": 320.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "300 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "AT-BLK-4D"
+              },
+              {
+                "color": "Grey",
+                "sku": "AT-GRY-4D"
+              },
+              {
+                "color": "Navy",
+                "sku": "AT-NAV-4D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 48,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "MX-NAV-4D",
+            "name": "Meridian Mesh Executive",
+            "color": "Navy",
+            "unit_price": 365.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "325 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "MX-NAV-4D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 80,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "F16-GRAP-4D",
+            "name": "Quill Office Chair",
+            "color": "Graphite",
+            "unit_price": 202.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "250 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Graphite",
+                "sku": "F16-GRAP-4D"
+              },
+              {
+                "color": "Grey",
+                "sku": "F16-GREY-4D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 31,
+              "depot_id": "ATL-03",
+              "depot_name": "Atlanta East"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "AT-NAV-4D"
+            },
+            "fields": {
+              "sku": "AT-NAV-4D",
+              "name": "AeroTask Pro Mesh",
+              "category": "Office chairs",
+              "color": "Navy",
+              "unit_price": 320.0,
+              "material": "Breathable mesh",
+              "description": "Ergonomic task chair with a breathable mesh back, 4D adjustable armrests and adjustable lumbar support. Built for long shifts."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'AT-NAV-4D'",
+            "read_at": "2026-11-12T04:58:22Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "MX-NAV-4D"
+            },
+            "fields": {
+              "sku": "MX-NAV-4D",
+              "name": "Meridian Mesh Executive",
+              "category": "Office chairs",
+              "color": "Navy",
+              "unit_price": 365.0,
+              "material": "Breathable mesh",
+              "description": "High-back executive mesh chair with 4D armrests and headrest."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'MX-NAV-4D'",
+            "read_at": "2026-11-12T04:58:22Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "F16-GRAP-4D"
+            },
+            "fields": {
+              "sku": "F16-GRAP-4D",
+              "name": "Quill Office Chair",
+              "category": "Office chairs",
+              "color": "Graphite",
+              "unit_price": 202.0,
+              "material": "Breathable mesh",
+              "description": "Quill office chair in graphite with breathable mesh and 4D armrests."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'F16-GRAP-4D'",
+            "read_at": "2026-11-12T04:58:22Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "AT-NAV-4D",
+              "AeroTask Pro Mesh",
+              0.01639,
+              null,
+              1,
+              "AT-BLK-4D,AT-GRY-4D,AT-NAV-4D"
+            ],
+            [
+              2,
+              "MX-NAV-4D",
+              "Meridian Mesh Executive",
+              0.01562,
+              null,
+              4,
+              "MX-NAV-4D"
+            ],
+            [
+              3,
+              "F16-GRAP-4D",
+              "Quill Office Chair",
+              0.01538,
+              null,
+              5,
+              "F16-GRAP-4D,F16-GREY-4D"
+            ],
+            [
+              4,
+              "PT-NAV-4D",
+              "Pulse Task Mesh",
+              0.01515,
+              null,
+              6,
+              "PT-NAV-4D"
+            ],
+            [
+              5,
+              "CM-NAV-4D",
+              "Corsa Mesh",
+              0.01471,
+              null,
+              8,
+              "CM-NAV-4D"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (meaning)"
+        },
+        "timing_ms": {
+          "retrieval": 8628.9,
+          "total": 8633.6
+        }
+      }
+    },
+    {
+      "id": "Q18",
+      "question": "Water-resistant trail shell",
+      "expected": [
+        "ST-NAV-M"
+      ],
+      "position": 1,
+      "top5": [
+        "ST-NAV-M",
+        "HS-NAV-00",
+        "EF-ELT-NV",
+        "AT-NAV-4D",
+        "PT-NAV-4D"
+      ],
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_df05b6b580",
+        "question": "Water-resistant trail shell",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"Water-resistant trail shell\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "ST-NAV-M",
+            "name": "Summit Trail Shell Jacket",
+            "color": "Navy",
+            "unit_price": 189.0,
+            "currency": "USD",
+            "specs": [
+              "DWR nylon"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "ST-NAV-M"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 35,
+              "depot_id": "ATL-03",
+              "depot_name": "Atlanta East"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "HS-NAV-00",
+            "name": "Harbor Shell Side Chair",
+            "color": "Navy",
+            "unit_price": 129.0,
+            "currency": "USD",
+            "specs": [
+              "Molded polypropylene shell",
+              "250 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "HS-NAV-00"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 200,
+              "depot_id": "CHI-01",
+              "depot_name": "Chicago Metro"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "EF-ELT-NV",
+            "name": "ErgoFlex Elite Shell",
+            "color": "Navy",
+            "unit_price": 345.0,
+            "currency": "USD",
+            "specs": [
+              "Elastomer mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "EF-ELT-NV"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 62,
+              "depot_id": "COL-02",
+              "depot_name": "Columbus Hub"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "ST-NAV-M"
+            },
+            "fields": {
+              "sku": "ST-NAV-M",
+              "name": "Summit Trail Shell Jacket",
+              "category": "Outdoor apparel",
+              "color": "Navy",
+              "unit_price": 189.0,
+              "material": "DWR nylon",
+              "description": "Lightweight trail shell with a DWR-treated nylon face that sheds rain and wind. Packs into its own pocket."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'ST-NAV-M'",
+            "read_at": "2026-11-12T04:58:24Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "HS-NAV-00"
+            },
+            "fields": {
+              "sku": "HS-NAV-00",
+              "name": "Harbor Shell Side Chair",
+              "category": "Guest seating",
+              "color": "Navy",
+              "unit_price": 129.0,
+              "material": "Molded polypropylene shell",
+              "description": "Stackable guest chair with a one-piece molded shell seat."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'HS-NAV-00'",
+            "read_at": "2026-11-12T04:58:24Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "EF-ELT-NV"
+            },
+            "fields": {
+              "sku": "EF-ELT-NV",
+              "name": "ErgoFlex Elite Shell",
+              "category": "Office chairs",
+              "color": "Navy",
+              "unit_price": 345.0,
+              "material": "Elastomer mesh",
+              "description": "Ergonomic chair with a flexible elastomer mesh shell, 4D armrests and synchro-tilt."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'EF-ELT-NV'",
+            "read_at": "2026-11-12T04:58:24Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "ST-NAV-M",
+              "Summit Trail Shell Jacket",
+              0.01639,
+              null,
+              1,
+              "ST-NAV-M"
+            ],
+            [
+              2,
+              "HS-NAV-00",
+              "Harbor Shell Side Chair",
+              0.01613,
+              null,
+              2,
+              "HS-NAV-00"
+            ],
+            [
+              3,
+              "EF-ELT-NV",
+              "ErgoFlex Elite Shell",
+              0.01587,
+              null,
+              3,
+              "EF-ELT-NV"
+            ],
+            [
+              4,
+              "AT-NAV-4D",
+              "AeroTask Pro Mesh",
+              0.01562,
+              null,
+              4,
+              "AT-BLK-4D,AT-GRY-4D,AT-NAV-4D"
+            ],
+            [
+              5,
+              "PT-NAV-4D",
+              "Pulse Task Mesh",
+              0.01538,
+              null,
+              5,
+              "PT-NAV-4D"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (meaning)"
+        },
+        "timing_ms": {
+          "retrieval": 2115.1,
+          "total": 2116.4
+        }
+      }
+    },
+    {
+      "id": "Q19",
+      "question": "Navy blue charging cable",
+      "expected": [
+        "CB-NAV-2M"
+      ],
+      "position": 1,
+      "top5": [
+        "CB-NAV-2M",
+        "CM-NAV-4D",
+        "PT-NAV-4D",
+        "EF-ELT-NV",
+        "MX-NAV-4D"
+      ],
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_3db132be2b",
+        "question": "Navy blue charging cable",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"Navy blue charging cable\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "CB-NAV-2M",
+            "name": "Braided USB-C Cable 2 m",
+            "color": "Navy",
+            "unit_price": 19.0,
+            "currency": "USD",
+            "specs": [
+              "Braided nylon"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "CB-NAV-2M"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 480,
+              "depot_id": "CHI-01",
+              "depot_name": "Chicago Metro"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "CM-NAV-4D",
+            "name": "Corsa Mesh",
+            "color": "Navy",
+            "unit_price": 315.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "CM-NAV-4D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 25,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "PT-NAV-4D",
+            "name": "Pulse Task Mesh",
+            "color": "Navy",
+            "unit_price": 299.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "PT-NAV-4D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 52,
+              "depot_id": "DAL-01",
+              "depot_name": "Dallas South"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "CB-NAV-2M"
+            },
+            "fields": {
+              "sku": "CB-NAV-2M",
+              "name": "Braided USB-C Cable 2 m",
+              "category": "Accessories",
+              "color": "Navy",
+              "unit_price": 19.0,
+              "material": "Braided nylon",
+              "description": "Braided USB-C to USB-C charging cable, 2 metres, navy blue."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'CB-NAV-2M'",
+            "read_at": "2026-11-12T04:58:27Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "CM-NAV-4D"
+            },
+            "fields": {
+              "sku": "CM-NAV-4D",
+              "name": "Corsa Mesh",
+              "category": "Office chairs",
+              "color": "Navy",
+              "unit_price": 315.0,
+              "material": "Breathable mesh",
+              "description": "Mesh task chair with 4D armrests."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'CM-NAV-4D'",
+            "read_at": "2026-11-12T04:58:27Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "PT-NAV-4D"
+            },
+            "fields": {
+              "sku": "PT-NAV-4D",
+              "name": "Pulse Task Mesh",
+              "category": "Office chairs",
+              "color": "Navy",
+              "unit_price": 299.0,
+              "material": "Breathable mesh",
+              "description": "Mid-back mesh task chair with 4D armrests."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'PT-NAV-4D'",
+            "read_at": "2026-11-12T04:58:27Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "CB-NAV-2M",
+              "Braided USB-C Cable 2 m",
+              0.01639,
+              null,
+              1,
+              "CB-NAV-2M"
+            ],
+            [
+              2,
+              "CM-NAV-4D",
+              "Corsa Mesh",
+              0.01613,
+              null,
+              2,
+              "CM-NAV-4D"
+            ],
+            [
+              3,
+              "PT-NAV-4D",
+              "Pulse Task Mesh",
+              0.01587,
+              null,
+              3,
+              "PT-NAV-4D"
+            ],
+            [
+              4,
+              "EF-ELT-NV",
+              "ErgoFlex Elite Shell",
+              0.01562,
+              null,
+              4,
+              "EF-ELT-NV"
+            ],
+            [
+              5,
+              "MX-NAV-4D",
+              "Meridian Mesh Executive",
+              0.01538,
+              null,
+              5,
+              "MX-NAV-4D"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (meaning)"
+        },
+        "timing_ms": {
+          "retrieval": 2665.1,
+          "total": 2667.0
+        }
+      }
+    },
+    {
+      "id": "Q20",
+      "question": "Show me the navy shell",
+      "expected": [
+        "EF-ELT-NV",
+        "ST-NAV-M",
+        "HS-NAV-00"
+      ],
+      "position": 1,
+      "top5": [
+        "HS-NAV-00",
+        "ST-NAV-M",
+        "EF-ELT-NV",
+        "CM-NAV-4D",
+        "CB-NAV-2M"
+      ],
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_ea9b18c520",
+        "question": "Show me the navy shell",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"Show me the navy shell\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "HS-NAV-00",
+            "name": "Harbor Shell Side Chair",
+            "color": "Navy",
+            "unit_price": 129.0,
+            "currency": "USD",
+            "specs": [
+              "Molded polypropylene shell",
+              "250 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "HS-NAV-00"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 200,
+              "depot_id": "CHI-01",
+              "depot_name": "Chicago Metro"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "ST-NAV-M",
+            "name": "Summit Trail Shell Jacket",
+            "color": "Navy",
+            "unit_price": 189.0,
+            "currency": "USD",
+            "specs": [
+              "DWR nylon"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "ST-NAV-M"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 35,
+              "depot_id": "ATL-03",
+              "depot_name": "Atlanta East"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "EF-ELT-NV",
+            "name": "ErgoFlex Elite Shell",
+            "color": "Navy",
+            "unit_price": 345.0,
+            "currency": "USD",
+            "specs": [
+              "Elastomer mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "EF-ELT-NV"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 62,
+              "depot_id": "COL-02",
+              "depot_name": "Columbus Hub"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "HS-NAV-00"
+            },
+            "fields": {
+              "sku": "HS-NAV-00",
+              "name": "Harbor Shell Side Chair",
+              "category": "Guest seating",
+              "color": "Navy",
+              "unit_price": 129.0,
+              "material": "Molded polypropylene shell",
+              "description": "Stackable guest chair with a one-piece molded shell seat."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'HS-NAV-00'",
+            "read_at": "2026-11-12T04:58:29Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "ST-NAV-M"
+            },
+            "fields": {
+              "sku": "ST-NAV-M",
+              "name": "Summit Trail Shell Jacket",
+              "category": "Outdoor apparel",
+              "color": "Navy",
+              "unit_price": 189.0,
+              "material": "DWR nylon",
+              "description": "Lightweight trail shell with a DWR-treated nylon face that sheds rain and wind. Packs into its own pocket."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'ST-NAV-M'",
+            "read_at": "2026-11-12T04:58:29Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "EF-ELT-NV"
+            },
+            "fields": {
+              "sku": "EF-ELT-NV",
+              "name": "ErgoFlex Elite Shell",
+              "category": "Office chairs",
+              "color": "Navy",
+              "unit_price": 345.0,
+              "material": "Elastomer mesh",
+              "description": "Ergonomic chair with a flexible elastomer mesh shell, 4D armrests and synchro-tilt."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'EF-ELT-NV'",
+            "read_at": "2026-11-12T04:58:29Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "HS-NAV-00",
+              "Harbor Shell Side Chair",
+              0.01639,
+              null,
+              1,
+              "HS-NAV-00"
+            ],
+            [
+              2,
+              "ST-NAV-M",
+              "Summit Trail Shell Jacket",
+              0.01613,
+              null,
+              2,
+              "ST-NAV-M"
+            ],
+            [
+              3,
+              "EF-ELT-NV",
+              "ErgoFlex Elite Shell",
+              0.01587,
+              null,
+              3,
+              "EF-ELT-NV"
+            ],
+            [
+              4,
+              "CM-NAV-4D",
+              "Corsa Mesh",
+              0.01562,
+              null,
+              4,
+              "CM-NAV-4D"
+            ],
+            [
+              5,
+              "CB-NAV-2M",
+              "Braided USB-C Cable 2 m",
+              0.01538,
+              null,
+              5,
+              "CB-NAV-2M"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (meaning)"
+        },
+        "timing_ms": {
+          "retrieval": 2248.7,
+          "total": 2250.4
+        }
+      }
+    },
+    {
+      "id": "Q23",
+      "question": "Stackable chairs for a waiting room",
+      "expected": [
+        "HS-NAV-00"
+      ],
+      "position": 4,
+      "top5": [
+        "AT-BLK-4D",
+        "PT-NAV-4D",
+        "F16-GREY-4D",
+        "HS-NAV-00",
+        "CM-NAV-4D"
+      ],
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_79225c464f",
+        "question": "Stackable chairs for a waiting room",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"Stackable chairs for a waiting room\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "AT-BLK-4D",
+            "name": "AeroTask Pro Mesh",
+            "color": "Black",
+            "unit_price": 320.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "300 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "AT-BLK-4D"
+              },
+              {
+                "color": "Grey",
+                "sku": "AT-GRY-4D"
+              },
+              {
+                "color": "Navy",
+                "sku": "AT-NAV-4D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 22,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "PT-NAV-4D",
+            "name": "Pulse Task Mesh",
+            "color": "Navy",
+            "unit_price": 299.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "PT-NAV-4D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 52,
+              "depot_id": "DAL-01",
+              "depot_name": "Dallas South"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "F16-GREY-4D",
+            "name": "Quill Office Chair",
+            "color": "Grey",
+            "unit_price": 202.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "250 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Graphite",
+                "sku": "F16-GRAP-4D"
+              },
+              {
+                "color": "Grey",
+                "sku": "F16-GREY-4D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 115,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "AT-BLK-4D"
+            },
+            "fields": {
+              "sku": "AT-BLK-4D",
+              "name": "AeroTask Pro Mesh",
+              "category": "Office chairs",
+              "color": "Black",
+              "unit_price": 320.0,
+              "material": "Breathable mesh",
+              "description": "Ergonomic task chair with a breathable mesh back, 4D adjustable armrests and adjustable lumbar support. Built for long shifts."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'AT-BLK-4D'",
+            "read_at": "2026-11-12T04:58:31Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "PT-NAV-4D"
+            },
+            "fields": {
+              "sku": "PT-NAV-4D",
+              "name": "Pulse Task Mesh",
+              "category": "Office chairs",
+              "color": "Navy",
+              "unit_price": 299.0,
+              "material": "Breathable mesh",
+              "description": "Mid-back mesh task chair with 4D armrests."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'PT-NAV-4D'",
+            "read_at": "2026-11-12T04:58:31Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "F16-GREY-4D"
+            },
+            "fields": {
+              "sku": "F16-GREY-4D",
+              "name": "Quill Office Chair",
+              "category": "Office chairs",
+              "color": "Grey",
+              "unit_price": 202.0,
+              "material": "Breathable mesh",
+              "description": "Quill office chair in grey with breathable mesh and 4D armrests."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'F16-GREY-4D'",
+            "read_at": "2026-11-12T04:58:31Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "AT-BLK-4D",
+              "AeroTask Pro Mesh",
+              0.01639,
+              null,
+              1,
+              "AT-BLK-4D,AT-GRY-4D,AT-NAV-4D"
+            ],
+            [
+              2,
+              "PT-NAV-4D",
+              "Pulse Task Mesh",
+              0.01562,
+              null,
+              4,
+              "PT-NAV-4D"
+            ],
+            [
+              3,
+              "F16-GREY-4D",
+              "Quill Office Chair",
+              0.01538,
+              null,
+              5,
+              "F16-GRAP-4D,F16-GREY-4D"
+            ],
+            [
+              4,
+              "HS-NAV-00",
+              "Harbor Shell Side Chair",
+              0.01515,
+              null,
+              6,
+              "HS-NAV-00"
+            ],
+            [
+              5,
+              "CM-NAV-4D",
+              "Corsa Mesh",
+              0.01493,
+              null,
+              7,
+              "CM-NAV-4D"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (meaning)"
+        },
+        "timing_ms": {
+          "retrieval": 2261.0,
+          "total": 2263.3
+        }
+      }
+    },
+    {
+      "id": "Q24",
+      "question": "Something to charge my laptop",
+      "expected": [
+        "CB-NAV-2M"
+      ],
+      "position": 1,
+      "top5": [
+        "CB-NAV-2M",
+        "G05-WHIT",
+        "G03-WHIT",
+        "G04-WHIT",
+        "AT-BLK-4D"
+      ],
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_cb0b7114d3",
+        "question": "Something to charge my laptop",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"Something to charge my laptop\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "CB-NAV-2M",
+            "name": "Braided USB-C Cable 2 m",
+            "color": "Navy",
+            "unit_price": 19.0,
+            "currency": "USD",
+            "specs": [
+              "Braided nylon"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "CB-NAV-2M"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 480,
+              "depot_id": "CHI-01",
+              "depot_name": "Chicago Metro"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "G05-WHIT",
+            "name": "Glow Desk Lamp",
+            "color": "White",
+            "unit_price": 40.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Grey",
+                "sku": "G05-GREY"
+              },
+              {
+                "color": "White",
+                "sku": "G05-WHIT"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 97,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "G03-WHIT",
+            "name": "Duo Monitor Arm",
+            "color": "White",
+            "unit_price": 144.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G03-BLAC"
+              },
+              {
+                "color": "White",
+                "sku": "G03-WHIT"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 82,
+              "depot_id": "COL-02",
+              "depot_name": "Columbus Hub"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "CB-NAV-2M"
+            },
+            "fields": {
+              "sku": "CB-NAV-2M",
+              "name": "Braided USB-C Cable 2 m",
+              "category": "Accessories",
+              "color": "Navy",
+              "unit_price": 19.0,
+              "material": "Braided nylon",
+              "description": "Braided USB-C to USB-C charging cable, 2 metres, navy blue."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'CB-NAV-2M'",
+            "read_at": "2026-11-12T04:58:34Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G05-WHIT"
+            },
+            "fields": {
+              "sku": "G05-WHIT",
+              "name": "Glow Desk Lamp",
+              "category": "Accessories",
+              "color": "White",
+              "unit_price": 40.0,
+              "material": null,
+              "description": "LED task lamp with adjustable brightness and a flexible neck. Finish: white."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G05-WHIT'",
+            "read_at": "2026-11-12T04:58:34Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G03-WHIT"
+            },
+            "fields": {
+              "sku": "G03-WHIT",
+              "name": "Duo Monitor Arm",
+              "category": "Accessories",
+              "color": "White",
+              "unit_price": 144.0,
+              "material": null,
+              "description": "Clamp-on arm that holds two screens at eye level. Finish: white."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G03-WHIT'",
+            "read_at": "2026-11-12T04:58:34Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "CB-NAV-2M",
+              "Braided USB-C Cable 2 m",
+              0.01639,
+              null,
+              1,
+              "CB-NAV-2M"
+            ],
+            [
+              2,
+              "G05-WHIT",
+              "Glow Desk Lamp",
+              0.01613,
+              null,
+              2,
+              "G05-GREY,G05-WHIT"
+            ],
+            [
+              3,
+              "G03-WHIT",
+              "Duo Monitor Arm",
+              0.01587,
+              null,
+              3,
+              "G03-BLAC,G03-WHIT"
+            ],
+            [
+              4,
+              "G04-WHIT",
+              "Rest Footrest",
+              0.01562,
+              null,
+              4,
+              "G04-BLAC,G04-WHIT"
+            ],
+            [
+              5,
+              "AT-BLK-4D",
+              "AeroTask Pro Mesh",
+              0.01538,
+              null,
+              5,
+              "AT-BLK-4D,AT-GRY-4D,AT-NAV-4D"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (meaning)"
+        },
+        "timing_ms": {
+          "retrieval": 2353.3,
+          "total": 2355.2
+        }
+      }
+    },
+    {
+      "id": "Q25",
+      "question": "A desk I can stand at",
+      "expected": [
+        "G00-BLAC",
+        "G00-GREY",
+        "G01-BLAC",
+        "G01-WHIT"
+      ],
+      "position": 1,
+      "top5": [
+        "G01-WHIT",
+        "G00-GREY",
+        "G02-WHIT",
+        "AT-GRY-4D",
+        "F16-GREY-4D"
+      ],
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_adc5209e9a",
+        "question": "A desk I can stand at",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"A desk I can stand at\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "G01-WHIT",
+            "name": "Span Standing Desk",
+            "color": "White",
+            "unit_price": 494.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G01-BLAC"
+              },
+              {
+                "color": "White",
+                "sku": "G01-WHIT"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 99,
+              "depot_id": "CHI-01",
+              "depot_name": "Chicago Metro"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "G00-GREY",
+            "name": "Lift Standing Desk",
+            "color": "Grey",
+            "unit_price": 878.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G00-BLAC"
+              },
+              {
+                "color": "Grey",
+                "sku": "G00-GREY"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 135,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "G02-WHIT",
+            "name": "Basic Writing Desk",
+            "color": "White",
+            "unit_price": 215.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G02-BLAC"
+              },
+              {
+                "color": "White",
+                "sku": "G02-WHIT"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 102,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G01-WHIT"
+            },
+            "fields": {
+              "sku": "G01-WHIT",
+              "name": "Span Standing Desk",
+              "category": "Desks",
+              "color": "White",
+              "unit_price": 494.0,
+              "material": null,
+              "description": "Extra-wide height-adjustable desk with a hand crank, for sit-stand work. Finish: white."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G01-WHIT'",
+            "read_at": "2026-11-12T04:58:36Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G00-GREY"
+            },
+            "fields": {
+              "sku": "G00-GREY",
+              "name": "Lift Standing Desk",
+              "category": "Desks",
+              "color": "Grey",
+              "unit_price": 878.0,
+              "material": null,
+              "description": "Electric height-adjustable desk with memory presets, for sitting or standing work. Finish: grey."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G00-GREY'",
+            "read_at": "2026-11-12T04:58:36Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G02-WHIT"
+            },
+            "fields": {
+              "sku": "G02-WHIT",
+              "name": "Basic Writing Desk",
+              "category": "Desks",
+              "color": "White",
+              "unit_price": 215.0,
+              "material": null,
+              "description": "Simple fixed-height writing desk with one drawer. Finish: white."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G02-WHIT'",
+            "read_at": "2026-11-12T04:58:36Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "G01-WHIT",
+              "Span Standing Desk",
+              0.01639,
+              null,
+              1,
+              "G01-BLAC,G01-WHIT"
+            ],
+            [
+              2,
+              "G00-GREY",
+              "Lift Standing Desk",
+              0.01587,
+              null,
+              3,
+              "G00-BLAC,G00-GREY"
+            ],
+            [
+              3,
+              "G02-WHIT",
+              "Basic Writing Desk",
+              0.01538,
+              null,
+              5,
+              "G02-BLAC,G02-WHIT"
+            ],
+            [
+              4,
+              "AT-GRY-4D",
+              "AeroTask Pro Mesh",
+              0.01493,
+              null,
+              7,
+              "AT-BLK-4D,AT-GRY-4D,AT-NAV-4D"
+            ],
+            [
+              5,
+              "F16-GREY-4D",
+              "Quill Office Chair",
+              0.01429,
+              null,
+              10,
+              "F16-GRAP-4D,F16-GREY-4D"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (meaning)"
+        },
+        "timing_ms": {
+          "retrieval": 2240.5,
+          "total": 2242.3
+        }
+      }
+    },
+    {
+      "id": "Q26",
+      "question": "A light for my desk",
+      "expected": [
+        "G05-GREY",
+        "G05-WHIT"
+      ],
+      "position": 1,
+      "top5": [
+        "G05-WHIT",
+        "G00-GREY",
+        "G01-WHIT",
+        "F11-GRAP-2D",
+        "G02-BLAC"
+      ],
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_1b307667b5",
+        "question": "A light for my desk",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"A light for my desk\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "G05-WHIT",
+            "name": "Glow Desk Lamp",
+            "color": "White",
+            "unit_price": 40.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Grey",
+                "sku": "G05-GREY"
+              },
+              {
+                "color": "White",
+                "sku": "G05-WHIT"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 97,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "G00-GREY",
+            "name": "Lift Standing Desk",
+            "color": "Grey",
+            "unit_price": 878.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G00-BLAC"
+              },
+              {
+                "color": "Grey",
+                "sku": "G00-GREY"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 135,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "G01-WHIT",
+            "name": "Span Standing Desk",
+            "color": "White",
+            "unit_price": 494.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G01-BLAC"
+              },
+              {
+                "color": "White",
+                "sku": "G01-WHIT"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 99,
+              "depot_id": "CHI-01",
+              "depot_name": "Chicago Metro"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G05-WHIT"
+            },
+            "fields": {
+              "sku": "G05-WHIT",
+              "name": "Glow Desk Lamp",
+              "category": "Accessories",
+              "color": "White",
+              "unit_price": 40.0,
+              "material": null,
+              "description": "LED task lamp with adjustable brightness and a flexible neck. Finish: white."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G05-WHIT'",
+            "read_at": "2026-11-12T04:58:38Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G00-GREY"
+            },
+            "fields": {
+              "sku": "G00-GREY",
+              "name": "Lift Standing Desk",
+              "category": "Desks",
+              "color": "Grey",
+              "unit_price": 878.0,
+              "material": null,
+              "description": "Electric height-adjustable desk with memory presets, for sitting or standing work. Finish: grey."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G00-GREY'",
+            "read_at": "2026-11-12T04:58:38Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G01-WHIT"
+            },
+            "fields": {
+              "sku": "G01-WHIT",
+              "name": "Span Standing Desk",
+              "category": "Desks",
+              "color": "White",
+              "unit_price": 494.0,
+              "material": null,
+              "description": "Extra-wide height-adjustable desk with a hand crank, for sit-stand work. Finish: white."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G01-WHIT'",
+            "read_at": "2026-11-12T04:58:38Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "G05-WHIT",
+              "Glow Desk Lamp",
+              0.01639,
+              null,
+              1,
+              "G05-GREY,G05-WHIT"
+            ],
+            [
+              2,
+              "G00-GREY",
+              "Lift Standing Desk",
+              0.01587,
+              null,
+              3,
+              "G00-BLAC,G00-GREY"
+            ],
+            [
+              3,
+              "G01-WHIT",
+              "Span Standing Desk",
+              0.01538,
+              null,
+              5,
+              "G01-BLAC,G01-WHIT"
+            ],
+            [
+              4,
+              "F11-GRAP-2D",
+              "Lumen Office Chair",
+              0.01493,
+              null,
+              7,
+              "F11-GRAP-2D"
+            ],
+            [
+              5,
+              "G02-BLAC",
+              "Basic Writing Desk",
+              0.01471,
+              null,
+              8,
+              "G02-BLAC,G02-WHIT"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (meaning)"
+        },
+        "timing_ms": {
+          "retrieval": 2101.8,
+          "total": 2103.3
+        }
+      }
+    },
+    {
+      "id": "Q27",
+      "question": "Rain jacket for hiking",
+      "expected": [
+        "ST-NAV-M"
+      ],
+      "position": 1,
+      "top5": [
+        "ST-NAV-M",
+        "EF-ELT-NV",
+        "AT-NAV-4D",
+        "MX-NAV-4D",
+        "PT-NAV-4D"
+      ],
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_f01ab78f2b",
+        "question": "Rain jacket for hiking",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"Rain jacket for hiking\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "ST-NAV-M",
+            "name": "Summit Trail Shell Jacket",
+            "color": "Navy",
+            "unit_price": 189.0,
+            "currency": "USD",
+            "specs": [
+              "DWR nylon"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "ST-NAV-M"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 35,
+              "depot_id": "ATL-03",
+              "depot_name": "Atlanta East"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "EF-ELT-NV",
+            "name": "ErgoFlex Elite Shell",
+            "color": "Navy",
+            "unit_price": 345.0,
+            "currency": "USD",
+            "specs": [
+              "Elastomer mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "EF-ELT-NV"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 62,
+              "depot_id": "COL-02",
+              "depot_name": "Columbus Hub"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "AT-NAV-4D",
+            "name": "AeroTask Pro Mesh",
+            "color": "Navy",
+            "unit_price": 320.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "300 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "AT-BLK-4D"
+              },
+              {
+                "color": "Grey",
+                "sku": "AT-GRY-4D"
+              },
+              {
+                "color": "Navy",
+                "sku": "AT-NAV-4D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 48,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "ST-NAV-M"
+            },
+            "fields": {
+              "sku": "ST-NAV-M",
+              "name": "Summit Trail Shell Jacket",
+              "category": "Outdoor apparel",
+              "color": "Navy",
+              "unit_price": 189.0,
+              "material": "DWR nylon",
+              "description": "Lightweight trail shell with a DWR-treated nylon face that sheds rain and wind. Packs into its own pocket."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'ST-NAV-M'",
+            "read_at": "2026-11-12T04:58:40Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "EF-ELT-NV"
+            },
+            "fields": {
+              "sku": "EF-ELT-NV",
+              "name": "ErgoFlex Elite Shell",
+              "category": "Office chairs",
+              "color": "Navy",
+              "unit_price": 345.0,
+              "material": "Elastomer mesh",
+              "description": "Ergonomic chair with a flexible elastomer mesh shell, 4D armrests and synchro-tilt."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'EF-ELT-NV'",
+            "read_at": "2026-11-12T04:58:40Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "AT-NAV-4D"
+            },
+            "fields": {
+              "sku": "AT-NAV-4D",
+              "name": "AeroTask Pro Mesh",
+              "category": "Office chairs",
+              "color": "Navy",
+              "unit_price": 320.0,
+              "material": "Breathable mesh",
+              "description": "Ergonomic task chair with a breathable mesh back, 4D adjustable armrests and adjustable lumbar support. Built for long shifts."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'AT-NAV-4D'",
+            "read_at": "2026-11-12T04:58:40Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "ST-NAV-M",
+              "Summit Trail Shell Jacket",
+              0.01639,
+              null,
+              1,
+              "ST-NAV-M"
+            ],
+            [
+              2,
+              "EF-ELT-NV",
+              "ErgoFlex Elite Shell",
+              0.01613,
+              null,
+              2,
+              "EF-ELT-NV"
+            ],
+            [
+              3,
+              "AT-NAV-4D",
+              "AeroTask Pro Mesh",
+              0.01587,
+              null,
+              3,
+              "AT-BLK-4D,AT-GRY-4D,AT-NAV-4D"
+            ],
+            [
+              4,
+              "MX-NAV-4D",
+              "Meridian Mesh Executive",
+              0.01562,
+              null,
+              4,
+              "MX-NAV-4D"
+            ],
+            [
+              5,
+              "PT-NAV-4D",
+              "Pulse Task Mesh",
+              0.01493,
+              null,
+              7,
+              "PT-NAV-4D"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (meaning)"
+        },
+        "timing_ms": {
+          "retrieval": 2112.6,
+          "total": 2114.7
+        }
+      }
+    },
+    {
+      "id": "Q28",
+      "question": "Somewhere to put my feet up under the desk",
+      "expected": [
+        "G04-BLAC",
+        "G04-WHIT"
+      ],
+      "position": 3,
+      "top5": [
+        "G00-GREY",
+        "G01-WHIT",
+        "G04-WHIT",
+        "AT-GRY-4D",
+        "G02-WHIT"
+      ],
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_e4aeaac29e",
+        "question": "Somewhere to put my feet up under the desk",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"Somewhere to put my feet up under the desk\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "G00-GREY",
+            "name": "Lift Standing Desk",
+            "color": "Grey",
+            "unit_price": 878.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G00-BLAC"
+              },
+              {
+                "color": "Grey",
+                "sku": "G00-GREY"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 135,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "G01-WHIT",
+            "name": "Span Standing Desk",
+            "color": "White",
+            "unit_price": 494.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G01-BLAC"
+              },
+              {
+                "color": "White",
+                "sku": "G01-WHIT"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 99,
+              "depot_id": "CHI-01",
+              "depot_name": "Chicago Metro"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "G04-WHIT",
+            "name": "Rest Footrest",
+            "color": "White",
+            "unit_price": 42.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G04-BLAC"
+              },
+              {
+                "color": "White",
+                "sku": "G04-WHIT"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 90,
+              "depot_id": "DAL-01",
+              "depot_name": "Dallas South"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G00-GREY"
+            },
+            "fields": {
+              "sku": "G00-GREY",
+              "name": "Lift Standing Desk",
+              "category": "Desks",
+              "color": "Grey",
+              "unit_price": 878.0,
+              "material": null,
+              "description": "Electric height-adjustable desk with memory presets, for sitting or standing work. Finish: grey."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G00-GREY'",
+            "read_at": "2026-11-12T04:58:42Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G01-WHIT"
+            },
+            "fields": {
+              "sku": "G01-WHIT",
+              "name": "Span Standing Desk",
+              "category": "Desks",
+              "color": "White",
+              "unit_price": 494.0,
+              "material": null,
+              "description": "Extra-wide height-adjustable desk with a hand crank, for sit-stand work. Finish: white."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G01-WHIT'",
+            "read_at": "2026-11-12T04:58:42Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G04-WHIT"
+            },
+            "fields": {
+              "sku": "G04-WHIT",
+              "name": "Rest Footrest",
+              "category": "Accessories",
+              "color": "White",
+              "unit_price": 42.0,
+              "material": null,
+              "description": "Ergonomic tilting footrest that eases leg strain and improves posture while seated. Finish: white."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G04-WHIT'",
+            "read_at": "2026-11-12T04:58:42Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "G00-GREY",
+              "Lift Standing Desk",
+              0.01639,
+              null,
+              1,
+              "G00-BLAC,G00-GREY"
+            ],
+            [
+              2,
+              "G01-WHIT",
+              "Span Standing Desk",
+              0.01613,
+              null,
+              2,
+              "G01-BLAC,G01-WHIT"
+            ],
+            [
+              3,
+              "G04-WHIT",
+              "Rest Footrest",
+              0.01538,
+              null,
+              5,
+              "G04-BLAC,G04-WHIT"
+            ],
+            [
+              4,
+              "AT-GRY-4D",
+              "AeroTask Pro Mesh",
+              0.01515,
+              null,
+              6,
+              "AT-BLK-4D,AT-GRY-4D,AT-NAV-4D"
+            ],
+            [
+              5,
+              "G02-WHIT",
+              "Basic Writing Desk",
+              0.01449,
+              null,
+              9,
+              "G02-BLAC,G02-WHIT"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (meaning)"
+        },
+        "timing_ms": {
+          "retrieval": 2152.7,
+          "total": 2154.2
+        }
+      }
+    }
+  ]
+}

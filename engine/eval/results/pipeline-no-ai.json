@@ -1,0 +1,4109 @@
+{
+  "preset": "no-ai",
+  "router_known": 35,
+  "router_fresh": 4,
+  "router_fresh_total": 8,
+  "RIGHT": 26,
+  "handoff": 5,
+  "WRONG": 4,
+  "total": 35,
+  "contract_valid": 35,
+  "median_ms": 9.9,
+  "results": [
+    {
+      "id": "Q01",
+      "should": "sql",
+      "went": "sql",
+      "outcome": "RIGHT",
+      "router_reason": "lookup words: 'how many'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_afb319dc2a",
+        "question": "How many navy AeroTask Pro Mesh chairs are available in Indianapolis?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.9,
+        "message": "available: 48",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products, stock_available",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "available": 48
+            },
+            "sql": "SELECT s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' AND s.depot_id = 'IND-04' LIMIT 50",
+            "read_at": "2026-11-19T02:34:18Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "available"
+          ],
+          "rows": [
+            [
+              48
+            ]
+          ]
+        },
+        "subject": {
+          "product": "AeroTask Pro Mesh",
+          "color": "Navy",
+          "depot_id": "IND-04",
+          "depot": "Indianapolis Regional",
+          "sku": "AT-NAV-4D"
+        },
+        "trace": {
+          "sql": "SELECT s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' AND s.depot_id = 'IND-04' LIMIT 50",
+          "tries": 1,
+          "writer": "baseline (rules, no AI)",
+          "station": "sql",
+          "router_reason": "lookup words: 'how many'"
+        },
+        "timing_ms": {
+          "generation": 0.9,
+          "retrieval": 9.0,
+          "total": 357.1
+        }
+      }
+    },
+    {
+      "id": "Q02",
+      "should": "sql",
+      "went": "sql",
+      "outcome": "RIGHT",
+      "router_reason": "lookup words: 'what does the aerotask pro mesh cost'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_55daa8ee31",
+        "question": "What does the AeroTask Pro Mesh cost?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.9,
+        "message": "unit_price: 320.0",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "unit_price": 320.0
+            },
+            "sql": "SELECT DISTINCT p.unit_price FROM products p WHERE p.name = 'AeroTask Pro Mesh' LIMIT 50",
+            "read_at": "2026-11-19T02:34:18Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "unit_price"
+          ],
+          "rows": [
+            [
+              320.0
+            ]
+          ]
+        },
+        "subject": {
+          "product": "AeroTask Pro Mesh"
+        },
+        "trace": {
+          "sql": "SELECT DISTINCT p.unit_price FROM products p WHERE p.name = 'AeroTask Pro Mesh' LIMIT 50",
+          "tries": 1,
+          "writer": "baseline (rules, no AI)",
+          "station": "sql",
+          "router_reason": "lookup words: 'what does the aerotask pro mesh cost'"
+        },
+        "timing_ms": {
+          "generation": 0.3,
+          "retrieval": 7.6,
+          "total": 16.4
+        }
+      }
+    },
+    {
+      "id": "Q03",
+      "should": "sql",
+      "went": "sql",
+      "outcome": "handoff",
+      "router_reason": "lookup words: 'which depot'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_e2c9aa62f5",
+        "question": "Which depot has the most navy ErgoFlex Elite Shell chairs?",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.3,
+        "message": "I couldn't answer that reliably, so I'm connecting you to a specialist.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "low_confidence",
+            "summary": "The SQL writer could not turn this question into a query."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "generation": 0.0,
+          "total": 0.1
+        },
+        "trace": {
+          "station": "sql",
+          "router_reason": "lookup words: 'which depot'"
+        }
+      }
+    },
+    {
+      "id": "Q04",
+      "should": "sql",
+      "went": "sql",
+      "outcome": "RIGHT",
+      "router_reason": "lookup words: 'how many'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_bea91a0cf8",
+        "question": "How many navy AeroTask Pro Mesh chairs do you have in total, across all depots?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "total_available: 51",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products, stock_available",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "total_available": 51
+            },
+            "sql": "SELECT SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' LIMIT 50",
+            "read_at": "2026-11-19T02:34:18Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "total_available"
+          ],
+          "rows": [
+            [
+              51
+            ]
+          ]
+        },
+        "subject": {
+          "product": "AeroTask Pro Mesh",
+          "color": "Navy",
+          "sku": "AT-NAV-4D"
+        },
+        "trace": {
+          "sql": "SELECT SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' LIMIT 50",
+          "tries": 1,
+          "writer": "baseline (rules, no AI)",
+          "station": "sql",
+          "router_reason": "lookup words: 'how many'"
+        },
+        "timing_ms": {
+          "generation": 0.0,
+          "retrieval": 7.5,
+          "total": 16.3
+        }
+      }
+    },
+    {
+      "id": "Q05",
+      "should": "sql",
+      "went": "sql",
+      "outcome": "handoff",
+      "router_reason": "lookup words: 'in stock'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_1f6eb26173",
+        "question": "Are black AeroTask chairs in stock in Columbus?",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.3,
+        "message": "I couldn't answer that reliably, so I'm connecting you to a specialist.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "low_confidence",
+            "summary": "The SQL writer could not turn this question into a query."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "generation": 0.6,
+          "total": 0.6
+        },
+        "trace": {
+          "station": "sql",
+          "router_reason": "lookup words: 'in stock'"
+        }
+      }
+    },
+    {
+      "id": "Q06",
+      "should": "sql",
+      "went": "sql",
+      "outcome": "RIGHT",
+      "router_reason": "lookup words: 'how many'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_92b2532869",
+        "question": "How many grey AeroTask Pro Mesh chairs are left?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "total_available: 6",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products, stock_available",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "total_available": 6
+            },
+            "sql": "SELECT SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Grey' LIMIT 50",
+            "read_at": "2026-11-19T02:34:18Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "total_available"
+          ],
+          "rows": [
+            [
+              6
+            ]
+          ]
+        },
+        "subject": {
+          "product": "AeroTask Pro Mesh",
+          "color": "Grey",
+          "sku": "AT-GRY-4D"
+        },
+        "trace": {
+          "sql": "SELECT SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Grey' LIMIT 50",
+          "tries": 1,
+          "writer": "baseline (rules, no AI)",
+          "station": "sql",
+          "router_reason": "lookup words: 'how many'"
+        },
+        "timing_ms": {
+          "generation": 0.0,
+          "retrieval": 8.4,
+          "total": 17.3
+        }
+      }
+    },
+    {
+      "id": "Q07",
+      "should": "sql",
+      "went": "sql",
+      "outcome": "handoff",
+      "router_reason": "lookup words: 'cheapest'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_9e292fbd2e",
+        "question": "What's the cheapest office chair with 4D armrests?",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.3,
+        "message": "I couldn't answer that reliably, so I'm connecting you to a specialist.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "low_confidence",
+            "summary": "The SQL writer could not turn this question into a query."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "generation": 0.2,
+          "total": 0.3
+        },
+        "trace": {
+          "station": "sql",
+          "router_reason": "lookup words: 'cheapest'"
+        }
+      }
+    },
+    {
+      "id": "Q08",
+      "should": "sql",
+      "went": "sql",
+      "outcome": "handoff",
+      "router_reason": "lookup words: 'how many'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_a7cea62b61",
+        "question": "How many office chair products cost under $300?",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.3,
+        "message": "I couldn't answer that reliably, so I'm connecting you to a specialist.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "low_confidence",
+            "summary": "The SQL writer could not turn this question into a query."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "generation": 0.1,
+          "total": 0.2
+        },
+        "trace": {
+          "station": "sql",
+          "router_reason": "lookup words: 'how many'"
+        }
+      }
+    },
+    {
+      "id": "Q09",
+      "should": "sql",
+      "went": "sql",
+      "outcome": "RIGHT",
+      "router_reason": "lookup words: 'how many'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_3ade46b741",
+        "question": "How many days does delivery from the Columbus Hub to Chicago take?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.9,
+        "message": "days: 3",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "delivery_times",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "days": 3
+            },
+            "sql": "SELECT days FROM delivery_times WHERE depot_id = 'COL-02' AND destination_city = 'Chicago' LIMIT 50",
+            "read_at": "2026-11-19T02:34:18Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "days"
+          ],
+          "rows": [
+            [
+              3
+            ]
+          ]
+        },
+        "subject": {
+          "depot_id": "COL-02",
+          "depot": "Columbus Hub"
+        },
+        "trace": {
+          "sql": "SELECT days FROM delivery_times WHERE depot_id = 'COL-02' AND destination_city = 'Chicago' LIMIT 50",
+          "tries": 1,
+          "writer": "baseline (rules, no AI)",
+          "station": "sql",
+          "router_reason": "lookup words: 'how many'"
+        },
+        "timing_ms": {
+          "generation": 0.0,
+          "retrieval": 8.5,
+          "total": 17.8
+        }
+      }
+    },
+    {
+      "id": "Q10",
+      "should": "sql",
+      "went": "sql",
+      "outcome": "RIGHT",
+      "router_reason": "order number NX-88219",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_396f3ac3b5",
+        "question": "What's the status of order NX-88219?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.95,
+        "message": "order_id: NX-88219; status: DELAYED_IN_HUB",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "orders",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "order_id": "NX-88219",
+              "status": "DELAYED_IN_HUB"
+            },
+            "sql": "SELECT order_id, status FROM orders WHERE order_id = 'NX-88219' LIMIT 50",
+            "read_at": "2026-11-19T02:34:18Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "order_id",
+            "status"
+          ],
+          "rows": [
+            [
+              "NX-88219",
+              "DELAYED_IN_HUB"
+            ]
+          ]
+        },
+        "subject": {
+          "order_id": "NX-88219"
+        },
+        "trace": {
+          "sql": "SELECT order_id, status FROM orders WHERE order_id = 'NX-88219' LIMIT 50",
+          "tries": 1,
+          "writer": "baseline (rules, no AI)",
+          "station": "sql",
+          "router_reason": "order number NX-88219"
+        },
+        "timing_ms": {
+          "generation": 0.0,
+          "retrieval": 8.3,
+          "total": 16.1
+        }
+      }
+    },
+    {
+      "id": "Q11",
+      "should": "hybrid",
+      "went": "hybrid",
+      "outcome": "RIGHT",
+      "router_reason": "total cost",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_6b3690a6b9",
+        "question": "What would 40 navy AeroTask Pro Mesh chairs cost in total?",
+        "route": "python",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "40 x AeroTask Pro Mesh (Navy) at $320.00 = $12,800.00.",
+        "constraints": {
+          "intent": "total_cost",
+          "product_name": "AeroTask Pro Mesh",
+          "category": "Office chairs",
+          "color": "Navy",
+          "material": "mesh",
+          "quantity": 40,
+          "single_depot": false
+        },
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "AT-NAV-4D"
+            },
+            "fields": {
+              "sku": "AT-NAV-4D",
+              "name": "AeroTask Pro Mesh",
+              "color": "Navy",
+              "unit_price": 320.0
+            },
+            "sql": "SELECT sku, name, color, unit_price FROM products WHERE name = 'AeroTask Pro Mesh' AND color = 'Navy'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "sku",
+            "name",
+            "quantity",
+            "unit_price",
+            "total"
+          ],
+          "rows": [
+            [
+              "AT-NAV-4D",
+              "AeroTask Pro Mesh",
+              40,
+              320.0,
+              12800.0
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT sku, name, color, unit_price FROM products WHERE name = 'AeroTask Pro Mesh' AND color = 'Navy'",
+          "tries": 1,
+          "writer": "rules (no AI)",
+          "station": "hybrid",
+          "router_reason": "total cost"
+        },
+        "timing_ms": {
+          "generation": 1.7,
+          "retrieval": 3.1,
+          "total": 44.1
+        },
+        "calculation": {
+          "formula": "quantity x unit_price",
+          "inputs": {
+            "quantity": 40,
+            "unit_price": 320.0
+          },
+          "result": 12800.0,
+          "citation_ids": [
+            "c1"
+          ]
+        }
+      }
+    },
+    {
+      "id": "Q12",
+      "should": "hybrid",
+      "went": "hybrid",
+      "outcome": "RIGHT",
+      "router_reason": "maths word: 'average'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_4c16e7453c",
+        "question": "What's the average price of mesh office chairs?",
+        "route": "python",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "The average price across 21 products is $414.38.",
+        "constraints": {
+          "intent": "average_price",
+          "category": "Office chairs",
+          "material": "mesh"
+        },
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "aggregate": "AVG(unit_price)"
+            },
+            "fields": {
+              "average_unit_price": 414.38,
+              "products_counted": 21
+            },
+            "sql": "SELECT ROUND(AVG(p.unit_price), 2) AS average_unit_price, COUNT(*) AS products_counted FROM products p WHERE p.category = 'Office chairs' AND LOWER(p.material) LIKE '%mesh%'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "average_unit_price",
+            "products_counted"
+          ],
+          "rows": [
+            [
+              414.38,
+              21
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT ROUND(AVG(p.unit_price), 2) AS average_unit_price, COUNT(*) AS products_counted FROM products p WHERE p.category = 'Office chairs' AND LOWER(p.material) LIKE '%mesh%'",
+          "tries": 1,
+          "writer": "rules (no AI)",
+          "station": "hybrid",
+          "router_reason": "maths word: 'average'"
+        },
+        "timing_ms": {
+          "generation": 1.2,
+          "retrieval": 2.2,
+          "total": 8.7
+        },
+        "calculation": {
+          "formula": "average of unit_price",
+          "inputs": {
+            "products_counted": 21
+          },
+          "result": 414.38,
+          "citation_ids": [
+            "c1"
+          ]
+        }
+      }
+    },
+    {
+      "id": "Q13",
+      "should": "hybrid",
+      "went": "hybrid",
+      "outcome": "RIGHT",
+      "router_reason": "rule to apply: 'need 40 ergonomic mesh chairs with 4d armrests in navy, under $350 each, delivered to chicago within 3'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_d606d0ebe1",
+        "question": "Need 40 ergonomic mesh chairs with 4D armrests in navy, under $350 each, delivered to Chicago within 3 days.",
+        "route": "hybrid",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "Found 2 products that match everything you asked for. 1 more qualifies if the units can come from several warehouses.",
+        "constraints": {
+          "intent": "find_products",
+          "category": "Office chairs",
+          "color": "Navy",
+          "material": "mesh",
+          "armrests": "4D",
+          "destination_city": "Chicago",
+          "max_unit_price": 350.0,
+          "quantity": 40,
+          "max_delivery_days": 3
+        },
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "AT-NAV-4D",
+            "name": "AeroTask Pro Mesh",
+            "color": "Navy",
+            "unit_price": 320.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "300 lb rating"
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 48,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c1"
+            ],
+            "delivery": {
+              "destination_city": "Chicago",
+              "days": 2,
+              "meets_deadline": true
+            }
+          },
+          {
+            "type": "product_card",
+            "sku": "EF-ELT-NV",
+            "name": "ErgoFlex Elite Shell",
+            "color": "Navy",
+            "unit_price": 345.0,
+            "currency": "USD",
+            "specs": [
+              "Elastomer mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 62,
+              "depot_id": "COL-02",
+              "depot_name": "Columbus Hub"
+            },
+            "citation_ids": [
+              "c2"
+            ],
+            "delivery": {
+              "destination_city": "Chicago",
+              "days": 3,
+              "meets_deadline": true
+            }
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "AT-NAV-4D",
+              "depot_id": "IND-04"
+            },
+            "fields": {
+              "sku": "AT-NAV-4D",
+              "depot_id": "IND-04",
+              "available": 48,
+              "unit_price": 320.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'Chicago' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND t.days <= 3 AND s.available >= 40",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "EF-ELT-NV",
+              "depot_id": "COL-02"
+            },
+            "fields": {
+              "sku": "EF-ELT-NV",
+              "depot_id": "COL-02",
+              "available": 62,
+              "unit_price": 345.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'Chicago' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND t.days <= 3 AND s.available >= 40",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "sku",
+            "name",
+            "unit_price",
+            "depot_id",
+            "available",
+            "days"
+          ],
+          "rows": [
+            [
+              "AT-NAV-4D",
+              "AeroTask Pro Mesh",
+              320.0,
+              "IND-04",
+              48,
+              2
+            ],
+            [
+              "EF-ELT-NV",
+              "ErgoFlex Elite Shell",
+              345.0,
+              "COL-02",
+              62,
+              3
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'Chicago' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND t.days <= 3 AND s.available >= 40",
+          "tries": 1,
+          "writer": "rules (no AI)",
+          "station": "hybrid",
+          "router_reason": "rule to apply: 'need 40 ergonomic mesh chairs with 4d armrests in navy, under $350 each, delivered to chicago within 3'"
+        },
+        "timing_ms": {
+          "generation": 0.1,
+          "retrieval": 3.5,
+          "total": 10.6
+        },
+        "relax": [
+          {
+            "field": "single_depot",
+            "label": "the one-warehouse rule",
+            "matches": 3
+          }
+        ]
+      }
+    },
+    {
+      "id": "Q14",
+      "should": "hybrid",
+      "went": "hybrid",
+      "outcome": "RIGHT",
+      "router_reason": "follow-up to the previous request",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_0ac3d86527",
+        "question": "Same chairs, but they must arrive in Chicago within 2 days.",
+        "route": "hybrid",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "Found 1 product that matches everything you asked for.",
+        "constraints": {
+          "intent": "find_products",
+          "category": "Office chairs",
+          "color": "Navy",
+          "material": "mesh",
+          "armrests": "4D",
+          "destination_city": "Chicago",
+          "max_unit_price": 350.0,
+          "quantity": 40,
+          "max_delivery_days": 2
+        },
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "AT-NAV-4D",
+            "name": "AeroTask Pro Mesh",
+            "color": "Navy",
+            "unit_price": 320.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "300 lb rating"
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 48,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c1"
+            ],
+            "delivery": {
+              "destination_city": "Chicago",
+              "days": 2,
+              "meets_deadline": true
+            }
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "AT-NAV-4D",
+              "depot_id": "IND-04"
+            },
+            "fields": {
+              "sku": "AT-NAV-4D",
+              "depot_id": "IND-04",
+              "available": 48,
+              "unit_price": 320.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'Chicago' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND t.days <= 2 AND s.available >= 40",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "sku",
+            "name",
+            "unit_price",
+            "depot_id",
+            "available",
+            "days"
+          ],
+          "rows": [
+            [
+              "AT-NAV-4D",
+              "AeroTask Pro Mesh",
+              320.0,
+              "IND-04",
+              48,
+              2
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'Chicago' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND t.days <= 2 AND s.available >= 40",
+          "tries": 1,
+          "writer": "rules (no AI)",
+          "station": "hybrid",
+          "router_reason": "follow-up to the previous request"
+        },
+        "timing_ms": {
+          "generation": 0.3,
+          "retrieval": 3.4,
+          "total": 10.5
+        }
+      }
+    },
+    {
+      "id": "Q15",
+      "should": "hybrid",
+      "went": "hybrid",
+      "outcome": "RIGHT",
+      "router_reason": "rule to apply: 'need 60 navy mesh chairs with 4d armrests under $350'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_f9ef0fc8d3",
+        "question": "I need 60 navy mesh chairs with 4D armrests under $350, all from one warehouse.",
+        "route": "hybrid",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "Found 1 product that matches everything you asked for.",
+        "constraints": {
+          "intent": "find_products",
+          "category": "Office chairs",
+          "color": "Navy",
+          "material": "mesh",
+          "armrests": "4D",
+          "max_unit_price": 350.0,
+          "quantity": 60,
+          "single_depot": true
+        },
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "EF-ELT-NV",
+            "name": "ErgoFlex Elite Shell",
+            "color": "Navy",
+            "unit_price": 345.0,
+            "currency": "USD",
+            "specs": [
+              "Elastomer mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 62,
+              "depot_id": "COL-02",
+              "depot_name": "Columbus Hub"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "EF-ELT-NV",
+              "depot_id": "COL-02"
+            },
+            "fields": {
+              "sku": "EF-ELT-NV",
+              "depot_id": "COL-02",
+              "available": 62,
+              "unit_price": 345.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available FROM products p JOIN stock_available s USING (sku) WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND s.available >= 60",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "sku",
+            "name",
+            "unit_price",
+            "depot_id",
+            "available",
+            "days"
+          ],
+          "rows": [
+            [
+              "EF-ELT-NV",
+              "ErgoFlex Elite Shell",
+              345.0,
+              "COL-02",
+              62,
+              null
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available FROM products p JOIN stock_available s USING (sku) WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND s.available >= 60",
+          "tries": 1,
+          "writer": "rules (no AI)",
+          "station": "hybrid",
+          "router_reason": "rule to apply: 'need 60 navy mesh chairs with 4d armrests under $350'"
+        },
+        "timing_ms": {
+          "generation": 0.1,
+          "retrieval": 2.2,
+          "total": 9.5
+        }
+      }
+    },
+    {
+      "id": "Q16",
+      "should": "hybrid",
+      "went": "hybrid",
+      "outcome": "RIGHT",
+      "router_reason": "rule to apply: 'need 50 navy mesh chairs with 4d armrests under $350'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_3ae462c711",
+        "question": "I need 50 navy mesh chairs with 4D armrests under $350 and don't mind which warehouses they come from.",
+        "route": "hybrid",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "Found 4 products that match everything you asked for.",
+        "constraints": {
+          "intent": "find_products",
+          "category": "Office chairs",
+          "color": "Navy",
+          "material": "mesh",
+          "armrests": "4D",
+          "max_unit_price": 350.0,
+          "quantity": 50,
+          "single_depot": false
+        },
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "PT-NAV-4D",
+            "name": "Pulse Task Mesh",
+            "color": "Navy",
+            "unit_price": 299.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 52,
+              "depot_id": "DAL-01",
+              "depot_name": "Dallas South"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "CM-NAV-4D",
+            "name": "Corsa Mesh",
+            "color": "Navy",
+            "unit_price": 315.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 25,
+              "depot_id": "COL-02",
+              "depot_name": "Columbus Hub"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "AT-NAV-4D",
+            "name": "AeroTask Pro Mesh",
+            "color": "Navy",
+            "unit_price": 320.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "300 lb rating"
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 48,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "PT-NAV-4D",
+              "depot_id": "DAL-01"
+            },
+            "fields": {
+              "sku": "PT-NAV-4D",
+              "depot_id": "DAL-01",
+              "available": 52,
+              "unit_price": 299.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available FROM products p JOIN stock_available s USING (sku) WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND s.available > 0",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "CM-NAV-4D",
+              "depot_id": "COL-02"
+            },
+            "fields": {
+              "sku": "CM-NAV-4D",
+              "depot_id": "COL-02",
+              "available": 25,
+              "unit_price": 315.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available FROM products p JOIN stock_available s USING (sku) WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND s.available > 0",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "AT-NAV-4D",
+              "depot_id": "IND-04"
+            },
+            "fields": {
+              "sku": "AT-NAV-4D",
+              "depot_id": "IND-04",
+              "available": 48,
+              "unit_price": 320.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available FROM products p JOIN stock_available s USING (sku) WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND s.available > 0",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "sku",
+            "name",
+            "unit_price",
+            "depot_id",
+            "available",
+            "days"
+          ],
+          "rows": [
+            [
+              "PT-NAV-4D",
+              "Pulse Task Mesh",
+              299.0,
+              "DAL-01",
+              52,
+              null
+            ],
+            [
+              "CM-NAV-4D",
+              "Corsa Mesh",
+              315.0,
+              "COL-02",
+              25,
+              null
+            ],
+            [
+              "AT-NAV-4D",
+              "AeroTask Pro Mesh",
+              320.0,
+              "IND-04",
+              48,
+              null
+            ],
+            [
+              "EF-ELT-NV",
+              "ErgoFlex Elite Shell",
+              345.0,
+              "COL-02",
+              62,
+              null
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available FROM products p JOIN stock_available s USING (sku) WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND s.available > 0",
+          "tries": 1,
+          "writer": "rules (no AI)",
+          "station": "hybrid",
+          "router_reason": "rule to apply: 'need 50 navy mesh chairs with 4d armrests under $350'"
+        },
+        "timing_ms": {
+          "generation": 0.1,
+          "retrieval": 2.3,
+          "total": 9.3
+        }
+      }
+    },
+    {
+      "id": "Q17",
+      "should": "search",
+      "went": "search",
+      "outcome": "RIGHT",
+      "router_reason": "description only, no numbers or rules",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_cfa87fceb7",
+        "question": "A breathable chair that's comfortable for long shifts",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"A breathable chair that's comfortable for long shifts\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "AT-BLK-4D",
+            "name": "AeroTask Pro Mesh",
+            "color": "Black",
+            "unit_price": 320.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "300 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "AT-BLK-4D"
+              },
+              {
+                "color": "Grey",
+                "sku": "AT-GRY-4D"
+              },
+              {
+                "color": "Navy",
+                "sku": "AT-NAV-4D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 22,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "F00-GRAP-2D",
+            "name": "Aria Office Chair",
+            "color": "Graphite",
+            "unit_price": 575.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "2D armrests",
+              "300 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Graphite",
+                "sku": "F00-GRAP-2D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 79,
+              "depot_id": "DAL-01",
+              "depot_name": "Dallas South"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "F02-GREE-3D",
+            "name": "Cove Office Chair",
+            "color": "Green",
+            "unit_price": 659.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "3D armrests",
+              "300 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Green",
+                "sku": "F02-GREE-3D"
+              },
+              {
+                "color": "White",
+                "sku": "F02-WHIT-3D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 31,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "AT-BLK-4D"
+            },
+            "fields": {
+              "sku": "AT-BLK-4D",
+              "name": "AeroTask Pro Mesh",
+              "category": "Office chairs",
+              "color": "Black",
+              "unit_price": 320.0,
+              "material": "Breathable mesh",
+              "description": "Ergonomic task chair with a breathable mesh back, 4D adjustable armrests and adjustable lumbar support. Built for long shifts."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'AT-BLK-4D'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "F00-GRAP-2D"
+            },
+            "fields": {
+              "sku": "F00-GRAP-2D",
+              "name": "Aria Office Chair",
+              "category": "Office chairs",
+              "color": "Graphite",
+              "unit_price": 575.0,
+              "material": "Breathable mesh",
+              "description": "Aria office chair in graphite with breathable mesh and 2D armrests."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'F00-GRAP-2D'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "F02-GREE-3D"
+            },
+            "fields": {
+              "sku": "F02-GREE-3D",
+              "name": "Cove Office Chair",
+              "category": "Office chairs",
+              "color": "Green",
+              "unit_price": 659.0,
+              "material": "Breathable mesh",
+              "description": "Cove office chair in green with breathable mesh and 3D armrests."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'F02-GREE-3D'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "AT-BLK-4D",
+              "AeroTask Pro Mesh",
+              0.01639,
+              1,
+              null,
+              "AT-BLK-4D,AT-GRY-4D,AT-NAV-4D"
+            ],
+            [
+              2,
+              "F00-GRAP-2D",
+              "Aria Office Chair",
+              0.01562,
+              4,
+              null,
+              "F00-GRAP-2D"
+            ],
+            [
+              3,
+              "F02-GREE-3D",
+              "Cove Office Chair",
+              0.01538,
+              5,
+              null,
+              "F02-GREE-3D,F02-WHIT-3D"
+            ],
+            [
+              4,
+              "F11-GRAP-2D",
+              "Lumen Office Chair",
+              0.01493,
+              7,
+              null,
+              "F11-GRAP-2D"
+            ],
+            [
+              5,
+              "F16-GRAP-4D",
+              "Quill Office Chair",
+              0.01471,
+              8,
+              null,
+              "F16-GRAP-4D,F16-GREY-4D"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (keyword)",
+          "station": "search",
+          "router_reason": "description only, no numbers or rules"
+        },
+        "timing_ms": {
+          "retrieval": 13.1,
+          "total": 62.4
+        }
+      }
+    },
+    {
+      "id": "Q18",
+      "should": "search",
+      "went": "search",
+      "outcome": "RIGHT",
+      "router_reason": "description only, no numbers or rules",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_c1f412f897",
+        "question": "Water-resistant trail shell",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"Water-resistant trail shell\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "ST-NAV-M",
+            "name": "Summit Trail Shell Jacket",
+            "color": "Navy",
+            "unit_price": 189.0,
+            "currency": "USD",
+            "specs": [
+              "DWR nylon"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "ST-NAV-M"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 35,
+              "depot_id": "ATL-03",
+              "depot_name": "Atlanta East"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "HS-NAV-00",
+            "name": "Harbor Shell Side Chair",
+            "color": "Navy",
+            "unit_price": 129.0,
+            "currency": "USD",
+            "specs": [
+              "Molded polypropylene shell",
+              "250 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "HS-NAV-00"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 200,
+              "depot_id": "CHI-01",
+              "depot_name": "Chicago Metro"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "EF-ELT-NV",
+            "name": "ErgoFlex Elite Shell",
+            "color": "Navy",
+            "unit_price": 345.0,
+            "currency": "USD",
+            "specs": [
+              "Elastomer mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "EF-ELT-NV"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 62,
+              "depot_id": "COL-02",
+              "depot_name": "Columbus Hub"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "ST-NAV-M"
+            },
+            "fields": {
+              "sku": "ST-NAV-M",
+              "name": "Summit Trail Shell Jacket",
+              "category": "Outdoor apparel",
+              "color": "Navy",
+              "unit_price": 189.0,
+              "material": "DWR nylon",
+              "description": "Lightweight trail shell with a DWR-treated nylon face that sheds rain and wind. Packs into its own pocket."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'ST-NAV-M'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "HS-NAV-00"
+            },
+            "fields": {
+              "sku": "HS-NAV-00",
+              "name": "Harbor Shell Side Chair",
+              "category": "Guest seating",
+              "color": "Navy",
+              "unit_price": 129.0,
+              "material": "Molded polypropylene shell",
+              "description": "Stackable guest chair with a one-piece molded shell seat."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'HS-NAV-00'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "EF-ELT-NV"
+            },
+            "fields": {
+              "sku": "EF-ELT-NV",
+              "name": "ErgoFlex Elite Shell",
+              "category": "Office chairs",
+              "color": "Navy",
+              "unit_price": 345.0,
+              "material": "Elastomer mesh",
+              "description": "Ergonomic chair with a flexible elastomer mesh shell, 4D armrests and synchro-tilt."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'EF-ELT-NV'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "ST-NAV-M",
+              "Summit Trail Shell Jacket",
+              0.01639,
+              1,
+              null,
+              "ST-NAV-M"
+            ],
+            [
+              2,
+              "HS-NAV-00",
+              "Harbor Shell Side Chair",
+              0.01613,
+              2,
+              null,
+              "HS-NAV-00"
+            ],
+            [
+              3,
+              "EF-ELT-NV",
+              "ErgoFlex Elite Shell",
+              0.01587,
+              3,
+              null,
+              "EF-ELT-NV"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (keyword)",
+          "station": "search",
+          "router_reason": "description only, no numbers or rules"
+        },
+        "timing_ms": {
+          "retrieval": 0.3,
+          "total": 8.3
+        }
+      }
+    },
+    {
+      "id": "Q19",
+      "should": "search",
+      "went": "search",
+      "outcome": "RIGHT",
+      "router_reason": "description only, no numbers or rules",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_8edfeb5c75",
+        "question": "Navy blue charging cable",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"Navy blue charging cable\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "CB-NAV-2M",
+            "name": "Braided USB-C Cable 2 m",
+            "color": "Navy",
+            "unit_price": 19.0,
+            "currency": "USD",
+            "specs": [
+              "Braided nylon"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "CB-NAV-2M"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 480,
+              "depot_id": "CHI-01",
+              "depot_name": "Chicago Metro"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "CM-NAV-4D",
+            "name": "Corsa Mesh",
+            "color": "Navy",
+            "unit_price": 315.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "CM-NAV-4D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 25,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "BR-NAV-3D",
+            "name": "Brio Mesh Task",
+            "color": "Navy",
+            "unit_price": 229.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "3D armrests",
+              "250 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "BR-NAV-3D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 110,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "CB-NAV-2M"
+            },
+            "fields": {
+              "sku": "CB-NAV-2M",
+              "name": "Braided USB-C Cable 2 m",
+              "category": "Accessories",
+              "color": "Navy",
+              "unit_price": 19.0,
+              "material": "Braided nylon",
+              "description": "Braided USB-C to USB-C charging cable, 2 metres, navy blue."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'CB-NAV-2M'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "CM-NAV-4D"
+            },
+            "fields": {
+              "sku": "CM-NAV-4D",
+              "name": "Corsa Mesh",
+              "category": "Office chairs",
+              "color": "Navy",
+              "unit_price": 315.0,
+              "material": "Breathable mesh",
+              "description": "Mesh task chair with 4D armrests."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'CM-NAV-4D'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "BR-NAV-3D"
+            },
+            "fields": {
+              "sku": "BR-NAV-3D",
+              "name": "Brio Mesh Task",
+              "category": "Office chairs",
+              "color": "Navy",
+              "unit_price": 229.0,
+              "material": "Breathable mesh",
+              "description": "Budget mesh task chair with 3D armrests."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'BR-NAV-3D'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "CB-NAV-2M",
+              "Braided USB-C Cable 2 m",
+              0.01639,
+              1,
+              null,
+              "CB-NAV-2M"
+            ],
+            [
+              2,
+              "CM-NAV-4D",
+              "Corsa Mesh",
+              0.01613,
+              2,
+              null,
+              "CM-NAV-4D"
+            ],
+            [
+              3,
+              "BR-NAV-3D",
+              "Brio Mesh Task",
+              0.01587,
+              3,
+              null,
+              "BR-NAV-3D"
+            ],
+            [
+              4,
+              "PT-NAV-4D",
+              "Pulse Task Mesh",
+              0.01562,
+              4,
+              null,
+              "PT-NAV-4D"
+            ],
+            [
+              5,
+              "RG-NAV-4D",
+              "Regent Leather Manager",
+              0.01538,
+              5,
+              null,
+              "RG-NAV-4D"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (keyword)",
+          "station": "search",
+          "router_reason": "description only, no numbers or rules"
+        },
+        "timing_ms": {
+          "retrieval": 0.1,
+          "total": 9.4
+        }
+      }
+    },
+    {
+      "id": "Q20",
+      "should": "search",
+      "went": "search",
+      "outcome": "RIGHT",
+      "router_reason": "description only, no numbers or rules",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_9caed371f1",
+        "question": "Show me the navy shell",
+        "route": "search",
+        "state": "disambiguate",
+        "confidence": 0.7,
+        "message": "3 different kinds of product match that. Which one do you mean?",
+        "components": [
+          {
+            "type": "choices",
+            "prompt": "Pick a match",
+            "options": [
+              {
+                "label": "ErgoFlex Elite Shell",
+                "description": "Office chairs \u00b7 Navy \u00b7 $345",
+                "follow_up_question": "Show me the navy ErgoFlex Elite Shell"
+              },
+              {
+                "label": "Harbor Shell Side Chair",
+                "description": "Guest seating \u00b7 Navy \u00b7 $129",
+                "follow_up_question": "Show me the navy Harbor Shell Side Chair"
+              },
+              {
+                "label": "Summit Trail Shell Jacket",
+                "description": "Outdoor apparel \u00b7 Navy \u00b7 $189",
+                "follow_up_question": "Show me the navy Summit Trail Shell Jacket"
+              }
+            ]
+          }
+        ],
+        "citations": [],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "HS-NAV-00",
+              "Harbor Shell Side Chair",
+              0.01639,
+              1,
+              null,
+              "HS-NAV-00"
+            ],
+            [
+              2,
+              "EF-ELT-NV",
+              "ErgoFlex Elite Shell",
+              0.01613,
+              2,
+              null,
+              "EF-ELT-NV"
+            ],
+            [
+              3,
+              "ST-NAV-M",
+              "Summit Trail Shell Jacket",
+              0.01587,
+              3,
+              null,
+              "ST-NAV-M"
+            ],
+            [
+              4,
+              "CB-NAV-2M",
+              "Braided USB-C Cable 2 m",
+              0.01562,
+              4,
+              null,
+              "CB-NAV-2M"
+            ],
+            [
+              5,
+              "CM-NAV-4D",
+              "Corsa Mesh",
+              0.01538,
+              5,
+              null,
+              "CM-NAV-4D"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (keyword)",
+          "station": "search",
+          "router_reason": "description only, no numbers or rules"
+        },
+        "timing_ms": {
+          "retrieval": 0.2,
+          "total": 8.2
+        }
+      }
+    },
+    {
+      "id": "Q21",
+      "should": "sql",
+      "went": "sql",
+      "outcome": "handoff",
+      "router_reason": "lookup words: 'do you sell'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_f5eaa92206",
+        "question": "Do you sell pink office chairs?",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.3,
+        "message": "I couldn't answer that reliably, so I'm connecting you to a specialist.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "low_confidence",
+            "summary": "The SQL writer could not turn this question into a query."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "generation": 0.1,
+          "total": 0.2
+        },
+        "trace": {
+          "station": "sql",
+          "router_reason": "lookup words: 'do you sell'"
+        }
+      }
+    },
+    {
+      "id": "Q22",
+      "should": "handoff",
+      "went": "handoff",
+      "outcome": "RIGHT",
+      "router_reason": "safety word: 'refund'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_9719d88769",
+        "question": "My order is 4 days late and I want a refund right now or I'm cancelling my card.",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.9,
+        "message": "Connecting you to a specialist. They'll see this chat and your details, so you won't need to repeat anything.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "critical_intent",
+            "summary": "Customer message: \"My order is 4 days late and I want a refund right now or I'm cancelling my card.\". Router reason: safety word: 'refund'."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "total": 0.0
+        },
+        "trace": {
+          "station": "handoff",
+          "router_reason": "safety word: 'refund'"
+        }
+      }
+    },
+    {
+      "id": "Q23",
+      "should": "search",
+      "went": "search",
+      "outcome": "RIGHT",
+      "router_reason": "description only, no numbers or rules",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_27c646887c",
+        "question": "Stackable chairs for a waiting room",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"Stackable chairs for a waiting room\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "HS-NAV-00",
+            "name": "Harbor Shell Side Chair",
+            "color": "Navy",
+            "unit_price": 129.0,
+            "currency": "USD",
+            "specs": [
+              "Molded polypropylene shell",
+              "250 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "HS-NAV-00"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 200,
+              "depot_id": "CHI-01",
+              "depot_name": "Chicago Metro"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "CM-NAV-4D",
+            "name": "Corsa Mesh",
+            "color": "Navy",
+            "unit_price": 315.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "CM-NAV-4D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 25,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "BR-NAV-3D",
+            "name": "Brio Mesh Task",
+            "color": "Navy",
+            "unit_price": 229.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "3D armrests",
+              "250 lb rating"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "BR-NAV-3D"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 110,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "HS-NAV-00"
+            },
+            "fields": {
+              "sku": "HS-NAV-00",
+              "name": "Harbor Shell Side Chair",
+              "category": "Guest seating",
+              "color": "Navy",
+              "unit_price": 129.0,
+              "material": "Molded polypropylene shell",
+              "description": "Stackable guest chair with a one-piece molded shell seat."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'HS-NAV-00'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "CM-NAV-4D"
+            },
+            "fields": {
+              "sku": "CM-NAV-4D",
+              "name": "Corsa Mesh",
+              "category": "Office chairs",
+              "color": "Navy",
+              "unit_price": 315.0,
+              "material": "Breathable mesh",
+              "description": "Mesh task chair with 4D armrests."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'CM-NAV-4D'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "BR-NAV-3D"
+            },
+            "fields": {
+              "sku": "BR-NAV-3D",
+              "name": "Brio Mesh Task",
+              "category": "Office chairs",
+              "color": "Navy",
+              "unit_price": 229.0,
+              "material": "Breathable mesh",
+              "description": "Budget mesh task chair with 3D armrests."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'BR-NAV-3D'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "HS-NAV-00",
+              "Harbor Shell Side Chair",
+              0.01639,
+              1,
+              null,
+              "HS-NAV-00"
+            ],
+            [
+              2,
+              "CM-NAV-4D",
+              "Corsa Mesh",
+              0.01613,
+              2,
+              null,
+              "CM-NAV-4D"
+            ],
+            [
+              3,
+              "BR-NAV-3D",
+              "Brio Mesh Task",
+              0.01587,
+              3,
+              null,
+              "BR-NAV-3D"
+            ],
+            [
+              4,
+              "F03-GREE-3D",
+              "Drift Office Chair",
+              0.01562,
+              4,
+              null,
+              "F03-GREE-3D"
+            ],
+            [
+              5,
+              "F06-GRAP-3D",
+              "Grove Office Chair",
+              0.01538,
+              5,
+              null,
+              "F06-GRAP-3D"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (keyword)",
+          "station": "search",
+          "router_reason": "description only, no numbers or rules"
+        },
+        "timing_ms": {
+          "retrieval": 0.2,
+          "total": 8.9
+        }
+      }
+    },
+    {
+      "id": "Q24",
+      "should": "search",
+      "went": "search",
+      "outcome": "WRONG",
+      "router_reason": "description only, no numbers or rules",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_79295edd15",
+        "question": "Something to charge my laptop",
+        "route": "search",
+        "state": "no_results",
+        "confidence": 0.9,
+        "message": "No. Nothing in the store matches that right now.",
+        "components": [],
+        "citations": [],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": []
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (keyword)",
+          "station": "search",
+          "router_reason": "description only, no numbers or rules"
+        },
+        "timing_ms": {
+          "retrieval": 0.1,
+          "total": 9.1
+        }
+      }
+    },
+    {
+      "id": "Q25",
+      "should": "search",
+      "went": "search",
+      "outcome": "RIGHT",
+      "router_reason": "description only, no numbers or rules",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_dec560d095",
+        "question": "A desk I can stand at",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"A desk I can stand at\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "G01-BLAC",
+            "name": "Span Standing Desk",
+            "color": "Black",
+            "unit_price": 484.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G01-BLAC"
+              },
+              {
+                "color": "White",
+                "sku": "G01-WHIT"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 112,
+              "depot_id": "ATL-03",
+              "depot_name": "Atlanta East"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "G02-BLAC",
+            "name": "Basic Writing Desk",
+            "color": "Black",
+            "unit_price": 222.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G02-BLAC"
+              },
+              {
+                "color": "White",
+                "sku": "G02-WHIT"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 131,
+              "depot_id": "CHI-01",
+              "depot_name": "Chicago Metro"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "G00-BLAC",
+            "name": "Lift Standing Desk",
+            "color": "Black",
+            "unit_price": 608.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G00-BLAC"
+              },
+              {
+                "color": "Grey",
+                "sku": "G00-GREY"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 85,
+              "depot_id": "DAL-01",
+              "depot_name": "Dallas South"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G01-BLAC"
+            },
+            "fields": {
+              "sku": "G01-BLAC",
+              "name": "Span Standing Desk",
+              "category": "Desks",
+              "color": "Black",
+              "unit_price": 484.0,
+              "material": null,
+              "description": "Extra-wide height-adjustable desk with a hand crank, for sit-stand work. Finish: black."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G01-BLAC'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G02-BLAC"
+            },
+            "fields": {
+              "sku": "G02-BLAC",
+              "name": "Basic Writing Desk",
+              "category": "Desks",
+              "color": "Black",
+              "unit_price": 222.0,
+              "material": null,
+              "description": "Simple fixed-height writing desk with one drawer. Finish: black."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G02-BLAC'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G00-BLAC"
+            },
+            "fields": {
+              "sku": "G00-BLAC",
+              "name": "Lift Standing Desk",
+              "category": "Desks",
+              "color": "Black",
+              "unit_price": 608.0,
+              "material": null,
+              "description": "Electric height-adjustable desk with memory presets, for sitting or standing work. Finish: black."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G00-BLAC'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "G01-BLAC",
+              "Span Standing Desk",
+              0.01639,
+              1,
+              null,
+              "G01-BLAC,G01-WHIT"
+            ],
+            [
+              2,
+              "G02-BLAC",
+              "Basic Writing Desk",
+              0.01587,
+              3,
+              null,
+              "G02-BLAC,G02-WHIT"
+            ],
+            [
+              3,
+              "G00-BLAC",
+              "Lift Standing Desk",
+              0.01538,
+              5,
+              null,
+              "G00-BLAC,G00-GREY"
+            ],
+            [
+              4,
+              "G05-GREY",
+              "Glow Desk Lamp",
+              0.01493,
+              7,
+              null,
+              "G05-GREY,G05-WHIT"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (keyword)",
+          "station": "search",
+          "router_reason": "description only, no numbers or rules"
+        },
+        "timing_ms": {
+          "retrieval": 0.3,
+          "total": 9.9
+        }
+      }
+    },
+    {
+      "id": "Q26",
+      "should": "search",
+      "went": "search",
+      "outcome": "RIGHT",
+      "router_reason": "description only, no numbers or rules",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_ee2ae1ae70",
+        "question": "A light for my desk",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"A light for my desk\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "G02-BLAC",
+            "name": "Basic Writing Desk",
+            "color": "Black",
+            "unit_price": 222.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G02-BLAC"
+              },
+              {
+                "color": "White",
+                "sku": "G02-WHIT"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 131,
+              "depot_id": "CHI-01",
+              "depot_name": "Chicago Metro"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "G00-BLAC",
+            "name": "Lift Standing Desk",
+            "color": "Black",
+            "unit_price": 608.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G00-BLAC"
+              },
+              {
+                "color": "Grey",
+                "sku": "G00-GREY"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 85,
+              "depot_id": "DAL-01",
+              "depot_name": "Dallas South"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "G01-BLAC",
+            "name": "Span Standing Desk",
+            "color": "Black",
+            "unit_price": 484.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G01-BLAC"
+              },
+              {
+                "color": "White",
+                "sku": "G01-WHIT"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 112,
+              "depot_id": "ATL-03",
+              "depot_name": "Atlanta East"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G02-BLAC"
+            },
+            "fields": {
+              "sku": "G02-BLAC",
+              "name": "Basic Writing Desk",
+              "category": "Desks",
+              "color": "Black",
+              "unit_price": 222.0,
+              "material": null,
+              "description": "Simple fixed-height writing desk with one drawer. Finish: black."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G02-BLAC'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G00-BLAC"
+            },
+            "fields": {
+              "sku": "G00-BLAC",
+              "name": "Lift Standing Desk",
+              "category": "Desks",
+              "color": "Black",
+              "unit_price": 608.0,
+              "material": null,
+              "description": "Electric height-adjustable desk with memory presets, for sitting or standing work. Finish: black."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G00-BLAC'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G01-BLAC"
+            },
+            "fields": {
+              "sku": "G01-BLAC",
+              "name": "Span Standing Desk",
+              "category": "Desks",
+              "color": "Black",
+              "unit_price": 484.0,
+              "material": null,
+              "description": "Extra-wide height-adjustable desk with a hand crank, for sit-stand work. Finish: black."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G01-BLAC'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "G02-BLAC",
+              "Basic Writing Desk",
+              0.01639,
+              1,
+              null,
+              "G02-BLAC,G02-WHIT"
+            ],
+            [
+              2,
+              "G00-BLAC",
+              "Lift Standing Desk",
+              0.01587,
+              3,
+              null,
+              "G00-BLAC,G00-GREY"
+            ],
+            [
+              3,
+              "G01-BLAC",
+              "Span Standing Desk",
+              0.01538,
+              5,
+              null,
+              "G01-BLAC,G01-WHIT"
+            ],
+            [
+              4,
+              "G05-GREY",
+              "Glow Desk Lamp",
+              0.01493,
+              7,
+              null,
+              "G05-GREY,G05-WHIT"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (keyword)",
+          "station": "search",
+          "router_reason": "description only, no numbers or rules"
+        },
+        "timing_ms": {
+          "retrieval": 0.1,
+          "total": 9.4
+        }
+      }
+    },
+    {
+      "id": "Q27",
+      "should": "search",
+      "went": "search",
+      "outcome": "RIGHT",
+      "router_reason": "description only, no numbers or rules",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_290ca64a1c",
+        "question": "Rain jacket for hiking",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"Rain jacket for hiking\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "ST-NAV-M",
+            "name": "Summit Trail Shell Jacket",
+            "color": "Navy",
+            "unit_price": 189.0,
+            "currency": "USD",
+            "specs": [
+              "DWR nylon"
+            ],
+            "variants": [
+              {
+                "color": "Navy",
+                "sku": "ST-NAV-M"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 35,
+              "depot_id": "ATL-03",
+              "depot_name": "Atlanta East"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "ST-NAV-M"
+            },
+            "fields": {
+              "sku": "ST-NAV-M",
+              "name": "Summit Trail Shell Jacket",
+              "category": "Outdoor apparel",
+              "color": "Navy",
+              "unit_price": 189.0,
+              "material": "DWR nylon",
+              "description": "Lightweight trail shell with a DWR-treated nylon face that sheds rain and wind. Packs into its own pocket."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'ST-NAV-M'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "ST-NAV-M",
+              "Summit Trail Shell Jacket",
+              0.01639,
+              1,
+              null,
+              "ST-NAV-M"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (keyword)",
+          "station": "search",
+          "router_reason": "description only, no numbers or rules"
+        },
+        "timing_ms": {
+          "retrieval": 0.2,
+          "total": 12.4
+        }
+      }
+    },
+    {
+      "id": "Q28",
+      "should": "search",
+      "went": "search",
+      "outcome": "WRONG",
+      "router_reason": "description only, no numbers or rules",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_b88ca5069d",
+        "question": "Somewhere to put my feet up under the desk",
+        "route": "search",
+        "state": "answer",
+        "confidence": 0.8,
+        "message": "Here are the closest matches for \"Somewhere to put my feet up under the desk\".",
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "G02-BLAC",
+            "name": "Basic Writing Desk",
+            "color": "Black",
+            "unit_price": 222.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G02-BLAC"
+              },
+              {
+                "color": "White",
+                "sku": "G02-WHIT"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 131,
+              "depot_id": "CHI-01",
+              "depot_name": "Chicago Metro"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "G00-BLAC",
+            "name": "Lift Standing Desk",
+            "color": "Black",
+            "unit_price": 608.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G00-BLAC"
+              },
+              {
+                "color": "Grey",
+                "sku": "G00-GREY"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 85,
+              "depot_id": "DAL-01",
+              "depot_name": "Dallas South"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "G01-BLAC",
+            "name": "Span Standing Desk",
+            "color": "Black",
+            "unit_price": 484.0,
+            "currency": "USD",
+            "specs": [],
+            "variants": [
+              {
+                "color": "Black",
+                "sku": "G01-BLAC"
+              },
+              {
+                "color": "White",
+                "sku": "G01-WHIT"
+              }
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 112,
+              "depot_id": "ATL-03",
+              "depot_name": "Atlanta East"
+            },
+            "citation_ids": [
+              "c3"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G02-BLAC"
+            },
+            "fields": {
+              "sku": "G02-BLAC",
+              "name": "Basic Writing Desk",
+              "category": "Desks",
+              "color": "Black",
+              "unit_price": 222.0,
+              "material": null,
+              "description": "Simple fixed-height writing desk with one drawer. Finish: black."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G02-BLAC'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G00-BLAC"
+            },
+            "fields": {
+              "sku": "G00-BLAC",
+              "name": "Lift Standing Desk",
+              "category": "Desks",
+              "color": "Black",
+              "unit_price": 608.0,
+              "material": null,
+              "description": "Electric height-adjustable desk with memory presets, for sitting or standing work. Finish: black."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G00-BLAC'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "sku": "G01-BLAC"
+            },
+            "fields": {
+              "sku": "G01-BLAC",
+              "name": "Span Standing Desk",
+              "category": "Desks",
+              "color": "Black",
+              "unit_price": 484.0,
+              "material": null,
+              "description": "Extra-wide height-adjustable desk with a hand crank, for sit-stand work. Finish: black."
+            },
+            "sql": "SELECT * FROM products WHERE sku = 'G01-BLAC'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "rank",
+            "sku",
+            "name",
+            "score",
+            "keyword_rank",
+            "meaning_rank",
+            "family_skus"
+          ],
+          "rows": [
+            [
+              1,
+              "G02-BLAC",
+              "Basic Writing Desk",
+              0.01639,
+              1,
+              null,
+              "G02-BLAC,G02-WHIT"
+            ],
+            [
+              2,
+              "G00-BLAC",
+              "Lift Standing Desk",
+              0.01587,
+              3,
+              null,
+              "G00-BLAC,G00-GREY"
+            ],
+            [
+              3,
+              "G01-BLAC",
+              "Span Standing Desk",
+              0.01538,
+              5,
+              null,
+              "G01-BLAC,G01-WHIT"
+            ],
+            [
+              4,
+              "G05-GREY",
+              "Glow Desk Lamp",
+              0.01493,
+              7,
+              null,
+              "G05-GREY,G05-WHIT"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "search (keyword)",
+          "station": "search",
+          "router_reason": "description only, no numbers or rules"
+        },
+        "timing_ms": {
+          "retrieval": 0.3,
+          "total": 11.0
+        }
+      }
+    },
+    {
+      "id": "Q29",
+      "should": "hybrid",
+      "went": "hybrid",
+      "outcome": "RIGHT",
+      "router_reason": "rule to apply: '$330'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_eab7f062ab",
+        "question": "Got any navy mesh chairs with fully adjustable 4D arms for less than $330? We need at least 45 shipped from a single location.",
+        "route": "hybrid",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "Found 2 products that match everything you asked for.",
+        "constraints": {
+          "intent": "find_products",
+          "category": "Office chairs",
+          "color": "Navy",
+          "material": "mesh",
+          "armrests": "4D",
+          "max_unit_price": 330.0,
+          "quantity": 45,
+          "single_depot": true
+        },
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "PT-NAV-4D",
+            "name": "Pulse Task Mesh",
+            "color": "Navy",
+            "unit_price": 299.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 52,
+              "depot_id": "DAL-01",
+              "depot_name": "Dallas South"
+            },
+            "citation_ids": [
+              "c1"
+            ]
+          },
+          {
+            "type": "product_card",
+            "sku": "AT-NAV-4D",
+            "name": "AeroTask Pro Mesh",
+            "color": "Navy",
+            "unit_price": 320.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "300 lb rating"
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 48,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c2"
+            ]
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "PT-NAV-4D",
+              "depot_id": "DAL-01"
+            },
+            "fields": {
+              "sku": "PT-NAV-4D",
+              "depot_id": "DAL-01",
+              "available": 52,
+              "unit_price": 299.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available FROM products p JOIN stock_available s USING (sku) WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 330.0 AND s.available >= 45",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "AT-NAV-4D",
+              "depot_id": "IND-04"
+            },
+            "fields": {
+              "sku": "AT-NAV-4D",
+              "depot_id": "IND-04",
+              "available": 48,
+              "unit_price": 320.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available FROM products p JOIN stock_available s USING (sku) WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 330.0 AND s.available >= 45",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "sku",
+            "name",
+            "unit_price",
+            "depot_id",
+            "available",
+            "days"
+          ],
+          "rows": [
+            [
+              "PT-NAV-4D",
+              "Pulse Task Mesh",
+              299.0,
+              "DAL-01",
+              52,
+              null
+            ],
+            [
+              "AT-NAV-4D",
+              "AeroTask Pro Mesh",
+              320.0,
+              "IND-04",
+              48,
+              null
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available FROM products p JOIN stock_available s USING (sku) WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 330.0 AND s.available >= 45",
+          "tries": 1,
+          "writer": "rules (no AI)",
+          "station": "hybrid",
+          "router_reason": "rule to apply: '$330'"
+        },
+        "timing_ms": {
+          "generation": 0.2,
+          "retrieval": 2.7,
+          "total": 10.8
+        }
+      }
+    },
+    {
+      "id": "Q30",
+      "should": "hybrid",
+      "went": "hybrid",
+      "outcome": "WRONG",
+      "router_reason": "maths word: 'how much for'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_c94e861212",
+        "question": "How much for 25 grey AeroTask Pro Mesh chairs?",
+        "route": "hybrid",
+        "state": "no_results",
+        "confidence": 0.85,
+        "message": "Nothing matches everything you asked for right now. Without the colour, 1 option would match.",
+        "constraints": {
+          "intent": "find_products",
+          "product_name": "AeroTask Pro Mesh",
+          "category": "Office chairs",
+          "color": "Grey",
+          "material": "mesh",
+          "quantity": 25
+        },
+        "components": [],
+        "citations": [],
+        "table": {
+          "columns": [],
+          "rows": []
+        },
+        "trace": {
+          "sql": null,
+          "tries": 1,
+          "writer": "rules (no AI)",
+          "station": "hybrid",
+          "router_reason": "maths word: 'how much for'"
+        },
+        "timing_ms": {
+          "generation": 0.1,
+          "retrieval": 4.2,
+          "total": 10.1
+        },
+        "relax": [
+          {
+            "field": "color",
+            "label": "the colour",
+            "matches": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "Q31",
+      "should": "hybrid",
+      "went": "hybrid",
+      "outcome": "RIGHT",
+      "router_reason": "maths word: 'mean'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_579ada5888",
+        "question": "Mean price of chairs with 4D armrests?",
+        "route": "python",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "The average price across 13 products is $348.77.",
+        "constraints": {
+          "intent": "average_price",
+          "category": "Office chairs",
+          "armrests": "4D"
+        },
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "aggregate": "AVG(unit_price)"
+            },
+            "fields": {
+              "average_unit_price": 348.77,
+              "products_counted": 13
+            },
+            "sql": "SELECT ROUND(AVG(p.unit_price), 2) AS average_unit_price, COUNT(*) AS products_counted FROM products p WHERE p.category = 'Office chairs' AND p.armrests = '4D'",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "average_unit_price",
+            "products_counted"
+          ],
+          "rows": [
+            [
+              348.77,
+              13
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT ROUND(AVG(p.unit_price), 2) AS average_unit_price, COUNT(*) AS products_counted FROM products p WHERE p.category = 'Office chairs' AND p.armrests = '4D'",
+          "tries": 1,
+          "writer": "rules (no AI)",
+          "station": "hybrid",
+          "router_reason": "maths word: 'mean'"
+        },
+        "timing_ms": {
+          "generation": 0.1,
+          "retrieval": 2.4,
+          "total": 8.8
+        },
+        "calculation": {
+          "formula": "average of unit_price",
+          "inputs": {
+            "products_counted": 13
+          },
+          "result": 348.77,
+          "citation_ids": [
+            "c1"
+          ]
+        }
+      }
+    },
+    {
+      "id": "Q32",
+      "should": "hybrid",
+      "went": "hybrid",
+      "outcome": "RIGHT",
+      "router_reason": "rule to apply: 'need 3 navy chairs with 4d armrests and a mesh back, max $350, there in 1'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_4017b2ead3",
+        "question": "We're opening an office in Chicago next week and need 3 navy chairs with 4D armrests and a mesh back, max $350, there in 1 day.",
+        "route": "hybrid",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "Found 1 product that matches everything you asked for.",
+        "constraints": {
+          "intent": "find_products",
+          "category": "Office chairs",
+          "color": "Navy",
+          "material": "mesh",
+          "armrests": "4D",
+          "destination_city": "Chicago",
+          "max_unit_price": 350.0,
+          "quantity": 3,
+          "max_delivery_days": 1
+        },
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "AT-NAV-4D",
+            "name": "AeroTask Pro Mesh",
+            "color": "Navy",
+            "unit_price": 320.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "300 lb rating"
+            ],
+            "stock": {
+              "status": "low_stock",
+              "available": 3,
+              "depot_id": "CHI-01",
+              "depot_name": "Chicago Metro"
+            },
+            "citation_ids": [
+              "c1"
+            ],
+            "delivery": {
+              "destination_city": "Chicago",
+              "days": 1,
+              "meets_deadline": true
+            }
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "AT-NAV-4D",
+              "depot_id": "CHI-01"
+            },
+            "fields": {
+              "sku": "AT-NAV-4D",
+              "depot_id": "CHI-01",
+              "available": 3,
+              "unit_price": 320.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'Chicago' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND t.days <= 1 AND s.available >= 3",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "sku",
+            "name",
+            "unit_price",
+            "depot_id",
+            "available",
+            "days"
+          ],
+          "rows": [
+            [
+              "AT-NAV-4D",
+              "AeroTask Pro Mesh",
+              320.0,
+              "CHI-01",
+              3,
+              1
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'Chicago' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND t.days <= 1 AND s.available >= 3",
+          "tries": 1,
+          "writer": "rules (no AI)",
+          "station": "hybrid",
+          "router_reason": "rule to apply: 'need 3 navy chairs with 4d armrests and a mesh back, max $350, there in 1'"
+        },
+        "timing_ms": {
+          "generation": 0.2,
+          "retrieval": 3.2,
+          "total": 9.5
+        }
+      }
+    },
+    {
+      "id": "Q33",
+      "should": "hybrid",
+      "went": "hybrid",
+      "outcome": "RIGHT",
+      "router_reason": "rule to apply: 'get to new york in 2'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_116a318a1f",
+        "question": "Which navy chairs with 4D arms can you get to New York in 2 days? 20 units, any price.",
+        "route": "hybrid",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "Found 3 products that match everything you asked for.",
+        "constraints": {
+          "intent": "find_products",
+          "category": "Office chairs",
+          "color": "Navy",
+          "armrests": "4D",
+          "destination_city": "New York",
+          "quantity": 20,
+          "max_delivery_days": 2
+        },
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "CM-NAV-4D",
+            "name": "Corsa Mesh",
+            "color": "Navy",
+            "unit_price": 315.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 25,
+              "depot_id": "COL-02",
+              "depot_name": "Columbus Hub"
+            },
+            "citation_ids": [
+              "c1"
+            ],
+            "delivery": {
+              "destination_city": "New York",
+              "days": 2,
+              "meets_deadline": true
+            }
+          },
+          {
+            "type": "product_card",
+            "sku": "RG-NAV-4D",
+            "name": "Regent Leather Manager",
+            "color": "Navy",
+            "unit_price": 340.0,
+            "currency": "USD",
+            "specs": [
+              "Bonded leather",
+              "4D armrests",
+              "300 lb rating"
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 45,
+              "depot_id": "COL-02",
+              "depot_name": "Columbus Hub"
+            },
+            "citation_ids": [
+              "c2"
+            ],
+            "delivery": {
+              "destination_city": "New York",
+              "days": 2,
+              "meets_deadline": true
+            }
+          },
+          {
+            "type": "product_card",
+            "sku": "EF-ELT-NV",
+            "name": "ErgoFlex Elite Shell",
+            "color": "Navy",
+            "unit_price": 345.0,
+            "currency": "USD",
+            "specs": [
+              "Elastomer mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 62,
+              "depot_id": "COL-02",
+              "depot_name": "Columbus Hub"
+            },
+            "citation_ids": [
+              "c3"
+            ],
+            "delivery": {
+              "destination_city": "New York",
+              "days": 2,
+              "meets_deadline": true
+            }
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "CM-NAV-4D",
+              "depot_id": "COL-02"
+            },
+            "fields": {
+              "sku": "CM-NAV-4D",
+              "depot_id": "COL-02",
+              "available": 25,
+              "unit_price": 315.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'New York' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND p.armrests = '4D' AND t.days <= 2 AND s.available >= 20",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "RG-NAV-4D",
+              "depot_id": "COL-02"
+            },
+            "fields": {
+              "sku": "RG-NAV-4D",
+              "depot_id": "COL-02",
+              "available": 45,
+              "unit_price": 340.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'New York' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND p.armrests = '4D' AND t.days <= 2 AND s.available >= 20",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "EF-ELT-NV",
+              "depot_id": "COL-02"
+            },
+            "fields": {
+              "sku": "EF-ELT-NV",
+              "depot_id": "COL-02",
+              "available": 62,
+              "unit_price": 345.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'New York' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND p.armrests = '4D' AND t.days <= 2 AND s.available >= 20",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "sku",
+            "name",
+            "unit_price",
+            "depot_id",
+            "available",
+            "days"
+          ],
+          "rows": [
+            [
+              "CM-NAV-4D",
+              "Corsa Mesh",
+              315.0,
+              "COL-02",
+              25,
+              2
+            ],
+            [
+              "RG-NAV-4D",
+              "Regent Leather Manager",
+              340.0,
+              "COL-02",
+              45,
+              2
+            ],
+            [
+              "EF-ELT-NV",
+              "ErgoFlex Elite Shell",
+              345.0,
+              "COL-02",
+              62,
+              2
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'New York' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND p.armrests = '4D' AND t.days <= 2 AND s.available >= 20",
+          "tries": 1,
+          "writer": "rules (no AI)",
+          "station": "hybrid",
+          "router_reason": "rule to apply: 'get to new york in 2'"
+        },
+        "timing_ms": {
+          "generation": 0.1,
+          "retrieval": 3.4,
+          "total": 10.4
+        }
+      }
+    },
+    {
+      "id": "Q34",
+      "should": "hybrid",
+      "went": "hybrid",
+      "outcome": "RIGHT",
+      "router_reason": "follow-up to the previous request",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_516767d5a6",
+        "question": "Same thing but leather only.",
+        "route": "hybrid",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "Found 1 product that matches everything you asked for.",
+        "constraints": {
+          "intent": "find_products",
+          "category": "Office chairs",
+          "color": "Navy",
+          "material": "leather",
+          "armrests": "4D",
+          "destination_city": "New York",
+          "quantity": 20,
+          "max_delivery_days": 2
+        },
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "RG-NAV-4D",
+            "name": "Regent Leather Manager",
+            "color": "Navy",
+            "unit_price": 340.0,
+            "currency": "USD",
+            "specs": [
+              "Bonded leather",
+              "4D armrests",
+              "300 lb rating"
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 45,
+              "depot_id": "COL-02",
+              "depot_name": "Columbus Hub"
+            },
+            "citation_ids": [
+              "c1"
+            ],
+            "delivery": {
+              "destination_city": "New York",
+              "days": 2,
+              "meets_deadline": true
+            }
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "RG-NAV-4D",
+              "depot_id": "COL-02"
+            },
+            "fields": {
+              "sku": "RG-NAV-4D",
+              "depot_id": "COL-02",
+              "available": 45,
+              "unit_price": 340.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'New York' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%leather%' AND p.armrests = '4D' AND t.days <= 2 AND s.available >= 20",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "sku",
+            "name",
+            "unit_price",
+            "depot_id",
+            "available",
+            "days"
+          ],
+          "rows": [
+            [
+              "RG-NAV-4D",
+              "Regent Leather Manager",
+              340.0,
+              "COL-02",
+              45,
+              2
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'New York' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%leather%' AND p.armrests = '4D' AND t.days <= 2 AND s.available >= 20",
+          "tries": 1,
+          "writer": "rules (no AI)",
+          "station": "hybrid",
+          "router_reason": "follow-up to the previous request"
+        },
+        "timing_ms": {
+          "generation": 0.1,
+          "retrieval": 3.2,
+          "total": 10.0
+        }
+      }
+    },
+    {
+      "id": "Q35",
+      "should": "hybrid",
+      "went": "hybrid",
+      "outcome": "WRONG",
+      "router_reason": "rule to apply: 'like forty navy mesh chairs, 4d arms, under $350, to chicago within 3'",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_828d690f9c",
+        "question": "I'd like forty navy mesh chairs, 4D arms, under $350, to Chicago within 3 days.",
+        "route": "hybrid",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "Found 3 products that match everything you asked for.",
+        "constraints": {
+          "intent": "find_products",
+          "category": "Office chairs",
+          "color": "Navy",
+          "material": "mesh",
+          "armrests": "4D",
+          "destination_city": "Chicago",
+          "max_unit_price": 350.0,
+          "max_delivery_days": 3
+        },
+        "components": [
+          {
+            "type": "product_card",
+            "sku": "CM-NAV-4D",
+            "name": "Corsa Mesh",
+            "color": "Navy",
+            "unit_price": 315.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 25,
+              "depot_id": "IND-04",
+              "depot_name": "Indianapolis Regional"
+            },
+            "citation_ids": [
+              "c1"
+            ],
+            "delivery": {
+              "destination_city": "Chicago",
+              "days": 2,
+              "meets_deadline": true
+            }
+          },
+          {
+            "type": "product_card",
+            "sku": "AT-NAV-4D",
+            "name": "AeroTask Pro Mesh",
+            "color": "Navy",
+            "unit_price": 320.0,
+            "currency": "USD",
+            "specs": [
+              "Breathable mesh",
+              "4D armrests",
+              "300 lb rating"
+            ],
+            "stock": {
+              "status": "low_stock",
+              "available": 3,
+              "depot_id": "CHI-01",
+              "depot_name": "Chicago Metro"
+            },
+            "citation_ids": [
+              "c2"
+            ],
+            "delivery": {
+              "destination_city": "Chicago",
+              "days": 1,
+              "meets_deadline": true
+            }
+          },
+          {
+            "type": "product_card",
+            "sku": "EF-ELT-NV",
+            "name": "ErgoFlex Elite Shell",
+            "color": "Navy",
+            "unit_price": 345.0,
+            "currency": "USD",
+            "specs": [
+              "Elastomer mesh",
+              "4D armrests",
+              "275 lb rating"
+            ],
+            "stock": {
+              "status": "in_stock",
+              "available": 62,
+              "depot_id": "COL-02",
+              "depot_name": "Columbus Hub"
+            },
+            "citation_ids": [
+              "c3"
+            ],
+            "delivery": {
+              "destination_city": "Chicago",
+              "days": 3,
+              "meets_deadline": true
+            }
+          }
+        ],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "CM-NAV-4D",
+              "depot_id": "IND-04"
+            },
+            "fields": {
+              "sku": "CM-NAV-4D",
+              "depot_id": "IND-04",
+              "available": 25,
+              "unit_price": 315.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'Chicago' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND t.days <= 3 AND s.available >= 1",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c2",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "AT-NAV-4D",
+              "depot_id": "CHI-01"
+            },
+            "fields": {
+              "sku": "AT-NAV-4D",
+              "depot_id": "CHI-01",
+              "available": 3,
+              "unit_price": 320.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'Chicago' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND t.days <= 3 AND s.available >= 1",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          },
+          {
+            "id": "c3",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "stock_available",
+            "row_key": {
+              "sku": "EF-ELT-NV",
+              "depot_id": "COL-02"
+            },
+            "fields": {
+              "sku": "EF-ELT-NV",
+              "depot_id": "COL-02",
+              "available": 62,
+              "unit_price": 345.0
+            },
+            "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'Chicago' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND t.days <= 3 AND s.available >= 1",
+            "read_at": "2026-11-19T02:34:19Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "sku",
+            "name",
+            "unit_price",
+            "depot_id",
+            "available",
+            "days"
+          ],
+          "rows": [
+            [
+              "CM-NAV-4D",
+              "Corsa Mesh",
+              315.0,
+              "IND-04",
+              25,
+              2
+            ],
+            [
+              "AT-NAV-4D",
+              "AeroTask Pro Mesh",
+              320.0,
+              "CHI-01",
+              3,
+              1
+            ],
+            [
+              "EF-ELT-NV",
+              "ErgoFlex Elite Shell",
+              345.0,
+              "COL-02",
+              62,
+              3
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT p.sku, p.name, p.color, p.unit_price, p.material, p.armrests, p.weight_rating_lb, s.depot_id, s.depot_name, s.available, t.days FROM products p JOIN stock_available s USING (sku) JOIN delivery_times t ON t.depot_id = s.depot_id AND t.destination_city = 'Chicago' WHERE p.category = 'Office chairs' AND p.color = 'Navy' AND LOWER(p.material) LIKE '%mesh%' AND p.armrests = '4D' AND p.unit_price <= 350.0 AND t.days <= 3 AND s.available >= 1",
+          "tries": 1,
+          "writer": "rules (no AI)",
+          "station": "hybrid",
+          "router_reason": "rule to apply: 'like forty navy mesh chairs, 4d arms, under $350, to chicago within 3'"
+        },
+        "timing_ms": {
+          "generation": 0.1,
+          "retrieval": 3.2,
+          "total": 9.9
+        }
+      }
+    }
+  ]
+}

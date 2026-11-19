@@ -1,0 +1,20 @@
+<!-- @dsCard group="Proof" height=400 -->
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>preview</title>
+<style>body{margin:0;padding:16px;background:var(--canvas)}</style></head>
+<body>
+<div class="cr">
+<aside class="cr-drawer" aria-label="Source">
+<div class="cr-drawer__h"><h3>Where this number came from</h3><button type="button" class="cr-btn cr-btn--quiet cr-btn--sm" aria-label="Close"><svg class="cr-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
+<div class="cr-drawer__b">
+<span class="cr-sm cr-muted">Read from the store's database at 10:04, 18 Nov 2026</span>
+<dl class="cr-kv"><dt>table</dt><dd>inventory</dd><dt>sku</dt><dd>AT-NAV-4D</dd><dt>depot</dt><dd>Indianapolis Regional</dd><dt>available</dt><dd>48</dd><dt>unit_price</dt><dd>320.00</dd></dl>
+<span class="cr-label cr-muted">The query that read it</span>
+<pre class="cr-sql">SELECT available FROM inventory
+WHERE sku = 'AT-NAV-4D'
+  AND depot_id = 'IND'</pre>
+</div></aside>
+</div>
+</body>
+</html>

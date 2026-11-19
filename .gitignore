@@ -1,0 +1,9 @@
+# Python's caches: rebuilt every time the code runs
+__pycache__/
+*.pyc
+# Local virtual environments
+venv/
+.venv/
+# Editor and OS clutter
+.DS_Store
+Thumbs.db

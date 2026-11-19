@@ -1,0 +1,615 @@
+{
+  "writer": "ollama (qwen2.5-coder:3b)",
+  "cold_start_s": 13.630017799994675,
+  "accuracy": 1.0,
+  "right": 11,
+  "handoff": 0,
+  "wrong": 0,
+  "total": 11,
+  "contract_valid": 11,
+  "median_ms": 7802.1,
+  "results": [
+    {
+      "id": "Q01",
+      "question": "How many navy AeroTask Pro Mesh chairs are available in Indianapolis?",
+      "expected": 48,
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "sql": "SELECT s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' AND s.depot_id = 'IND-04' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_226bb4c0c2",
+        "question": "How many navy AeroTask Pro Mesh chairs are available in Indianapolis?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "available: 48",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products, stock_available",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "available": 48
+            },
+            "sql": "SELECT s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' AND s.depot_id = 'IND-04' LIMIT 50",
+            "read_at": "2026-11-12T03:45:20Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "available"
+          ],
+          "rows": [
+            [
+              48
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' AND s.depot_id = 'IND-04' LIMIT 50",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 39090.2,
+          "retrieval": 4.4,
+          "total": 39100.8
+        }
+      }
+    },
+    {
+      "id": "Q02",
+      "question": "What does the AeroTask Pro Mesh cost?",
+      "expected": 320.0,
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "sql": "SELECT unit_price FROM products WHERE name = 'AeroTask Pro Mesh' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_51057058da",
+        "question": "What does the AeroTask Pro Mesh cost?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "unit_price: 320.0",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "unit_price": 320.0
+            },
+            "sql": "SELECT unit_price FROM products WHERE name = 'AeroTask Pro Mesh' LIMIT 50",
+            "read_at": "2026-11-12T03:45:26Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "unit_price"
+          ],
+          "rows": [
+            [
+              320.0
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT unit_price FROM products WHERE name = 'AeroTask Pro Mesh' LIMIT 50",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 5968.1,
+          "retrieval": 1.1,
+          "total": 5969.4
+        }
+      }
+    },
+    {
+      "id": "Q03",
+      "question": "Which depot has the most navy ErgoFlex Elite Shell chairs?",
+      "expected": "COL-02",
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "sql": "SELECT s.depot_id, SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'ErgoFlex Elite Shell' AND p.color = 'Navy' GROUP BY s.depot_id ORDER BY total_available DESC LIMIT 1",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_1f9451292c",
+        "question": "Which depot has the most navy ErgoFlex Elite Shell chairs?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "depot_id: COL-02; total_available: 62",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products, stock_available",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "depot_id": "COL-02",
+              "total_available": 62
+            },
+            "sql": "SELECT s.depot_id, SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'ErgoFlex Elite Shell' AND p.color = 'Navy' GROUP BY s.depot_id ORDER BY total_available DESC LIMIT 1",
+            "read_at": "2026-11-12T03:45:37Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "depot_id",
+            "total_available"
+          ],
+          "rows": [
+            [
+              "COL-02",
+              62
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT s.depot_id, SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'ErgoFlex Elite Shell' AND p.color = 'Navy' GROUP BY s.depot_id ORDER BY total_available DESC LIMIT 1",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 10980.8,
+          "retrieval": 1.3,
+          "total": 10982.4
+        }
+      }
+    },
+    {
+      "id": "Q04",
+      "question": "How many navy AeroTask Pro Mesh chairs do you have in total, across all depots?",
+      "expected": 51,
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "sql": "SELECT SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_be494f2630",
+        "question": "How many navy AeroTask Pro Mesh chairs do you have in total, across all depots?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "total_available: 51",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products, stock_available",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "total_available": 51
+            },
+            "sql": "SELECT SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' LIMIT 50",
+            "read_at": "2026-11-12T03:45:46Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "total_available"
+          ],
+          "rows": [
+            [
+              51
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' LIMIT 50",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 8987.0,
+          "retrieval": 1.3,
+          "total": 8988.7
+        }
+      }
+    },
+    {
+      "id": "Q05",
+      "question": "Are black AeroTask chairs in stock in Columbus?",
+      "expected": 0,
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "sql": "SELECT s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask' AND p.color = 'Black' AND s.depot_id = 'COL-02' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_1c4a031400",
+        "question": "Are black AeroTask chairs in stock in Columbus?",
+        "route": "sql",
+        "state": "no_results",
+        "confidence": 0.85,
+        "message": "No. Nothing in the store matches that right now.",
+        "components": [],
+        "citations": [],
+        "table": {
+          "columns": [
+            "available"
+          ],
+          "rows": []
+        },
+        "trace": {
+          "sql": "SELECT s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask' AND p.color = 'Black' AND s.depot_id = 'COL-02' LIMIT 50",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 9176.8,
+          "retrieval": 1.4,
+          "total": 9178.6
+        }
+      }
+    },
+    {
+      "id": "Q06",
+      "question": "How many grey AeroTask Pro Mesh chairs are left?",
+      "expected": 6,
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "sql": "SELECT s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Grey' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_80db654cca",
+        "question": "How many grey AeroTask Pro Mesh chairs are left?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "available: 6",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products, stock_available",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "available": 6
+            },
+            "sql": "SELECT s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Grey' LIMIT 50",
+            "read_at": "2026-11-12T03:46:04Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "available"
+          ],
+          "rows": [
+            [
+              6
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Grey' LIMIT 50",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 7933.3,
+          "retrieval": 1.4,
+          "total": 7935.0
+        }
+      }
+    },
+    {
+      "id": "Q07",
+      "question": "What's the cheapest office chair with 4D armrests?",
+      "expected": "Quill Office Chair",
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "sql": "SELECT name, unit_price FROM products WHERE category = 'Office chairs' AND armrests = '4D' ORDER BY unit_price ASC LIMIT 1",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_feea8f8bd0",
+        "question": "What's the cheapest office chair with 4D armrests?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "name: Quill Office Chair; unit_price: 202.0",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "name": "Quill Office Chair",
+              "unit_price": 202.0
+            },
+            "sql": "SELECT name, unit_price FROM products WHERE category = 'Office chairs' AND armrests = '4D' ORDER BY unit_price ASC LIMIT 1",
+            "read_at": "2026-11-12T03:46:11Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "name",
+            "unit_price"
+          ],
+          "rows": [
+            [
+              "Quill Office Chair",
+              202.0
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT name, unit_price FROM products WHERE category = 'Office chairs' AND armrests = '4D' ORDER BY unit_price ASC LIMIT 1",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 7800.8,
+          "retrieval": 1.0,
+          "total": 7802.1
+        }
+      }
+    },
+    {
+      "id": "Q08",
+      "question": "How many office chair products cost under $300?",
+      "expected": 11,
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "sql": "SELECT COUNT(*) FROM products WHERE category = 'Office chairs' AND unit_price < 300 LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_bc0a21cb54",
+        "question": "How many office chair products cost under $300?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "COUNT(*): 11",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "COUNT(*)": 11
+            },
+            "sql": "SELECT COUNT(*) FROM products WHERE category = 'Office chairs' AND unit_price < 300 LIMIT 50",
+            "read_at": "2026-11-12T03:46:18Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "COUNT(*)"
+          ],
+          "rows": [
+            [
+              11
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT COUNT(*) FROM products WHERE category = 'Office chairs' AND unit_price < 300 LIMIT 50",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 6537.8,
+          "retrieval": 1.2,
+          "total": 6539.4
+        }
+      }
+    },
+    {
+      "id": "Q09",
+      "question": "How many days does delivery from the Columbus Hub to Chicago take?",
+      "expected": 3,
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "sql": "SELECT days FROM delivery_times WHERE depot_id = 'COL-02' AND destination_city = 'Chicago' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_672732c4b0",
+        "question": "How many days does delivery from the Columbus Hub to Chicago take?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "days: 3",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "delivery_times",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "days": 3
+            },
+            "sql": "SELECT days FROM delivery_times WHERE depot_id = 'COL-02' AND destination_city = 'Chicago' LIMIT 50",
+            "read_at": "2026-11-12T03:46:25Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "days"
+          ],
+          "rows": [
+            [
+              3
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT days FROM delivery_times WHERE depot_id = 'COL-02' AND destination_city = 'Chicago' LIMIT 50",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 6910.4,
+          "retrieval": 1.1,
+          "total": 6911.8
+        }
+      }
+    },
+    {
+      "id": "Q10",
+      "question": "What's the status of order NX-88219?",
+      "expected": "DELAYED_IN_HUB",
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "sql": "SELECT status FROM orders WHERE order_id = 'NX-88219' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_141015377c",
+        "question": "What's the status of order NX-88219?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "status: DELAYED_IN_HUB",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "orders",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "status": "DELAYED_IN_HUB"
+            },
+            "sql": "SELECT status FROM orders WHERE order_id = 'NX-88219' LIMIT 50",
+            "read_at": "2026-11-12T03:46:31Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "status"
+          ],
+          "rows": [
+            [
+              "DELAYED_IN_HUB"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT status FROM orders WHERE order_id = 'NX-88219' LIMIT 50",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 6237.0,
+          "retrieval": 1.0,
+          "total": 6238.4
+        }
+      }
+    },
+    {
+      "id": "Q21",
+      "question": "Do you sell pink office chairs?",
+      "expected": 0,
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "sql": "SELECT COUNT(*) FROM products WHERE category = 'Office chairs' AND color = 'Pink' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_cdc2fd8a5f",
+        "question": "Do you sell pink office chairs?",
+        "route": "sql",
+        "state": "no_results",
+        "confidence": 0.85,
+        "message": "No. Nothing in the store matches that right now.",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "COUNT(*)": 0
+            },
+            "sql": "SELECT COUNT(*) FROM products WHERE category = 'Office chairs' AND color = 'Pink' LIMIT 50",
+            "read_at": "2026-11-12T03:46:37Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "COUNT(*)"
+          ],
+          "rows": [
+            [
+              0
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT COUNT(*) FROM products WHERE category = 'Office chairs' AND color = 'Pink' LIMIT 50",
+          "tries": 1,
+          "writer": "ollama (qwen2.5-coder:3b)"
+        },
+        "timing_ms": {
+          "generation": 6083.4,
+          "retrieval": 1.0,
+          "total": 6084.7
+        }
+      }
+    }
+  ]
+}

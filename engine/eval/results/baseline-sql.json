@@ -1,0 +1,526 @@
+{
+  "method": "baseline",
+  "writer": "baseline (rules, no AI)",
+  "set": "sql",
+  "cold_start_s": null,
+  "accuracy": 0.5454545454545454,
+  "right": 6,
+  "handoff": 5,
+  "wrong": 0,
+  "total": 11,
+  "contract_valid": 11,
+  "median_ms": 10.5,
+  "results": [
+    {
+      "id": "Q01",
+      "question": "How many navy AeroTask Pro Mesh chairs are available in Indianapolis?",
+      "expected": 48,
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "contract_errors": [],
+      "form": null,
+      "sql": "SELECT s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' AND s.depot_id = 'IND-04' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_0fa30605d2",
+        "question": "How many navy AeroTask Pro Mesh chairs are available in Indianapolis?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.9,
+        "message": "available: 48",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products, stock_available",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "available": 48
+            },
+            "sql": "SELECT s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' AND s.depot_id = 'IND-04' LIMIT 50",
+            "read_at": "2026-11-12T07:58:28Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "available"
+          ],
+          "rows": [
+            [
+              48
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT s.available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' AND s.depot_id = 'IND-04' LIMIT 50",
+          "tries": 1,
+          "writer": "baseline (rules, no AI)"
+        },
+        "timing_ms": {
+          "generation": 0.4,
+          "retrieval": 14.5,
+          "total": 17.8
+        }
+      }
+    },
+    {
+      "id": "Q02",
+      "question": "What does the AeroTask Pro Mesh cost?",
+      "expected": 320.0,
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "contract_errors": [],
+      "form": null,
+      "sql": "SELECT DISTINCT p.unit_price FROM products p WHERE p.name = 'AeroTask Pro Mesh' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_d71c9c0bf8",
+        "question": "What does the AeroTask Pro Mesh cost?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.9,
+        "message": "unit_price: 320.0",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "unit_price": 320.0
+            },
+            "sql": "SELECT DISTINCT p.unit_price FROM products p WHERE p.name = 'AeroTask Pro Mesh' LIMIT 50",
+            "read_at": "2026-11-12T07:58:28Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "unit_price"
+          ],
+          "rows": [
+            [
+              320.0
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT DISTINCT p.unit_price FROM products p WHERE p.name = 'AeroTask Pro Mesh' LIMIT 50",
+          "tries": 1,
+          "writer": "baseline (rules, no AI)"
+        },
+        "timing_ms": {
+          "generation": 0.6,
+          "retrieval": 12.3,
+          "total": 13.3
+        }
+      }
+    },
+    {
+      "id": "Q03",
+      "question": "Which depot has the most navy ErgoFlex Elite Shell chairs?",
+      "expected": "COL-02",
+      "outcome": "handoff",
+      "correct": false,
+      "ticket_valid": true,
+      "contract_errors": [],
+      "form": null,
+      "sql": null,
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_b6f01c1164",
+        "question": "Which depot has the most navy ErgoFlex Elite Shell chairs?",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.3,
+        "message": "I couldn't answer that reliably, so I'm connecting you to a specialist.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "low_confidence",
+            "summary": "The SQL writer could not turn this question into a query."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "generation": 0.0,
+          "total": 0.1
+        }
+      }
+    },
+    {
+      "id": "Q04",
+      "question": "How many navy AeroTask Pro Mesh chairs do you have in total, across all depots?",
+      "expected": 51,
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "contract_errors": [],
+      "form": null,
+      "sql": "SELECT SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_64fa815b04",
+        "question": "How many navy AeroTask Pro Mesh chairs do you have in total, across all depots?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "total_available: 51",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products, stock_available",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "total_available": 51
+            },
+            "sql": "SELECT SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' LIMIT 50",
+            "read_at": "2026-11-12T07:58:28Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "total_available"
+          ],
+          "rows": [
+            [
+              51
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Navy' LIMIT 50",
+          "tries": 1,
+          "writer": "baseline (rules, no AI)"
+        },
+        "timing_ms": {
+          "generation": 0.1,
+          "retrieval": 10.0,
+          "total": 10.5
+        }
+      }
+    },
+    {
+      "id": "Q05",
+      "question": "Are black AeroTask chairs in stock in Columbus?",
+      "expected": 0,
+      "outcome": "handoff",
+      "correct": false,
+      "ticket_valid": true,
+      "contract_errors": [],
+      "form": null,
+      "sql": null,
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_0a0a7ad576",
+        "question": "Are black AeroTask chairs in stock in Columbus?",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.3,
+        "message": "I couldn't answer that reliably, so I'm connecting you to a specialist.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "low_confidence",
+            "summary": "The SQL writer could not turn this question into a query."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "generation": 0.6,
+          "total": 0.7
+        }
+      }
+    },
+    {
+      "id": "Q06",
+      "question": "How many grey AeroTask Pro Mesh chairs are left?",
+      "expected": 6,
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "contract_errors": [],
+      "form": null,
+      "sql": "SELECT SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Grey' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_875de5826d",
+        "question": "How many grey AeroTask Pro Mesh chairs are left?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.85,
+        "message": "total_available: 6",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "products, stock_available",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "total_available": 6
+            },
+            "sql": "SELECT SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Grey' LIMIT 50",
+            "read_at": "2026-11-12T07:58:28Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "total_available"
+          ],
+          "rows": [
+            [
+              6
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT SUM(s.available) AS total_available FROM stock_available s JOIN products p USING (sku) WHERE p.name = 'AeroTask Pro Mesh' AND p.color = 'Grey' LIMIT 50",
+          "tries": 1,
+          "writer": "baseline (rules, no AI)"
+        },
+        "timing_ms": {
+          "generation": 0.0,
+          "retrieval": 10.9,
+          "total": 11.3
+        }
+      }
+    },
+    {
+      "id": "Q07",
+      "question": "What's the cheapest office chair with 4D armrests?",
+      "expected": "Quill Office Chair",
+      "outcome": "handoff",
+      "correct": false,
+      "ticket_valid": true,
+      "contract_errors": [],
+      "form": null,
+      "sql": null,
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_f51cd979e3",
+        "question": "What's the cheapest office chair with 4D armrests?",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.3,
+        "message": "I couldn't answer that reliably, so I'm connecting you to a specialist.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "low_confidence",
+            "summary": "The SQL writer could not turn this question into a query."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "generation": 0.4,
+          "total": 0.5
+        }
+      }
+    },
+    {
+      "id": "Q08",
+      "question": "How many office chair products cost under $300?",
+      "expected": 11,
+      "outcome": "handoff",
+      "correct": false,
+      "ticket_valid": true,
+      "contract_errors": [],
+      "form": null,
+      "sql": null,
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_1c37082e19",
+        "question": "How many office chair products cost under $300?",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.3,
+        "message": "I couldn't answer that reliably, so I'm connecting you to a specialist.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "low_confidence",
+            "summary": "The SQL writer could not turn this question into a query."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "generation": 0.2,
+          "total": 0.3
+        }
+      }
+    },
+    {
+      "id": "Q09",
+      "question": "How many days does delivery from the Columbus Hub to Chicago take?",
+      "expected": 3,
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "contract_errors": [],
+      "form": null,
+      "sql": "SELECT days FROM delivery_times WHERE depot_id = 'COL-02' AND destination_city = 'Chicago' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_889069c690",
+        "question": "How many days does delivery from the Columbus Hub to Chicago take?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.9,
+        "message": "days: 3",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "delivery_times",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "days": 3
+            },
+            "sql": "SELECT days FROM delivery_times WHERE depot_id = 'COL-02' AND destination_city = 'Chicago' LIMIT 50",
+            "read_at": "2026-11-12T07:58:28Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "days"
+          ],
+          "rows": [
+            [
+              3
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT days FROM delivery_times WHERE depot_id = 'COL-02' AND destination_city = 'Chicago' LIMIT 50",
+          "tries": 1,
+          "writer": "baseline (rules, no AI)"
+        },
+        "timing_ms": {
+          "generation": 0.0,
+          "retrieval": 12.4,
+          "total": 12.8
+        }
+      }
+    },
+    {
+      "id": "Q10",
+      "question": "What's the status of order NX-88219?",
+      "expected": "DELAYED_IN_HUB",
+      "outcome": "RIGHT",
+      "correct": true,
+      "ticket_valid": true,
+      "contract_errors": [],
+      "form": null,
+      "sql": "SELECT order_id, status FROM orders WHERE order_id = 'NX-88219' LIMIT 50",
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_70284b62ee",
+        "question": "What's the status of order NX-88219?",
+        "route": "sql",
+        "state": "answer",
+        "confidence": 0.95,
+        "message": "order_id: NX-88219; status: DELAYED_IN_HUB",
+        "components": [],
+        "citations": [
+          {
+            "id": "c1",
+            "kind": "db_row",
+            "database": "store.db",
+            "table": "orders",
+            "row_key": {
+              "result_row": 1
+            },
+            "fields": {
+              "order_id": "NX-88219",
+              "status": "DELAYED_IN_HUB"
+            },
+            "sql": "SELECT order_id, status FROM orders WHERE order_id = 'NX-88219' LIMIT 50",
+            "read_at": "2026-11-12T07:58:28Z",
+            "confidence": 1.0
+          }
+        ],
+        "table": {
+          "columns": [
+            "order_id",
+            "status"
+          ],
+          "rows": [
+            [
+              "NX-88219",
+              "DELAYED_IN_HUB"
+            ]
+          ]
+        },
+        "trace": {
+          "sql": "SELECT order_id, status FROM orders WHERE order_id = 'NX-88219' LIMIT 50",
+          "tries": 1,
+          "writer": "baseline (rules, no AI)"
+        },
+        "timing_ms": {
+          "generation": 0.0,
+          "retrieval": 13.2,
+          "total": 13.6
+        }
+      }
+    },
+    {
+      "id": "Q21",
+      "question": "Do you sell pink office chairs?",
+      "expected": 0,
+      "outcome": "handoff",
+      "correct": false,
+      "ticket_valid": true,
+      "contract_errors": [],
+      "form": null,
+      "sql": null,
+      "ticket": {
+        "contract_version": "0.1",
+        "query_id": "q_b17bd2a421",
+        "question": "Do you sell pink office chairs?",
+        "route": "handoff",
+        "state": "handoff",
+        "confidence": 0.3,
+        "message": "I couldn't answer that reliably, so I'm connecting you to a specialist.",
+        "components": [
+          {
+            "type": "handoff",
+            "reason": "low_confidence",
+            "summary": "The SQL writer could not turn this question into a query."
+          }
+        ],
+        "citations": [],
+        "timing_ms": {
+          "generation": 0.1,
+          "total": 0.2
+        }
+      }
+    }
+  ]
+}

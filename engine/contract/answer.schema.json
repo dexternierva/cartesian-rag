@@ -1,0 +1,582 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cartesianrag.local/contract/answer.schema.json",
+  "title": "CartesianRAG Answer (contract v0.1)",
+  "description": "The 'order ticket' the engine sends back to the screens. Every box the UI draws must be fed by a field here. If a field is missing, the screen can't draw that box.",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "query_id",
+    "question",
+    "route",
+    "state",
+    "confidence",
+    "message",
+    "components",
+    "citations",
+    "timing_ms"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "contract_version": {
+      "description": "Which version of these rules the ticket follows. Lets old screens and new engines notice when they disagree.",
+      "const": "0.1"
+    },
+    "query_id": {
+      "description": "A unique ID for this question, so logs, the audit drawer and the eval script can all point at the same answer.",
+      "type": "string",
+      "pattern": "^q_[A-Za-z0-9_-]+$"
+    },
+    "question": {
+      "description": "Exactly what the person typed.",
+      "type": "string",
+      "minLength": 1
+    },
+    "route": {
+      "description": "Which kitchen station cooked the answer. sql = exact numbers from tables; search = finding by description; hybrid = both; python = maths over many rows; handoff = sent to a human.",
+      "enum": [
+        "sql",
+        "search",
+        "hybrid",
+        "python",
+        "handoff"
+      ]
+    },
+    "state": {
+      "description": "Which version of the widget the screen should show. Matches the 5 component states on the design canvas.",
+      "enum": [
+        "answer",
+        "disambiguate",
+        "no_results",
+        "handoff"
+      ]
+    },
+    "confidence": {
+      "description": "How sure the engine is, from 0 to 1. The screen uses it to pick a state: 0.85+ answer, 0.65-0.84 ask 'Did you mean...?', below 0.65 hand off to a person.",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "message": {
+      "description": "One or two plain sentences shown above the cards. Never contains a number that isn't also in a cited field.",
+      "type": "string"
+    },
+    "constraints": {
+      "description": "What the engine understood from the question. Shown nowhere yet, but lets us debug 'did it hear me right?'.",
+      "$ref": "#/$defs/constraints"
+    },
+    "components": {
+      "description": "The interactive pieces to draw in the chat, in order. This is what makes the answer 'direct manipulation' instead of a wall of text.",
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/product_card"
+          },
+          {
+            "$ref": "#/$defs/choices"
+          },
+          {
+            "$ref": "#/$defs/handoff"
+          }
+        ]
+      }
+    },
+    "citations": {
+      "description": "The receipts. Each one is a row or document the answer came from. Citation badges and the audit drawer are drawn from these.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/citation"
+      }
+    },
+    "calculation": {
+      "description": "Optional. The maths behind a total, shown by 'Show calculation'.",
+      "$ref": "#/$defs/calculation"
+    },
+    "timing_ms": {
+      "description": "How long each kitchen step took, in milliseconds. The design's budget is under 1,200 ms total.",
+      "type": "object",
+      "required": [
+        "total"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "routing": {
+          "type": "number",
+          "minimum": 0
+        },
+        "retrieval": {
+          "type": "number",
+          "minimum": 0
+        },
+        "generation": {
+          "type": "number",
+          "minimum": 0
+        },
+        "total": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "table": {
+      "description": "Optional. The raw result rows, so a screen can draw a table and the eval script can grade the answer without reading prose. Added in step 4 because grading needs machine-readable answers.",
+      "type": "object",
+      "required": [
+        "columns",
+        "rows"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "items": {
+            "type": "array"
+          }
+        }
+      }
+    },
+    "trace": {
+      "description": "Optional. How the answer was made: the SQL that ran (kept even when it returned no rows), how many tries it took, and which writer/model wrote it. For debugging and the eval script; screens may ignore it.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "sql": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "tries": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "writer": {
+          "type": "string"
+        },
+        "station": {
+          "enum": [
+            "sql",
+            "hybrid",
+            "search",
+            "handoff"
+          ],
+          "description": "Which station the router chose."
+        },
+        "router_reason": {
+          "type": "string",
+          "description": "Why the router chose it, in plain words."
+        }
+      }
+    },
+    "relax": {
+      "description": "Optional. When nothing matches every requirement: each single requirement whose removal gives results. Screens turn each into a button that re-asks with 'drop' = field.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "field",
+          "label",
+          "matches"
+        ],
+        "properties": {
+          "field": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "matches": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "subject": {
+      "description": "Optional. What a lookup answer is about, taken from the query's exact filters and checked against the database (product, color, sku, depot, city, order_id, status...). Lets screens write a full sentence.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "quantity": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "color": {
+          "type": "string"
+        },
+        "max_unit_price": {
+          "type": "number",
+          "minimum": 0
+        },
+        "destination_city": {
+          "type": "string"
+        },
+        "max_delivery_days": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "category": {
+          "type": "string"
+        },
+        "intent": {
+          "enum": [
+            "find_products",
+            "total_cost",
+            "average_price"
+          ]
+        },
+        "product_name": {
+          "type": "string"
+        },
+        "material": {
+          "type": "string",
+          "description": "A keyword matched inside the material description, e.g. 'mesh'."
+        },
+        "armrests": {
+          "type": "string"
+        },
+        "single_depot": {
+          "type": "boolean",
+          "description": "true = all units from one warehouse (one shipment)."
+        }
+      },
+      "description": "The 'form' the extractor filled in. Also the conversation memory: a follow-up question starts from the previous ticket's constraints."
+    },
+    "product_card": {
+      "description": "Draws one Product Row Card (S1 wireframe).",
+      "type": "object",
+      "required": [
+        "type",
+        "sku",
+        "name",
+        "unit_price",
+        "currency",
+        "specs",
+        "stock",
+        "citation_ids"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "product_card"
+        },
+        "sku": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "unit_price": {
+          "type": "number",
+          "minimum": 0
+        },
+        "currency": {
+          "const": "USD"
+        },
+        "specs": {
+          "description": "Short spec chips, e.g. 'Breathable mesh', '4D armrests', '300 lb rating'.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 4
+        },
+        "variants": {
+          "description": "Other colours of the same product family, for the colour buttons.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "color",
+              "sku"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "color": {
+                "type": "string"
+              },
+              "sku": {
+                "type": "string"
+              },
+              "available": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "stock": {
+          "description": "Feeds the stock label: a dot PLUS words, never colour alone.",
+          "type": "object",
+          "required": [
+            "status",
+            "available",
+            "depot_id",
+            "depot_name"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "in_stock",
+                "low_stock",
+                "out_of_stock"
+              ]
+            },
+            "available": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "depot_id": {
+              "type": "string"
+            },
+            "depot_name": {
+              "type": "string"
+            }
+          }
+        },
+        "delivery": {
+          "type": "object",
+          "required": [
+            "destination_city",
+            "days"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "destination_city": {
+              "type": "string"
+            },
+            "days": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "meets_deadline": {
+              "type": "boolean"
+            }
+          }
+        },
+        "citation_ids": {
+          "description": "Which receipts back this card. The card's Source badge opens these in the audit drawer.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "choices": {
+      "description": "Draws 'Did you mean...?' chips (disambiguation state).",
+      "type": "object",
+      "required": [
+        "type",
+        "prompt",
+        "options"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "choices"
+        },
+        "prompt": {
+          "type": "string"
+        },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "follow_up_question"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              },
+              "follow_up_question": {
+                "description": "What gets asked if the chip is tapped, so a tap works exactly like typing.",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "handoff": {
+      "description": "Draws the 'Connecting you to a specialist' card and tells the console what to show Marcus.",
+      "type": "object",
+      "required": [
+        "type",
+        "reason",
+        "summary"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "handoff"
+        },
+        "reason": {
+          "enum": [
+            "low_confidence",
+            "negative_sentiment",
+            "critical_intent",
+            "user_requested"
+          ]
+        },
+        "summary": {
+          "type": "string"
+        }
+      }
+    },
+    "citation": {
+      "description": "One receipt. Feeds the audit drawer: confidence, extraction time, schema view, executed SQL.",
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "read_at"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^c[0-9]+$"
+        },
+        "kind": {
+          "enum": [
+            "db_row",
+            "document"
+          ]
+        },
+        "database": {
+          "type": "string"
+        },
+        "table": {
+          "type": "string"
+        },
+        "row_key": {
+          "description": "How to find the exact row again, e.g. {'sku': 'AT-NAV-4D', 'depot_id': 'IND-04'}.",
+          "type": "object"
+        },
+        "fields": {
+          "description": "The row's columns and values, shown in the drawer's schema view.",
+          "type": "object"
+        },
+        "sql": {
+          "type": "string"
+        },
+        "document": {
+          "type": "string"
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "excerpt": {
+          "type": "string"
+        },
+        "read_at": {
+          "description": "When the engine read this row (ISO 8601, UTC). Shown as 'synced 2 min ago'.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "db_row"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "database",
+              "table",
+              "row_key",
+              "fields",
+              "sql"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "document"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "document",
+              "excerpt"
+            ]
+          }
+        }
+      ]
+    },
+    "calculation": {
+      "type": "object",
+      "required": [
+        "formula",
+        "result"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "formula": {
+          "type": "string"
+        },
+        "inputs": {
+          "type": "object"
+        },
+        "result": {
+          "type": "number"
+        },
+        "citation_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
